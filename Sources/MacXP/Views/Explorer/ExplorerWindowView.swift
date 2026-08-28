@@ -64,26 +64,31 @@ public class ExplorerViewModel: ObservableObject {
             renamingItemID = nil
         } catch {
             errorMessage = error.localizedDescription
+            SoundManager.shared.play(.error)
             items = []
         }
     }
 
     public func navigateTo(path: String) {
+        SoundManager.shared.play(.navigation)
         state.navigateTo(path: path)
         loadDirectoryContents()
     }
 
     public func goBack() {
+        SoundManager.shared.play(.navigation)
         state.goBack()
         loadDirectoryContents()
     }
 
     public func goForward() {
+        SoundManager.shared.play(.navigation)
         state.goForward()
         loadDirectoryContents()
     }
 
     public func goUp() {
+        SoundManager.shared.play(.navigation)
         state.goUp()
         loadDirectoryContents()
     }
@@ -132,6 +137,7 @@ public class ExplorerViewModel: ObservableObject {
             startRenaming(item: newFolder)
         } catch {
             errorMessage = error.localizedDescription
+            SoundManager.shared.play(.error)
         }
     }
 
@@ -144,6 +150,7 @@ public class ExplorerViewModel: ObservableObject {
             startRenaming(item: newDoc)
         } catch {
             errorMessage = error.localizedDescription
+            SoundManager.shared.play(.error)
         }
     }
 
@@ -164,6 +171,7 @@ public class ExplorerViewModel: ObservableObject {
             loadDirectoryContents()
         } catch {
             errorMessage = error.localizedDescription
+            SoundManager.shared.play(.error)
         }
         renamingItemID = nil
     }
@@ -176,6 +184,9 @@ public class ExplorerViewModel: ObservableObject {
         let itemsToDelete = selectedItems
         for item in itemsToDelete {
             try? FileSystemService.shared.deleteItem(at: item.path)
+        }
+        if !itemsToDelete.isEmpty {
+            SoundManager.shared.play(.recycleBin)
         }
         loadDirectoryContents()
     }

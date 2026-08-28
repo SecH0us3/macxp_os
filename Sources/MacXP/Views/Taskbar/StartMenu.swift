@@ -382,6 +382,7 @@ public struct StartMenuView: View {
         let isHovered = (hoveredItemID == item.id)
 
         return Button(action: {
+            SoundManager.shared.play(.navigation)
             item.action(windowManager)
             onClose()
         }) {

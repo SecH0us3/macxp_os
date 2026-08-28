@@ -195,6 +195,7 @@ public struct RunDialogView: View {
             }
             
         case .notFound:
+            SoundManager.shared.play(.error)
             showErrorAlert = true
         }
     }

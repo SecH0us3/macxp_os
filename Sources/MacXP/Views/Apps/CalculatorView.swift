@@ -194,6 +194,47 @@ public class CalculatorEngine: ObservableObject {
         hasMemory = false
     }
     
+    public func handleKeyInput(_ input: Character) {
+        switch input {
+        case "0"..."9":
+            inputDigit(String(input))
+        case ".", ",":
+            inputDigit(".")
+        case "+":
+            setOperator(.add)
+        case "-":
+            setOperator(.subtract)
+        case "*", "x", "X":
+            setOperator(.multiply)
+        case "/":
+            setOperator(.divide)
+        case "=", "\r", "\n":
+            calculate()
+        case "\u{7f}", "\u{8}":
+            backspace()
+        case "c", "C", "\u{1b}":
+            clearAll()
+        case "e", "E":
+            clearEntry()
+        case "%":
+            percentage()
+        case "@", "s", "S":
+            squareRoot()
+        case "r", "R":
+            reciprocal()
+        case "n", "N":
+            negate()
+        default:
+            break
+        }
+    }
+    
+    public func handleKeyInput(_ input: String) {
+        for char in input {
+            handleKeyInput(char)
+        }
+    }
+    
     private func formatNumber(_ val: Double) -> String {
         if val.isInfinite || val.isNaN {
             hasError = true
@@ -328,6 +369,10 @@ public struct CalculatorView: View {
                 .padding(.bottom, 6)
             }
             .background(Color(red: 0.93, green: 0.91, blue: 0.85))
+            .focusable()
+            .calculatorKeyInput { chars in
+                engine.handleKeyInput(chars)
+            }
         }
     }
     
@@ -361,5 +406,22 @@ public struct CalculatorView: View {
                 )
         }
         .buttonStyle(PlainButtonStyle())
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func calculatorKeyInput(_ onInput: @escaping (String) -> Void) -> some View {
+        if #available(macOS 14.0, *) {
+            self.onKeyPress { keyPress in
+                if !keyPress.characters.isEmpty {
+                    onInput(keyPress.characters)
+                    return .handled
+                }
+                return .ignored
+            }
+        } else {
+            self
+        }
     }
 }

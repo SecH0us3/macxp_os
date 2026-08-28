@@ -86,12 +86,14 @@ public struct BlissWallpaperView: View {
 
 public struct DesktopView: View {
     @ObservedObject public var windowManager: WindowManager
+    @ObservedObject public var hotkeyManager: HotkeyManager = HotkeyManager.shared
     @StateObject public var desktopManager = DesktopManager()
     @StateObject public var systemTrayModel = SystemTrayModel()
     @StateObject public var startMenuModel = StartMenuModel()
 
     @State private var isStartMenuOpen: Bool = false
     @State private var isVolumePopupOpen: Bool = false
+    @State private var isTurnOffDialogOpen: Bool = false
     @State private var marqueeStart: CGPoint? = nil
     @State private var marqueeCurrent: CGPoint? = nil
 
@@ -246,9 +248,7 @@ public struct DesktopView: View {
                         },
                         onTurnOff: {
                             isStartMenuOpen = false
-                            #if os(macOS)
-                            NSApplication.shared.terminate(nil)
-                            #endif
+                            isTurnOffDialogOpen = true
                         }
                     )
                     .offset(x: 0, y: -30)
@@ -275,6 +275,9 @@ public struct DesktopView: View {
                     onToggleStartMenu: {
                         isVolumePopupOpen = false
                         isStartMenuOpen.toggle()
+                        if isStartMenuOpen {
+                            SoundManager.shared.play(.navigation)
+                        }
                     },
                     onToggleVolume: {
                         isStartMenuOpen = false
@@ -286,12 +289,74 @@ public struct DesktopView: View {
                 )
                 .frame(maxWidth: .infinity)
                 .zIndex(99999)
+
+                // 9. Alt-Tab Task Switcher HUD Overlay
+                if hotkeyManager.isTaskSwitcherVisible {
+                    TaskSwitcherHUDView(windowManager: windowManager, hotkeyManager: hotkeyManager)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .zIndex(99998)
+                }
+
+                // 10. Turn Off Computer Dialog Overlay
+                if isTurnOffDialogOpen {
+                    TurnOffDialogView(
+                        windowManager: windowManager,
+                        onStandBy: {
+                            windowManager.minimizeAll()
+                        },
+                        onTurnOff: {
+                            #if os(macOS)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                NSApplication.shared.terminate(nil)
+                            }
+                            #endif
+                        },
+                        onRestart: {
+                            // Reset windows and play startup chime
+                            for win in windowManager.windows {
+                                windowManager.closeWindow(id: win.id)
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                SoundManager.shared.play(.startup)
+                            }
+                        },
+                        onDismiss: {
+                            isTurnOffDialogOpen = false
+                        }
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .zIndex(100000)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear {
+                SoundManager.shared.play(.startup)
+                hotkeyManager.startMonitoring(
+                    windowManager: windowManager,
+                    onToggleStartMenu: {
+                        isVolumePopupOpen = false
+                        isStartMenuOpen.toggle()
+                        if isStartMenuOpen {
+                            SoundManager.shared.play(.navigation)
+                        }
+                    },
+                    onToggleShowDesktop: {
+                        windowManager.toggleShowDesktop()
+                    },
+                    onToggleFullscreen: {
+                        #if os(macOS)
+                        if let window = NSApplication.shared.windows.first {
+                            window.toggleFullScreen(nil)
+                        }
+                        #endif
+                    }
+                )
+            }
         }
     }
 
     private func handleOpenDesktopItem(_ item: DesktopIconItem) {
+        SoundManager.shared.play(.navigation)
         if let appType = item.appType {
             windowManager.openWindow(appType: appType, title: item.title, icon: item.iconName)
         } else if let fileURL = item.fileURL {

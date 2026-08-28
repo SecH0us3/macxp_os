@@ -16,6 +16,8 @@ public class SystemTrayModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     public init() {
+        self.volumeLevel = SoundManager.shared.volume
+        self.isMuted = SoundManager.shared.isMuted
         updateBatteryStatus()
 
         // Update clock every second
@@ -36,14 +38,17 @@ public class SystemTrayModel: ObservableObject {
     }
 
     public func setVolume(_ value: Float) {
-        self.volumeLevel = max(0.0, min(1.0, value))
+        let clamped = max(0.0, min(1.0, value))
+        self.volumeLevel = clamped
         if volumeLevel > 0 && isMuted {
             isMuted = false
         }
+        SoundManager.shared.setVolume(clamped)
     }
 
     public func toggleMute() {
         self.isMuted.toggle()
+        SoundManager.shared.setMuted(self.isMuted)
     }
 
     public static func formatTime(_ date: Date) -> String {
