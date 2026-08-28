@@ -208,5 +208,12 @@ final class WindowManagerTests: XCTestCase {
         XCTAssertNotEqual(rect1.origin, rect2.origin)
         XCTAssertEqual(rect2.origin.x, rect1.origin.x + 26)
         XCTAssertEqual(rect2.origin.y, rect1.origin.y + 26)
+        
+        // Closing window 1 and opening window 3 should advance cascade position, not reset to offset 26
+        manager.closeWindow(id: win1)
+        let win3 = manager.openWindow(appType: .notepad())
+        let rect3 = manager.window(for: win3)!.rect
+        XCTAssertEqual(rect3.origin.x, rect1.origin.x + 52)
+        XCTAssertEqual(rect3.origin.y, rect1.origin.y + 52)
     }
 }

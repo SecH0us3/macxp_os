@@ -63,6 +63,21 @@ final class BuiltinAppsTests: XCTestCase {
         XCTAssertTrue(dirResult!.contains("Volume in drive C"))
         XCTAssertTrue(dirResult!.contains("Directory of"))
         
+        // dir with Unix path
+        let dirTmp = shell.executeDosCommand("dir /tmp")
+        XCTAssertNotNil(dirTmp)
+        XCTAssertTrue(dirTmp!.contains("Directory of"))
+        
+        // dir with root Unix path
+        let dirRoot = shell.executeDosCommand("dir /")
+        XCTAssertNotNil(dirRoot)
+        XCTAssertTrue(dirRoot!.contains("Directory of C:\\"))
+        
+        // dir with Windows path
+        let dirWin = shell.executeDosCommand("dir C:\\Users")
+        XCTAssertNotNil(dirWin)
+        XCTAssertTrue(dirWin!.contains("Directory of C:\\Users") || dirWin!.contains("File Not Found"))
+        
         // Invalid CD
         let invalidCd = shell.executeDosCommand("cd /non_existent_directory_xyz_123")
         XCTAssertEqual(invalidCd, "The system cannot find the path specified.")
@@ -106,6 +121,20 @@ final class BuiltinAppsTests: XCTestCase {
         }
         
         waitForExpectations(timeout: 5)
+    }
+
+    func testShellServiceUnixProcessLargeOutputNoDeadlock() {
+        let shell = ShellService()
+        let exp = expectation(description: "Execute Unix command with large output")
+        
+        // Output > 100KB to ensure pipe buffers do not deadlock
+        shell.executeCommand("python3 -c \"print('A' * 128000)\"") { output, isError in
+            XCTAssertFalse(isError)
+            XCTAssertEqual(output.count, 128000)
+            exp.fulfill()
+        }
+        
+        waitForExpectations(timeout: 10)
     }
 
     // MARK: - 2. Notepad Model Tests

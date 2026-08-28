@@ -205,11 +205,18 @@ public class ShellService: ObservableObject {
     
     private func listDirectory(_ target: String) -> String {
         var dirPath = currentUnixDirectory
-        if !target.isEmpty && !target.hasPrefix("/") && !target.hasPrefix("-") {
-            if target.hasPrefix("C:\\") || target.hasPrefix("c:\\") {
-                dirPath = convertToUnixPath(dosPath: target)
-            } else {
-                dirPath = (currentUnixDirectory as NSString).appendingPathComponent(target)
+        let trimmed = target.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty {
+            if trimmed == "~" {
+                dirPath = NSHomeDirectory()
+            } else if trimmed == "\\" || trimmed == "/" {
+                dirPath = "/"
+            } else if trimmed.hasPrefix("C:\\") || trimmed.hasPrefix("c:\\") || trimmed.hasPrefix("C:/") || trimmed.hasPrefix("c:/") || trimmed.lowercased() == "c:" {
+                dirPath = convertToUnixPath(dosPath: trimmed)
+            } else if trimmed.hasPrefix("/") {
+                dirPath = trimmed
+            } else if !trimmed.hasPrefix("-") {
+                dirPath = (currentUnixDirectory as NSString).appendingPathComponent(trimmed)
             }
             dirPath = (dirPath as NSString).standardizingPath
         }
@@ -278,8 +285,10 @@ public class ShellService: ObservableObject {
     }
     
     private func typeFile(_ target: String) -> String {
-        var filePath = target
-        if !filePath.hasPrefix("/") {
+        var filePath = target.trimmingCharacters(in: .whitespacesAndNewlines)
+        if filePath.hasPrefix("C:\\") || filePath.hasPrefix("c:\\") || filePath.hasPrefix("C:/") || filePath.hasPrefix("c:/") {
+            filePath = convertToUnixPath(dosPath: filePath)
+        } else if !filePath.hasPrefix("/") {
             filePath = (currentUnixDirectory as NSString).appendingPathComponent(filePath)
         }
         filePath = (filePath as NSString).standardizingPath
@@ -320,10 +329,9 @@ public class ShellService: ObservableObject {
             
             do {
                 try process.run()
-                process.waitUntilExit()
-                
                 let dataOut = pipeOut.fileHandleForReading.readDataToEndOfFile()
                 let dataErr = pipeErr.fileHandleForReading.readDataToEndOfFile()
+                process.waitUntilExit()
                 
                 let outStr = String(data: dataOut, encoding: .utf8) ?? ""
                 let errStr = String(data: dataErr, encoding: .utf8) ?? ""

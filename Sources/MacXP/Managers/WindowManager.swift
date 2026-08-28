@@ -2,6 +2,7 @@ import SwiftUI
 
 public class WindowManager: ObservableObject {
     @Published public var windows: [XPWindowInstance] = []
+    private var cascadeCounter: Int = 0
     
     public init() {}
     
@@ -20,7 +21,8 @@ public class WindowManager: ObservableObject {
         var targetRect = rect
         if targetRect == nil {
             let size = appType.defaultSize
-            let offset = CGFloat((windows.count % 8) * 26)
+            let offset = CGFloat((cascadeCounter % 8) * 26)
+            cascadeCounter += 1
             targetRect = CGRect(x: 80 + offset, y: 60 + offset, width: size.width, height: size.height)
         }
         
