@@ -348,15 +348,20 @@ public struct DesktopView: View {
 
     @ViewBuilder
     private func windowContentView(for window: XPWindowInstance) -> some View {
-        VStack {
-            Text(window.title)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.black)
-            Text(String(describing: window.appType))
-                .font(.system(size: 11))
-                .foregroundColor(.gray)
+        switch window.appType {
+        case .explorer(let path):
+            ExplorerWindowView(initialPath: path, windowManager: windowManager, window: window)
+        default:
+            VStack {
+                Text(window.title)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.black)
+                Text(String(describing: window.appType))
+                    .font(.system(size: 11))
+                    .foregroundColor(.gray)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(red: 0.94, green: 0.94, blue: 0.94))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 0.94, green: 0.94, blue: 0.94))
     }
 }

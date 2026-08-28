@@ -92,12 +92,12 @@
   - Real macOS filesystem integration: navigate directories, open files via `NSWorkspace` or internal apps, create folders, rename files inline, delete to macOS Trash.
   - Right-click file context menu: Open, Explore, Open With (Notepad), Delete, Rename, Properties.
 
-- [ ] **Step 1: Write tests for FileSystemService**
-- [ ] **Step 2: Implement FileSystemService for macOS file operations**
-- [ ] **Step 3: Implement Explorer toolbar, address bar, sidebar, and grid views**
-- [ ] **Step 4: Implement FileContextMenu and file operations (create folder, rename, trash)**
-- [ ] **Step 5: Run tests and verify all pass (`rtk swift test`)**
-- [ ] **Step 6: Commit**
+- [x] **Step 1: Write tests for FileSystemService**
+- [x] **Step 2: Implement FileSystemService for macOS file operations**
+- [x] **Step 3: Implement Explorer toolbar, address bar, sidebar, and grid views**
+- [x] **Step 4: Implement FileContextMenu and file operations (create folder, rename, trash)**
+- [x] **Step 5: Run tests and verify all pass (`rtk swift test`)**
+- [x] **Step 6: Commit**
 
 ---
 
