@@ -2,10 +2,12 @@ import SwiftUI
 
 @main
 struct MacXPApp: App {
+    @StateObject private var windowManager = WindowManager()
+
     var body: some Scene {
         WindowGroup {
-            Text("MacXP Initialized")
-                .frame(width: 800, height: 600)
+            DesktopView(windowManager: windowManager)
+                .frame(minWidth: 800, minHeight: 600)
         }
         .windowStyle(.hiddenTitleBar)
     }
