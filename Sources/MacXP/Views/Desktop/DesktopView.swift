@@ -351,17 +351,22 @@ public struct DesktopView: View {
         switch window.appType {
         case .explorer(let path):
             ExplorerWindowView(initialPath: path, windowManager: windowManager, window: window)
-        default:
-            VStack {
-                Text(window.title)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.black)
-                Text(String(describing: window.appType))
-                    .font(.system(size: 11))
-                    .foregroundColor(.gray)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(red: 0.94, green: 0.94, blue: 0.94))
+        case .notepad(let fileURL):
+            NotepadView(fileURL: fileURL, windowManager: windowManager, window: window)
+        case .cmd:
+            CmdView(windowManager: windowManager, window: window)
+        case .calculator:
+            CalculatorView(windowManager: windowManager, window: window)
+        case .minesweeper:
+            MinesweeperView(windowManager: windowManager, window: window)
+        case .paint:
+            PaintView(windowManager: windowManager, window: window)
+        case .controlPanel:
+            ControlPanelView(windowManager: windowManager, window: window)
+        case .systemProperties:
+            SystemPropertiesView(windowManager: windowManager, window: window)
+        case .runDialog:
+            RunDialogView(windowManager: windowManager, window: window)
         }
     }
 }
