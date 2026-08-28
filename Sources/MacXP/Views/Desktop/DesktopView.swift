@@ -1,83 +1,98 @@
 import SwiftUI
 
 public struct BlissWallpaperView: View {
+    @State private var wallpaperImage: NSImage? = nil
+
     public init() {}
 
     public var body: some View {
         GeometryReader { geo in
-            ZStack {
-                // Vibrant Blue Sky
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.10, green: 0.45, blue: 0.88),
-                        Color(red: 0.30, green: 0.62, blue: 0.95),
-                        Color(red: 0.58, green: 0.78, blue: 0.98)
-                    ],
-                    startPoint: .top,
-                    endPoint: .center
-                )
-
-                // Fluffy Cloud Wisps
-                Path { path in
-                    path.addEllipse(in: CGRect(x: geo.size.width * 0.10, y: geo.size.height * 0.08, width: geo.size.width * 0.50, height: geo.size.height * 0.16))
-                    path.addEllipse(in: CGRect(x: geo.size.width * 0.52, y: geo.size.height * 0.05, width: geo.size.width * 0.42, height: geo.size.height * 0.14))
-                }
-                .fill(
-                    RadialGradient(
-                        colors: [Color.white.opacity(0.50), Color.white.opacity(0.0)],
-                        center: .center,
-                        startRadius: 10,
-                        endRadius: geo.size.width * 0.25
-                    )
-                )
-                .blur(radius: 14)
-
-                // Background Rolling Hill
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: geo.size.height * 0.62))
-                    path.addCurve(
-                        to: CGPoint(x: geo.size.width, y: geo.size.height * 0.48),
-                        control1: CGPoint(x: geo.size.width * 0.35, y: geo.size.height * 0.42),
-                        control2: CGPoint(x: geo.size.width * 0.70, y: geo.size.height * 0.58)
-                    )
-                    path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height))
-                    path.addLine(to: CGPoint(x: 0, y: geo.size.height))
-                    path.closeSubpath()
-                }
-                .fill(
+            if let image = wallpaperImage ?? XPAssetProvider.loadBlissImage() {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+            } else {
+                ZStack {
+                    // Vibrant Blue Sky
                     LinearGradient(
                         colors: [
-                            Color(red: 0.32, green: 0.72, blue: 0.16),
-                            Color(red: 0.18, green: 0.50, blue: 0.08)
+                            Color(red: 0.10, green: 0.45, blue: 0.88),
+                            Color(red: 0.30, green: 0.62, blue: 0.95),
+                            Color(red: 0.58, green: 0.78, blue: 0.98)
                         ],
                         startPoint: .top,
-                        endPoint: .bottom
+                        endPoint: .center
                     )
-                )
 
-                // Foreground Rolling Green Hill
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: geo.size.height * 0.52))
-                    path.addCurve(
-                        to: CGPoint(x: geo.size.width, y: geo.size.height * 0.68),
-                        control1: CGPoint(x: geo.size.width * 0.32, y: geo.size.height * 0.70),
-                        control2: CGPoint(x: geo.size.width * 0.65, y: geo.size.height * 0.46)
+                    // Fluffy Cloud Wisps
+                    Path { path in
+                        path.addEllipse(in: CGRect(x: geo.size.width * 0.10, y: geo.size.height * 0.08, width: geo.size.width * 0.50, height: geo.size.height * 0.16))
+                        path.addEllipse(in: CGRect(x: geo.size.width * 0.52, y: geo.size.height * 0.05, width: geo.size.width * 0.42, height: geo.size.height * 0.14))
+                    }
+                    .fill(
+                        RadialGradient(
+                            colors: [Color.white.opacity(0.50), Color.white.opacity(0.0)],
+                            center: .center,
+                            startRadius: 10,
+                            endRadius: geo.size.width * 0.25
+                        )
                     )
-                    path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height))
-                    path.addLine(to: CGPoint(x: 0, y: geo.size.height))
-                    path.closeSubpath()
+                    .blur(radius: 14)
+
+                    // Background Rolling Hill
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: geo.size.height * 0.62))
+                        path.addCurve(
+                            to: CGPoint(x: geo.size.width, y: geo.size.height * 0.48),
+                            control1: CGPoint(x: geo.size.width * 0.35, y: geo.size.height * 0.42),
+                            control2: CGPoint(x: geo.size.width * 0.70, y: geo.size.height * 0.58)
+                        )
+                        path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height))
+                        path.addLine(to: CGPoint(x: 0, y: geo.size.height))
+                        path.closeSubpath()
+                    }
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.32, green: 0.72, blue: 0.16),
+                                Color(red: 0.18, green: 0.50, blue: 0.08)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+
+                    // Foreground Rolling Green Hill
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: geo.size.height * 0.52))
+                        path.addCurve(
+                            to: CGPoint(x: geo.size.width, y: geo.size.height * 0.68),
+                            control1: CGPoint(x: geo.size.width * 0.32, y: geo.size.height * 0.70),
+                            control2: CGPoint(x: geo.size.width * 0.65, y: geo.size.height * 0.46)
+                        )
+                        path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height))
+                        path.addLine(to: CGPoint(x: 0, y: geo.size.height))
+                        path.closeSubpath()
+                    }
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.42, green: 0.80, blue: 0.20),
+                                Color(red: 0.24, green: 0.60, blue: 0.10),
+                                Color(red: 0.14, green: 0.42, blue: 0.06)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                 }
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.42, green: 0.80, blue: 0.20),
-                            Color(red: 0.24, green: 0.60, blue: 0.10),
-                            Color(red: 0.14, green: 0.42, blue: 0.06)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
+            }
+        }
+        .onAppear {
+            if wallpaperImage == nil {
+                wallpaperImage = XPAssetProvider.loadBlissImage()
             }
         }
         .ignoresSafeArea()

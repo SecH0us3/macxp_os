@@ -92,6 +92,12 @@ fi
 # PkgInfo
 echo "APPL????" > "${CONTENTS_DIR}/PkgInfo"
 
+# Copy all Resources (Bliss wallpaper, Windows flags, AppIcon, etc.)
+if [[ -d "Resources" ]]; then
+    echo "==> Copying all assets from Resources/ to bundle..."
+    cp -R Resources/* "${RESOURCES_DIR}/" || true
+fi
+
 # Copy or generate AppIcon.icns
 if [[ -f "Resources/AppIcon.icns" ]]; then
     echo "==> Copying AppIcon.icns..."

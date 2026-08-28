@@ -35,40 +35,57 @@ public struct StartButtonShape: InsettableShape {
 }
 
 public struct XPFlagIcon: View {
-    public var size: CGFloat = 16
+    public var size: CGFloat = 18
+    @State private var flagImage: NSImage? = nil
 
-    public init(size: CGFloat = 16) {
+    public init(size: CGFloat = 18) {
         self.size = size
     }
 
     public var body: some View {
-        ZStack {
-            VStack(spacing: 1.5) {
-                HStack(spacing: 1.5) {
-                    // Red pane (top-left)
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(Color(red: 0.93, green: 0.28, blue: 0.16))
-                        .frame(width: size * 0.45, height: size * 0.45)
-                    // Green pane (top-right)
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(Color(red: 0.44, green: 0.74, blue: 0.16))
-                        .frame(width: size * 0.45, height: size * 0.45)
+        Group {
+            if let image = flagImage ?? XPAssetProvider.loadFlagImage() {
+                Image(nsImage: image)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: size, height: size)
+                    .shadow(color: Color.black.opacity(0.4), radius: 1, x: 0.5, y: 0.5)
+            } else {
+                ZStack {
+                    VStack(spacing: 1.5) {
+                        HStack(spacing: 1.5) {
+                            // Red pane (top-left)
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(Color(red: 0.93, green: 0.28, blue: 0.16))
+                                .frame(width: size * 0.45, height: size * 0.45)
+                            // Green pane (top-right)
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(Color(red: 0.44, green: 0.74, blue: 0.16))
+                                .frame(width: size * 0.45, height: size * 0.45)
+                        }
+                        HStack(spacing: 1.5) {
+                            // Blue pane (bottom-left)
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(Color(red: 0.05, green: 0.58, blue: 0.91))
+                                .frame(width: size * 0.45, height: size * 0.45)
+                            // Yellow pane (bottom-right)
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(Color(red: 0.98, green: 0.76, blue: 0.13))
+                                .frame(width: size * 0.45, height: size * 0.45)
+                        }
+                    }
+                    .rotationEffect(.degrees(-8))
+                    .shadow(color: Color.black.opacity(0.4), radius: 1, x: 0.5, y: 0.5)
                 }
-                HStack(spacing: 1.5) {
-                    // Blue pane (bottom-left)
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(Color(red: 0.05, green: 0.58, blue: 0.91))
-                        .frame(width: size * 0.45, height: size * 0.45)
-                    // Yellow pane (bottom-right)
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(Color(red: 0.98, green: 0.76, blue: 0.13))
-                        .frame(width: size * 0.45, height: size * 0.45)
-                }
+                .frame(width: size, height: size)
             }
-            .rotationEffect(.degrees(-8))
-            .shadow(color: Color.black.opacity(0.4), radius: 1, x: 0.5, y: 0.5)
         }
-        .frame(width: size, height: size)
+        .onAppear {
+            if flagImage == nil {
+                flagImage = XPAssetProvider.loadFlagImage()
+            }
+        }
     }
 }
 
