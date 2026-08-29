@@ -392,6 +392,9 @@ public struct DesktopView: View {
                 DispatchQueue.main.async {
                     for window in NSApplication.shared.windows {
                         window.collectionBehavior = [.canJoinAllSpaces, .fullScreenPrimary]
+                        if !window.styleMask.contains(.fullScreen) {
+                            window.toggleFullScreen(nil)
+                        }
                     }
                 }
                 #endif
