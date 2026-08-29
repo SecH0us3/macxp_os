@@ -130,6 +130,7 @@ public struct DesktopView: View {
     @State private var isStartMenuOpen: Bool = false
     @State private var isVolumePopupOpen: Bool = false
     @State private var isTurnOffDialogOpen: Bool = false
+    @State private var isBooting: Bool = true
     @State private var marqueeStart: CGPoint? = nil
     @State private var marqueeCurrent: CGPoint? = nil
 
@@ -348,12 +349,13 @@ public struct DesktopView: View {
                             #endif
                         },
                         onRestart: {
-                            // Reset windows and play startup chime
+                            // Reset windows and reboot with boot screen
                             for win in windowManager.windows {
                                 windowManager.closeWindow(id: win.id)
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                SoundManager.shared.play(.startup)
+                            isTurnOffDialogOpen = false
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                isBooting = true
                             }
                         },
                         onDismiss: {
@@ -370,10 +372,22 @@ public struct DesktopView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .zIndex(100005)
                 }
+
+                // 12. Windows XP Boot Screen Overlay with Running Blue Cubes
+                if isBooting {
+                    BootScreenView(onComplete: {
+                        withAnimation(.easeInOut(duration: 0.6)) {
+                            isBooting = false
+                        }
+                        SoundManager.shared.play(.startup)
+                    })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .zIndex(200000)
+                    .transition(.opacity)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
-                SoundManager.shared.play(.startup)
                 #if os(macOS)
                 DispatchQueue.main.async {
                     for window in NSApplication.shared.windows {
