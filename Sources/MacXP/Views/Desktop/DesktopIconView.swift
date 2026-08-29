@@ -39,8 +39,10 @@ public struct DesktopIconItem: Identifiable, Equatable {
 }
 
 public class DesktopManager: ObservableObject {
+    public static let shared = DesktopManager()
     @Published public var icons: [DesktopIconItem] = []
     @Published public var selectedIconIDs: Set<UUID> = []
+    @Published public var selectedWallpaper: String = "Bliss (Windows XP Standard)"
 
     public init() {
         loadDefaultIcons()

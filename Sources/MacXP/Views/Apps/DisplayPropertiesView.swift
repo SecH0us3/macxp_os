@@ -210,13 +210,30 @@ public struct DisplayPropertiesView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Background:")
                 .font(.system(size: 11, weight: .bold))
-            List {
-                Text("Bliss (Windows XP Standard)")
-                Text("Solid Blue")
-                Text("Autumn")
-                Text("Azul")
+            let wallpapers = ["Bliss (Windows XP Standard)", "Solid Blue", "Autumn", "Azul"]
+            VStack(spacing: 0) {
+                ForEach(wallpapers, id: \.self) { wp in
+                    let isSel = DesktopManager.shared.selectedWallpaper == wp
+                    HStack {
+                        Image(systemName: "photo")
+                            .font(.system(size: 11))
+                            .foregroundColor(isSel ? .white : .blue)
+                        Text(wp)
+                            .font(.system(size: 11))
+                            .foregroundColor(isSel ? .white : .black)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(isSel ? Color(red: 0.19, green: 0.42, blue: 0.77) : Color.white)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        DesktopManager.shared.selectedWallpaper = wp
+                        SoundManager.shared.play(.navigation)
+                    }
+                }
             }
-            .frame(height: 140)
+            .frame(height: 140, alignment: .top)
             .background(Color.white)
             .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
             Spacer()

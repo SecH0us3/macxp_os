@@ -1,13 +1,33 @@
 import SwiftUI
 
 public struct BlissWallpaperView: View {
+    public var wallpaper: String = "Bliss (Windows XP Standard)"
     @State private var wallpaperImage: NSImage? = nil
 
-    public init() {}
+    public init(wallpaper: String = "Bliss (Windows XP Standard)") {
+        self.wallpaper = wallpaper
+    }
 
     public var body: some View {
         GeometryReader { geo in
-            if let image = wallpaperImage ?? XPAssetProvider.loadBlissImage() {
+            if wallpaper == "Solid Blue" {
+                Color(red: 0.0, green: 0.306, blue: 0.596)
+                    .ignoresSafeArea()
+            } else if wallpaper == "Autumn" {
+                LinearGradient(
+                    colors: [Color(red: 0.85, green: 0.45, blue: 0.15), Color(red: 0.55, green: 0.20, blue: 0.05)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+            } else if wallpaper == "Azul" {
+                LinearGradient(
+                    colors: [Color(red: 0.0, green: 0.2, blue: 0.6), Color(red: 0.0, green: 0.05, blue: 0.25)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+            } else if let image = wallpaperImage ?? XPAssetProvider.loadBlissImage() {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -121,7 +141,7 @@ public struct DesktopView: View {
         GeometryReader { desktopGeo in
             ZStack(alignment: .bottomLeading) {
                 // 1. Bliss Wallpaper & Desktop Canvas
-                BlissWallpaperView()
+                BlissWallpaperView(wallpaper: desktopManager.selectedWallpaper)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         desktopManager.clearSelection()
