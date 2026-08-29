@@ -169,6 +169,13 @@ public class StartMenuModel: ObservableObject {
     }
 }
 
+public enum AllProgramsCategoryKey: Equatable, Hashable {
+    case accessories
+    case games
+    case macCategory(MacAppCategory)
+    case allMacApps
+}
+
 public struct StartMenuView: View {
     @ObservedObject public var windowManager: WindowManager
     @ObservedObject public var model: StartMenuModel
@@ -176,7 +183,10 @@ public struct StartMenuView: View {
     public var onTurnOff: (() -> Void)?
 
     @State private var hoveredItemID: UUID? = nil
+    @State private var hoveredAppID: UUID? = nil
     @State private var isAllProgramsOpen: Bool = false
+    @State private var activeFlyout: AllProgramsCategoryKey? = nil
+    @ObservedObject private var appDiscovery = MacAppDiscoveryService.shared
 
     public init(
         windowManager: WindowManager,
@@ -243,6 +253,7 @@ public struct StartMenuView: View {
             if isAllProgramsOpen {
                 allProgramsFlyout
                     .offset(x: 200, y: -42)
+                    .zIndex(100)
             }
         }
     }
@@ -333,6 +344,9 @@ public struct StartMenuView: View {
             Button(action: {
                 withAnimation(.easeInOut(duration: 0.15)) {
                     isAllProgramsOpen.toggle()
+                    if !isAllProgramsOpen {
+                        activeFlyout = nil
+                    }
                 }
             }) {
                 HStack {
@@ -480,12 +494,156 @@ public struct StartMenuView: View {
 
     // MARK: - All Programs Flyout
     private var allProgramsFlyout: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(model.allPrograms) { program in
-                menuItemRow(item: program, isLeftColumn: true)
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 0) {
+                // 1. Built-in XP Categories
+                folderCategoryRow(
+                    title: "Accessories",
+                    iconName: "wrench.and.screwdriver.fill",
+                    key: .accessories
+                )
+                folderCategoryRow(
+                    title: "Games",
+                    iconName: "gamecontroller.fill",
+                    key: .games
+                )
+
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+
+                // 2. Discovered macOS Categories
+                ForEach(appDiscovery.categoriesWithApps) { category in
+                    folderCategoryRow(
+                        title: category.rawValue,
+                        iconName: category.iconName,
+                        key: .macCategory(category)
+                    )
+                }
+
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+
+                // 3. All Installed Mac Applications
+                folderCategoryRow(
+                    title: "All Mac Applications",
+                    iconName: "square.grid.2x2.fill",
+                    key: .allMacApps
+                )
+            }
+            .frame(width: 215)
+            .padding(.vertical, 4)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 2))
+            .overlay(
+                RoundedRectangle(cornerRadius: 2)
+                    .strokeBorder(Color(red: 0.00, green: 0.20, blue: 0.70), lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.35), radius: 6, x: 3, y: 3)
+
+            // Secondary Submenu Flyout (to the right)
+            if let flyoutKey = activeFlyout {
+                categorySubmenuFlyout(key: flyoutKey)
+                    .offset(x: 213, y: -60)
             }
         }
-        .frame(width: 180)
+    }
+
+    private func folderCategoryRow(title: String, iconName: String, key: AllProgramsCategoryKey) -> some View {
+        let isActive = (activeFlyout == key)
+
+        return Button(action: {
+            activeFlyout = (activeFlyout == key ? nil : key)
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: iconName)
+                    .font(.system(size: 13))
+                    .foregroundColor(isActive ? .white : Color(red: 0.15, green: 0.45, blue: 0.85))
+                    .frame(width: 20, height: 20)
+
+                Text(title)
+                    .font(.system(size: 11))
+                    .foregroundColor(isActive ? .white : .black)
+                    .lineLimit(1)
+
+                Spacer()
+
+                Image(systemName: "play.fill")
+                    .font(.system(size: 7))
+                    .foregroundColor(isActive ? .white : Color.gray)
+            }
+            .padding(.horizontal, 8)
+            .frame(height: 24)
+            .background(isActive ? Color(red: 0.19, green: 0.42, blue: 0.77) : Color.clear)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onHover { hovering in
+            if hovering {
+                activeFlyout = key
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func categorySubmenuFlyout(key: AllProgramsCategoryKey) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 0) {
+                    switch key {
+                    case .accessories:
+                        xpAppRow(title: "Notepad", icon: "doc.text.fill") {
+                            windowManager.openWindow(appType: .notepad(fileURL: nil))
+                        }
+                        xpAppRow(title: "Command Prompt", icon: "terminal.fill") {
+                            windowManager.openWindow(appType: .cmd)
+                        }
+                        xpAppRow(title: "Calculator", icon: "plus.forwardslash.minus") {
+                            windowManager.openWindow(appType: .calculator)
+                        }
+                        xpAppRow(title: "Paint", icon: "paintbrush.fill") {
+                            windowManager.openWindow(appType: .paint)
+                        }
+                        xpAppRow(title: "Windows Explorer", icon: "folder.fill") {
+                            windowManager.openWindow(appType: .explorer(path: "/"))
+                        }
+                        xpAppRow(title: "Internet Explorer", icon: "globe") {
+                            windowManager.openWindow(appType: .internetExplorer())
+                        }
+                    case .games:
+                        xpAppRow(title: "Minesweeper", icon: "flag.fill") {
+                            windowManager.openWindow(appType: .minesweeper)
+                        }
+                        ForEach(appDiscovery.apps(for: .games)) { app in
+                            macAppRow(app: app)
+                        }
+                    case .macCategory(let category):
+                        let apps = appDiscovery.apps(for: category)
+                        if apps.isEmpty {
+                            Text("No applications found")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color.gray)
+                                .padding(8)
+                        } else {
+                            ForEach(apps) { app in
+                                macAppRow(app: app)
+                            }
+                        }
+                    case .allMacApps:
+                        ForEach(appDiscovery.allApps) { app in
+                            macAppRow(app: app)
+                        }
+                    }
+                }
+            }
+            .frame(maxHeight: 340)
+        }
+        .frame(width: 220)
         .padding(.vertical, 4)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 2))
@@ -493,5 +651,68 @@ public struct StartMenuView: View {
             RoundedRectangle(cornerRadius: 2)
                 .strokeBorder(Color(red: 0.00, green: 0.20, blue: 0.70), lineWidth: 1)
         )
+        .shadow(color: Color.black.opacity(0.35), radius: 6, x: 3, y: 3)
+    }
+
+    private func xpAppRow(title: String, icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: {
+            SoundManager.shared.play(.navigation)
+            action()
+            onClose()
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 13))
+                    .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.85))
+                    .frame(width: 20, height: 20)
+
+                Text(title)
+                    .font(.system(size: 11))
+                    .foregroundColor(.black)
+                    .lineLimit(1)
+
+                Spacer()
+            }
+            .padding(.horizontal, 8)
+            .frame(height: 24)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private func macAppRow(app: DiscoveredMacApp) -> some View {
+        let isHovered = (hoveredAppID == app.id)
+
+        return Button(action: {
+            SoundManager.shared.play(.navigation)
+            appDiscovery.launchApp(app)
+            onClose()
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: app.iconName)
+                    .font(.system(size: 13))
+                    .foregroundColor(isHovered ? .white : Color(red: 0.15, green: 0.45, blue: 0.85))
+                    .frame(width: 20, height: 20)
+
+                Text(app.name)
+                    .font(.system(size: 11))
+                    .foregroundColor(isHovered ? .white : .black)
+                    .lineLimit(1)
+
+                Spacer()
+            }
+            .padding(.horizontal, 8)
+            .frame(height: 24)
+            .background(isHovered ? Color(red: 0.19, green: 0.42, blue: 0.77) : Color.clear)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onHover { hovering in
+            if hovering {
+                hoveredAppID = app.id
+            } else if hoveredAppID == app.id {
+                hoveredAppID = nil
+            }
+        }
     }
 }
