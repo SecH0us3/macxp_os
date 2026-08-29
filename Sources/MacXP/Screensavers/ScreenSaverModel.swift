@@ -251,3 +251,154 @@ public struct Pipes3DEngine {
         }
     }
 }
+
+// MARK: - Mystify Models
+
+public struct MystifySettings: Equatable {
+    public var polygonCount: Int
+    public var lineCount: Int
+
+    public init(polygonCount: Int = 2, lineCount: Int = 10) {
+        self.polygonCount = max(1, min(8, polygonCount))
+        self.lineCount = max(4, min(30, lineCount))
+    }
+}
+
+public struct MystifyVertex {
+    public var x: Double
+    public var y: Double
+    public var vx: Double
+    public var vy: Double
+}
+
+public struct MystifyPolygon {
+    public var vertices: [MystifyVertex]
+    public var history: [[CGPoint]]
+    public var colorHue: Double
+    public var maxLines: Int
+
+    public init(vertexCount: Int = 4, bounds: CGSize, maxLines: Int = 10, colorHue: Double = 0.0) {
+        self.maxLines = maxLines
+        self.colorHue = colorHue
+        self.history = []
+        self.vertices = (0..<vertexCount).map { _ in
+            let x = Double.random(in: 50...max(100, Double(bounds.width) - 50))
+            let y = Double.random(in: 50...max(100, Double(bounds.height) - 50))
+            let vx = Double.random(in: 2.0...5.0) * (Bool.random() ? 1 : -1)
+            let vy = Double.random(in: 2.0...5.0) * (Bool.random() ? 1 : -1)
+            return MystifyVertex(x: x, y: y, vx: vx, vy: vy)
+        }
+    }
+
+    public mutating func step(bounds: CGSize) {
+        let bw = max(100.0, Double(bounds.width))
+        let bh = max(100.0, Double(bounds.height))
+
+        var currentPoints: [CGPoint] = []
+
+        for i in 0..<vertices.count {
+            vertices[i].x += vertices[i].vx
+            vertices[i].y += vertices[i].vy
+
+            if vertices[i].x <= 0 {
+                vertices[i].x = 0
+                vertices[i].vx = abs(vertices[i].vx)
+            } else if vertices[i].x >= bw {
+                vertices[i].x = bw
+                vertices[i].vx = -abs(vertices[i].vx)
+            }
+
+            if vertices[i].y <= 0 {
+                vertices[i].y = 0
+                vertices[i].vy = abs(vertices[i].vy)
+            } else if vertices[i].y >= bh {
+                vertices[i].y = bh
+                vertices[i].vy = -abs(vertices[i].vy)
+            }
+
+            currentPoints.append(CGPoint(x: vertices[i].x, y: vertices[i].y))
+        }
+
+        history.insert(currentPoints, at: 0)
+        if history.count > maxLines {
+            history.removeLast()
+        }
+
+        colorHue = (colorHue + 0.005).truncatingRemainder(dividingBy: 1.0)
+    }
+}
+
+public struct MystifyEngine {
+    public var settings: MystifySettings
+    public var polygons: [MystifyPolygon]
+
+    public init(settings: MystifySettings = MystifySettings(), bounds: CGSize = CGSize(width: 800, height: 600)) {
+        self.settings = settings
+        self.polygons = (0..<settings.polygonCount).map { idx in
+            let hue = Double(idx) / Double(settings.polygonCount)
+            return MystifyPolygon(vertexCount: 4, bounds: bounds, maxLines: settings.lineCount, colorHue: hue)
+        }
+    }
+
+    public mutating func step(bounds: CGSize) {
+        for i in 0..<polygons.count {
+            polygons[i].step(bounds: bounds)
+        }
+    }
+}
+
+// MARK: - Windows XP 3D Logo Models
+
+public struct XP3DLogoSettings: Equatable {
+    public var speed: Double
+    public var logoSize: Double
+
+    public init(speed: Double = 1.0, logoSize: Double = 120.0) {
+        self.speed = max(0.2, min(3.0, speed))
+        self.logoSize = max(60.0, min(240.0, logoSize))
+    }
+}
+
+public struct XP3DLogoState {
+    public var position: CGPoint
+    public var velocity: CGPoint
+    public var rotationAngle: Double
+    public var rotationSpeed: Double
+    public var settings: XP3DLogoSettings
+
+    public init(settings: XP3DLogoSettings = XP3DLogoSettings(), bounds: CGSize = CGSize(width: 800, height: 600)) {
+        self.settings = settings
+        self.position = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
+        self.velocity = CGPoint(x: 120.0 * settings.speed, y: 90.0 * settings.speed)
+        self.rotationAngle = 0.0
+        self.rotationSpeed = 45.0 * settings.speed
+    }
+
+    public mutating func update(deltaTime: Double, bounds: CGSize) {
+        position.x += velocity.x * CGFloat(deltaTime)
+        position.y += velocity.y * CGFloat(deltaTime)
+        rotationAngle += rotationSpeed * deltaTime
+
+        let radius = CGFloat(settings.logoSize / 2)
+        let minX = radius
+        let maxX = max(radius, bounds.width - radius)
+        let minY = radius
+        let maxY = max(radius, bounds.height - radius)
+
+        if position.x <= minX {
+            position.x = minX
+            velocity.x = abs(velocity.x)
+        } else if position.x >= maxX {
+            position.x = maxX
+            velocity.x = -abs(velocity.x)
+        }
+
+        if position.y <= minY {
+            position.y = minY
+            velocity.y = abs(velocity.y)
+        } else if position.y >= maxY {
+            position.y = maxY
+            velocity.y = -abs(velocity.y)
+        }
+    }
+}
