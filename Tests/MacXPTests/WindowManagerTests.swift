@@ -57,6 +57,14 @@ final class WindowManagerTests: XCTestCase {
         let calcWin = manager.window(for: calcId)!
         XCTAssertEqual(calcWin.appType, .calculator)
         XCTAssertEqual(calcWin.title, "Calculator")
+
+        let ieId = manager.openWindow(appType: .internetExplorer(url: "https://www.google.com"))
+        let ieWin = manager.window(for: ieId)!
+        XCTAssertEqual(ieWin.appType, .internetExplorer(url: "https://www.google.com"))
+        XCTAssertEqual(ieWin.title, "Internet Explorer")
+        XCTAssertEqual(ieWin.icon, "globe")
+        XCTAssertEqual(ieWin.rect.width, 800)
+        XCTAssertEqual(ieWin.rect.height, 560)
         
         let mineWin = manager.window(for: mineId)!
         XCTAssertEqual(mineWin.appType, .minesweeper)

@@ -374,6 +374,13 @@ public struct DesktopView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 SoundManager.shared.play(.startup)
+                #if os(macOS)
+                DispatchQueue.main.async {
+                    for window in NSApplication.shared.windows {
+                        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenPrimary]
+                    }
+                }
+                #endif
                 hotkeyManager.startMonitoring(
                     windowManager: windowManager,
                     onToggleStartMenu: {
@@ -400,11 +407,15 @@ public struct DesktopView: View {
 
     private func handleOpenDesktopItem(_ item: DesktopIconItem) {
         SoundManager.shared.play(.navigation)
-        if let appType = item.appType {
+        if item.title == "Internet Explorer" || item.appType == .internetExplorer() {
+            windowManager.openWindow(appType: .internetExplorer(), title: "Internet Explorer", icon: "globe")
+        } else if let appType = item.appType {
             windowManager.openWindow(appType: appType, title: item.title, icon: item.iconName)
         } else if let fileURL = item.fileURL {
             #if os(macOS)
-            NSWorkspace.shared.open(fileURL)
+            let config = NSWorkspace.OpenConfiguration()
+            config.activates = true
+            NSWorkspace.shared.open(fileURL, configuration: config, completionHandler: nil)
             #endif
         }
     }
@@ -477,6 +488,8 @@ public struct DesktopView: View {
             DisplayPropertiesView(onClose: {
                 windowManager.closeWindow(id: window.id)
             })
+        case .internetExplorer(let url):
+            InternetExplorerView(initialURL: url, windowManager: windowManager, window: window)
         case .runDialog:
             RunDialogView(windowManager: windowManager, window: window)
         }

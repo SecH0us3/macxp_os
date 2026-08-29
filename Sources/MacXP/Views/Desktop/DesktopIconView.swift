@@ -85,7 +85,7 @@ public class DesktopManager: ObservableObject {
                 title: "Internet Explorer",
                 iconName: "globe",
                 isSystem: true,
-                appType: .explorer(path: "https://www.google.com"),
+                appType: .internetExplorer(url: "https://www.google.com"),
                 position: CGPoint(x: 20, y: 290)
             )
         ]

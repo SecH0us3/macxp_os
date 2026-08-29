@@ -210,6 +210,15 @@ final class DesktopAndTaskbarTests: XCTestCase {
         runItem.action(windowManager)
         XCTAssertEqual(windowManager.windows.count, 2)
         XCTAssertEqual(windowManager.windows.last?.appType, .runDialog)
+
+        // Test Pinned Internet Explorer dispatch
+        guard let ieItem = startMenuModel.pinnedItems.first(where: { $0.title == "Internet" }) else {
+            XCTFail("Internet item not found in start menu")
+            return
+        }
+        ieItem.action(windowManager)
+        XCTAssertEqual(windowManager.windows.count, 3)
+        XCTAssertEqual(windowManager.windows.last?.appType, .internetExplorer(url: "https://www.google.com"))
     }
     
     // MARK: - System Tray & Volume Tests

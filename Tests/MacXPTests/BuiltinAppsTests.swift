@@ -469,6 +469,7 @@ final class BuiltinAppsTests: XCTestCase {
         XCTAssertEqual(engine.resolveCommand("control"), .openApp(.controlPanel))
         XCTAssertEqual(engine.resolveCommand("sysdm.cpl"), .openApp(.systemProperties))
         XCTAssertEqual(engine.resolveCommand("explorer"), .openApp(.explorer(path: "/")))
+        XCTAssertEqual(engine.resolveCommand("iexplore"), .openApp(.internetExplorer(url: "https://www.google.com")))
         
         // URL
         if case .openURL(let url) = engine.resolveCommand("https://www.google.com") {
@@ -488,5 +489,41 @@ final class BuiltinAppsTests: XCTestCase {
         
         XCTAssertEqual(engine.history.first, "cmd")
         XCTAssertEqual(engine.history.count, 2)
+    }
+
+    // MARK: - 8. Internet Explorer ViewModel Tests
+
+    func testInternetExplorerURLNormalization() {
+        let vm = InternetExplorerViewModel(initialURL: "https://www.google.com")
+        XCTAssertEqual(vm.currentURLString, "https://www.google.com")
+
+        // Domain without scheme
+        let url1 = vm.normalizeInputURL("youtube.com")
+        XCTAssertEqual(url1.absoluteString, "https://youtube.com")
+
+        // Search query
+        let url2 = vm.normalizeInputURL("windows xp blissful wallpaper")
+        XCTAssertTrue(url2.absoluteString.contains("google.com/search?q=windows%20xp%20blissful%20wallpaper") || url2.absoluteString.contains("google.com/search?q=windows+xp+blissful+wallpaper"))
+
+        // Local or custom schemes
+        let url3 = vm.normalizeInputURL("http://localhost:3000")
+        XCTAssertEqual(url3.absoluteString, "http://localhost:3000")
+    }
+
+    func testInternetExplorerNavigationHistory() {
+        let vm = InternetExplorerViewModel(initialURL: "https://www.google.com")
+        XCTAssertFalse(vm.canGoBack)
+        XCTAssertFalse(vm.canGoForward)
+
+        vm.loadURL("https://github.com")
+        XCTAssertTrue(vm.canGoBack)
+        XCTAssertEqual(vm.currentURLString, "https://github.com")
+
+        vm.goBack()
+        XCTAssertEqual(vm.currentURLString, "https://www.google.com")
+        XCTAssertTrue(vm.canGoForward)
+
+        vm.goForward()
+        XCTAssertEqual(vm.currentURLString, "https://github.com")
     }
 }

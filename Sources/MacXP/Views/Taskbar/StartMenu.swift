@@ -52,7 +52,7 @@ public class StartMenuModel: ObservableObject {
                 iconName: "globe",
                 isBold: true,
                 action: { wm in
-                    wm.openWindow(appType: .explorer(path: "https://www.google.com"), title: "Internet Explorer", icon: "globe")
+                    wm.openWindow(appType: .internetExplorer(url: "https://www.google.com"), title: "Internet Explorer", icon: "globe")
                 }
             ),
             StartMenuItem(

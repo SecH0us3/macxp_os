@@ -11,6 +11,7 @@ public enum XPAppType: Equatable, Hashable {
     case controlPanel
     case systemProperties
     case displayProperties
+    case internetExplorer(url: String = "https://www.google.com")
     case runDialog
     
     public var defaultTitle: String {
@@ -40,6 +41,8 @@ public enum XPAppType: Equatable, Hashable {
             return "System Properties"
         case .displayProperties:
             return "Display Properties"
+        case .internetExplorer:
+            return "Internet Explorer"
         case .runDialog:
             return "Run"
         }
@@ -65,6 +68,8 @@ public enum XPAppType: Equatable, Hashable {
             return "desktopcomputer"
         case .displayProperties:
             return "display"
+        case .internetExplorer:
+            return "globe"
         case .runDialog:
             return "play.circle"
         }
@@ -90,6 +95,8 @@ public enum XPAppType: Equatable, Hashable {
             return CGSize(width: 440, height: 480)
         case .displayProperties:
             return CGSize(width: 440, height: 490)
+        case .internetExplorer:
+            return CGSize(width: 800, height: 560)
         case .runDialog:
             return CGSize(width: 400, height: 180)
         }

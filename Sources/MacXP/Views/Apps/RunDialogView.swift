@@ -48,6 +48,8 @@ public class RunDialogEngine: ObservableObject {
             return .openApp(.systemProperties)
         case "desk.cpl", "display", "screensaver":
             return .openApp(.displayProperties)
+        case "iexplore", "iexplore.exe", "internet":
+            return .openApp(.internetExplorer(url: "https://www.google.com"))
         case "explorer", "explorer.exe":
             return .openApp(.explorer(path: "/"))
         default:
