@@ -75,17 +75,17 @@ public struct ExplorerSidebar: View {
                     isExpanded: $isPlacesExpanded
                 ) {
                     VStack(alignment: .leading, spacing: 6) {
-                        taskActionLink(title: "My Computer", icon: "desktopcomputer") {
+                        taskActionLink(title: "My Computer", icon: "desktopcomputer", customImage: XPAssetProvider.loadMyComputerIcon()) {
                             onNavigate("computer://")
                         }
-                        taskActionLink(title: "My Documents", icon: "folder.fill") {
+                        taskActionLink(title: "My Documents", icon: "folder.fill", customImage: XPAssetProvider.loadMyDocumentsIcon()) {
                             let docs = (FileManager.default.homeDirectoryForCurrentUser.path as NSString).appendingPathComponent("Documents")
                             onNavigate(docs)
                         }
-                        taskActionLink(title: "Shared Documents", icon: "externaldrive.fill") {
+                        taskActionLink(title: "Shared Documents", icon: "externaldrive.fill", customImage: XPAssetProvider.loadSharedDocumentsIcon()) {
                             onNavigate("/Users/Shared")
                         }
-                        taskActionLink(title: "Desktop", icon: "display") {
+                        taskActionLink(title: "Desktop", icon: "display", customImage: XPAssetProvider.loadIcon(named: "system_properties")) {
                             let dt = (FileManager.default.homeDirectoryForCurrentUser.path as NSString).appendingPathComponent("Desktop")
                             onNavigate(dt)
                         }
@@ -184,15 +184,31 @@ public struct ExplorerSidebar: View {
     private func taskActionLink(
         title: String,
         icon: String,
+        customImage: NSImage? = nil,
         color: Color = Color(red: 0.15, green: 0.35, blue: 0.75),
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             HStack(spacing: 6) {
+                #if os(macOS)
+                if let custom = customImage {
+                    Image(nsImage: custom)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 14, height: 14)
+                } else {
+                    Image(systemName: icon)
+                        .font(.system(size: 11))
+                        .foregroundColor(color)
+                        .frame(width: 14)
+                }
+                #else
                 Image(systemName: icon)
                     .font(.system(size: 11))
                     .foregroundColor(color)
                     .frame(width: 14)
+                #endif
 
                 Text(title)
                     .font(.system(size: 10, weight: .regular))

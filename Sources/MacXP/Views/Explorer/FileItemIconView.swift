@@ -65,7 +65,13 @@ public struct FileItemIconView: View {
         let isApp = (ext == "app" || path.hasSuffix(".app"))
         let exists = FileManager.default.fileExists(atPath: path)
 
-        if (isApp || (!isDirectory && !isVolume)) && exists {
+        if let xpIcon = xpSystemIcon {
+            Image(nsImage: xpIcon)
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: size, height: size)
+        } else if (isApp || (!isDirectory && !isVolume)) && exists {
             let nsImage = ItemIconCache.shared.icon(forPath: path)
             Image(nsImage: nsImage)
                 .resizable()
@@ -79,6 +85,51 @@ public struct FileItemIconView: View {
         fallbackSymbol
         #endif
     }
+
+    #if os(macOS)
+    private var xpSystemIcon: NSImage? {
+        let n = name.lowercased()
+        let p = path.lowercased()
+
+        if n == "my computer" || p == "computer://" || fallbackIconName == "desktopcomputer" {
+            return XPAssetProvider.loadMyComputerIcon()
+        }
+        if n.contains("local disk") || n.contains("disk (c:)") || (isVolume && path == "/") || p == "/" || p == "c:\\" {
+            return XPAssetProvider.loadHardDriveIcon()
+        }
+        if n.contains("floppy") {
+            return XPAssetProvider.loadFloppyDriveIcon()
+        }
+        if n.contains("cd") || n.contains("dvd") || n.contains("optical") {
+            return XPAssetProvider.loadOpticalDriveIcon()
+        }
+        if isVolume {
+            return XPAssetProvider.loadRemovableDriveIcon() ?? XPAssetProvider.loadHardDriveIcon()
+        }
+        if n == "shared documents" || p.contains("shared") {
+            return XPAssetProvider.loadSharedDocumentsIcon()
+        }
+        if n == "my documents" || n == "user documents" || n == "documents" || p.hasSuffix("/documents") || p == FileManager.default.homeDirectoryForCurrentUser.path {
+            return XPAssetProvider.loadMyDocumentsIcon()
+        }
+        if n == "recycle bin" || p == "trash://" || p.contains(".trash") {
+            return XPAssetProvider.loadRecycleIcon(isEmpty: true)
+        }
+        if n == "control panel" {
+            return XPAssetProvider.loadControlPanelIcon()
+        }
+        if n == "my network places" || n == "network" {
+            return XPAssetProvider.loadNetworkPlacesIcon()
+        }
+        if n == "desktop" || fallbackIconName == "display" {
+            return XPAssetProvider.loadIcon(named: "system_properties")
+        }
+        if isDirectory {
+            return XPAssetProvider.loadFolderIcon()
+        }
+        return nil
+    }
+    #endif
 
     private var fallbackSymbol: some View {
         Group {

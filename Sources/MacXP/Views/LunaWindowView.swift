@@ -163,14 +163,55 @@ public struct LunaWindowView<Content: View>: View {
     private var titleBarView: some View {
         HStack(spacing: 6) {
             // App Icon
+            #if os(macOS)
             if case .internetExplorer = window.appType {
                 IEIconView(size: 15)
+            } else if window.title == "My Computer" || (window.appType == .explorer(path: "computer://")) || (window.appType == .explorer(path: "/")) {
+                if let icon = XPAssetProvider.loadMyComputerIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                } else {
+                    fallbackTitleIcon
+                }
+            } else if window.title == "Control Panel" || window.appType == .controlPanel {
+                if let icon = XPAssetProvider.loadControlPanelIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                } else {
+                    fallbackTitleIcon
+                }
+            } else if window.title == "System Properties" || window.appType == .systemProperties {
+                if let icon = XPAssetProvider.loadIcon(named: "system_properties") ?? XPAssetProvider.loadMyComputerIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                } else {
+                    fallbackTitleIcon
+                }
+            } else if case .explorer = window.appType {
+                if let icon = XPAssetProvider.loadFolderIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                } else {
+                    fallbackTitleIcon
+                }
             } else if !window.icon.isEmpty {
-                Image(systemName: window.icon)
-                    .font(.system(size: 13))
-                    .foregroundColor(.white)
-                    .shadow(color: Color.black.opacity(0.4), radius: 1, x: 0.5, y: 0.5)
+                fallbackTitleIcon
             }
+            #else
+            fallbackTitleIcon
+            #endif
 
             // Window Title
             Text(window.title)
@@ -200,8 +241,8 @@ public struct LunaWindowView<Content: View>: View {
             }
             .padding(.trailing, 2)
         }
-        .padding(.leading, 8)
-        .frame(height: 30)
+        .padding(.horizontal, 8)
+        .frame(height: 28)
         .background(titleBarGradient)
         .overlay(
             VStack {
@@ -228,6 +269,17 @@ public struct LunaWindowView<Content: View>: View {
         )
         .onTapGesture(count: 2) {
             onToggleMaximize?()
+        }
+    }
+
+    private var fallbackTitleIcon: some View {
+        Group {
+            if !window.icon.isEmpty {
+                Image(systemName: window.icon)
+                    .font(.system(size: 13))
+                    .foregroundColor(.white)
+                    .shadow(color: Color.black.opacity(0.4), radius: 1, x: 0.5, y: 0.5)
+            }
         }
     }
 

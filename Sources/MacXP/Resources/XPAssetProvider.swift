@@ -102,6 +102,92 @@ public final class XPAssetProvider {
     }
 
     private var cachedIEIcon: NSImage?
+    private var iconCache: [String: NSImage] = [:]
+
+    /// Loads an authentic Windows XP icon from Resources/Icons/<name>.png
+    public static func loadIcon(named name: String) -> NSImage? {
+        if let cached = shared.iconCache[name] {
+            return cached
+        }
+
+        let baseName = (name as NSString).deletingPathExtension
+        let searchPaths: [URL?] = [
+            Bundle.main.url(forResource: baseName, withExtension: "png", subdirectory: "Icons"),
+            Bundle.main.url(forResource: baseName, withExtension: "png"),
+            Bundle.main.resourceURL?.appendingPathComponent("Icons/\(baseName).png"),
+            Bundle.main.resourceURL?.appendingPathComponent("\(baseName).png"),
+            URL(fileURLWithPath: "Resources/Icons/\(baseName).png"),
+            URL(fileURLWithPath: "Resources/\(baseName).png"),
+            URL(fileURLWithPath: "../Resources/Icons/\(baseName).png"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Icons/\(baseName).png"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/\(baseName).png")
+        ]
+
+        for case let url? in searchPaths {
+            if FileManager.default.fileExists(atPath: url.path),
+               let image = NSImage(contentsOf: url) {
+                shared.iconCache[name] = image
+                return image
+            }
+        }
+
+        return nil
+    }
+
+    /// Loads the authentic Windows XP "My Computer" icon
+    public static func loadMyComputerIcon() -> NSImage? {
+        loadIcon(named: "my_computer")
+    }
+
+    /// Loads the authentic Windows XP "Local Disk (C:)" Hard Drive icon
+    public static func loadHardDriveIcon() -> NSImage? {
+        loadIcon(named: "drive_harddisk")
+    }
+
+    /// Loads the authentic Windows XP yellow Folder icon
+    public static func loadFolderIcon() -> NSImage? {
+        loadIcon(named: "folder")
+    }
+
+    /// Loads the authentic Windows XP "My Documents" icon
+    public static func loadMyDocumentsIcon() -> NSImage? {
+        loadIcon(named: "my_documents")
+    }
+
+    /// Loads the authentic Windows XP "Shared Documents" icon
+    public static func loadSharedDocumentsIcon() -> NSImage? {
+        loadIcon(named: "shared_documents")
+    }
+
+    /// Loads the authentic Windows XP Recycle Bin icon (empty or full)
+    public static func loadRecycleIcon(isEmpty: Bool = true) -> NSImage? {
+        loadIcon(named: isEmpty ? "recycle_empty" : "recycle_full")
+    }
+
+    /// Loads the authentic Windows XP Optical CD/DVD Drive icon
+    public static func loadOpticalDriveIcon() -> NSImage? {
+        loadIcon(named: "drive_optical")
+    }
+
+    /// Loads the authentic Windows XP 3.5 Floppy Drive icon
+    public static func loadFloppyDriveIcon() -> NSImage? {
+        loadIcon(named: "drive_floppy")
+    }
+
+    /// Loads the authentic Windows XP USB / Removable Drive icon
+    public static func loadRemovableDriveIcon() -> NSImage? {
+        loadIcon(named: "drive_removable")
+    }
+
+    /// Loads the authentic Windows XP Control Panel icon
+    public static func loadControlPanelIcon() -> NSImage? {
+        loadIcon(named: "control_panel")
+    }
+
+    /// Loads the authentic Windows XP My Network Places icon
+    public static func loadNetworkPlacesIcon() -> NSImage? {
+        loadIcon(named: "network_places")
+    }
 
     /// Loads the authentic Windows XP Internet Explorer 6 icon
     public static func loadIEIcon() -> NSImage? {
@@ -109,11 +195,15 @@ public final class XPAssetProvider {
             return cached
         }
 
+        if let icon = loadIcon(named: "ie") {
+            shared.cachedIEIcon = icon
+            return icon
+        }
+
         let searchPaths: [URL?] = [
             Bundle.main.url(forResource: "ie", withExtension: "png"),
             Bundle.main.resourceURL?.appendingPathComponent("ie.png"),
             URL(fileURLWithPath: "Resources/ie.png"),
-            URL(fileURLWithPath: "Sources/MacXP/Resources/ie.png"),
             URL(fileURLWithPath: "../Resources/ie.png"),
             Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/ie.png")
         ]

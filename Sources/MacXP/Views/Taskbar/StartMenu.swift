@@ -403,18 +403,76 @@ public struct StartMenuView: View {
             onClose()
         }) {
             HStack(spacing: 8) {
+                #if os(macOS)
                 if item.title == "Internet" || item.subtitle == "Internet Explorer" {
                     IEIconView(size: isLeftColumn ? 22 : 18)
                         .frame(width: 24, height: 24)
+                } else if item.title == "My Computer" || item.iconName == "desktopcomputer" {
+                    if let icon = XPAssetProvider.loadMyComputerIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
+                } else if item.title == "My Documents" {
+                    if let icon = XPAssetProvider.loadMyDocumentsIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
+                } else if item.title == "Control Panel" {
+                    if let icon = XPAssetProvider.loadControlPanelIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
+                } else if item.title == "Search" {
+                    if let icon = XPAssetProvider.loadIcon(named: "search") {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
+                } else if item.title == "Help and Support" {
+                    if let icon = XPAssetProvider.loadIcon(named: "help") {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
+                } else if item.title == "Run..." {
+                    if let icon = XPAssetProvider.loadIcon(named: "cmd") {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
                 } else {
-                    Image(systemName: item.iconName)
-                        .font(.system(size: isLeftColumn ? 18 : 15))
-                        .foregroundColor(
-                            isHovered ? .white :
-                                (isLeftColumn ? Color(red: 0.15, green: 0.45, blue: 0.85) : Color(red: 0.05, green: 0.25, blue: 0.65))
-                        )
-                        .frame(width: 24, height: 24)
+                    menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
                 }
+                #else
+                menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                #endif
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(item.title)
@@ -449,6 +507,16 @@ public struct StartMenuView: View {
                 hoveredItemID = nil
             }
         }
+    }
+
+    private func menuItemFallbackIcon(item: StartMenuItem, isLeftColumn: Bool, isHovered: Bool) -> some View {
+        Image(systemName: item.iconName)
+            .font(.system(size: isLeftColumn ? 18 : 15))
+            .foregroundColor(
+                isHovered ? .white :
+                    (isLeftColumn ? Color(red: 0.15, green: 0.45, blue: 0.85) : Color(red: 0.05, green: 0.25, blue: 0.65))
+            )
+            .frame(width: 24, height: 24)
     }
 
     // MARK: - Footer
@@ -679,15 +747,76 @@ public struct StartMenuView: View {
             onClose()
         }) {
             HStack(spacing: 8) {
+                #if os(macOS)
                 if title == "Internet Explorer" {
                     IEIconView(size: 18)
                         .frame(width: 20, height: 20)
+                } else if title == "Windows Explorer" {
+                    if let iconImg = XPAssetProvider.loadFolderIcon() {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Notepad" {
+                    if let iconImg = XPAssetProvider.loadIcon(named: "notepad") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Paint" {
+                    if let iconImg = XPAssetProvider.loadIcon(named: "paint") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Calculator" {
+                    if let iconImg = XPAssetProvider.loadIcon(named: "calculator") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Command Prompt" {
+                    if let iconImg = XPAssetProvider.loadIcon(named: "cmd") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Minesweeper" {
+                    if let iconImg = XPAssetProvider.loadIcon(named: "minesweeper") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
                 } else {
-                    Image(systemName: icon)
-                        .font(.system(size: 13))
-                        .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.85))
-                        .frame(width: 20, height: 20)
+                    fallbackXpAppIcon(icon: icon)
                 }
+                #else
+                fallbackXpAppIcon(icon: icon)
+                #endif
 
                 Text(title)
                     .font(.system(size: 11))
@@ -701,6 +830,13 @@ public struct StartMenuView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+    }
+
+    private func fallbackXpAppIcon(icon: String) -> some View {
+        Image(systemName: icon)
+            .font(.system(size: 13))
+            .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.85))
+            .frame(width: 20, height: 20)
     }
 
     private func macAppRow(app: DiscoveredMacApp) -> some View {

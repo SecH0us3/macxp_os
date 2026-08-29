@@ -24,9 +24,7 @@ public struct ExplorerAddressBar: View {
             // Address Input Combo Box
             HStack(spacing: 4) {
                 // Folder / Location Icon
-                Image(systemName: iconForCurrentPath)
-                    .font(.system(size: 13))
-                    .foregroundColor(Color(red: 0.95, green: 0.75, blue: 0.20))
+                addressBarIcon
                     .padding(.leading, 4)
 
                 // Editable Path Text Field
@@ -126,6 +124,50 @@ public struct ExplorerAddressBar: View {
         if !trimmed.isEmpty {
             onNavigate(trimmed)
         }
+    }
+
+    private var addressBarIcon: some View {
+        Group {
+            #if os(macOS)
+            if currentPath == "computer://" || currentPath.caseInsensitiveCompare("My Computer") == .orderedSame {
+                if let icon = XPAssetProvider.loadMyComputerIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                } else {
+                    fallbackAddressIcon
+                }
+            } else if currentPath == "/" || currentPath == "C:\\" {
+                if let icon = XPAssetProvider.loadHardDriveIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                } else {
+                    fallbackAddressIcon
+                }
+            } else if let icon = XPAssetProvider.loadFolderIcon() {
+                Image(nsImage: icon)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+            } else {
+                fallbackAddressIcon
+            }
+            #else
+            fallbackAddressIcon
+            #endif
+        }
+    }
+
+    private var fallbackAddressIcon: some View {
+        Image(systemName: iconForCurrentPath)
+            .font(.system(size: 13))
+            .foregroundColor(Color(red: 0.95, green: 0.75, blue: 0.20))
     }
 
     private var iconForCurrentPath: String {
