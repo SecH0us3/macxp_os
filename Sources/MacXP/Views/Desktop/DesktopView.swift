@@ -490,6 +490,8 @@ public struct DesktopView: View {
             })
         case .internetExplorer(let url):
             InternetExplorerView(initialURL: url, windowManager: windowManager, window: window)
+        case .mediaPlayer(let fileURL):
+            WindowsMediaPlayerView(fileURL: fileURL, windowManager: windowManager, window: window)
         case .runDialog:
             RunDialogView(windowManager: windowManager, window: window)
         }

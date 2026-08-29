@@ -12,6 +12,7 @@ public enum XPAppType: Equatable, Hashable {
     case systemProperties
     case displayProperties
     case internetExplorer(url: String = "https://www.google.com")
+    case mediaPlayer(fileURL: URL? = nil)
     case runDialog
     
     public var defaultTitle: String {
@@ -43,6 +44,11 @@ public enum XPAppType: Equatable, Hashable {
             return "Display Properties"
         case .internetExplorer:
             return "Internet Explorer"
+        case .mediaPlayer(let url):
+            if let url = url {
+                return "\(url.deletingPathExtension().lastPathComponent) - Windows Media Player"
+            }
+            return "Windows Media Player"
         case .runDialog:
             return "Run"
         }
@@ -70,6 +76,8 @@ public enum XPAppType: Equatable, Hashable {
             return "display"
         case .internetExplorer:
             return "globe"
+        case .mediaPlayer:
+            return "play.rectangle.fill"
         case .runDialog:
             return "play.circle"
         }
@@ -97,6 +105,8 @@ public enum XPAppType: Equatable, Hashable {
             return CGSize(width: 440, height: 490)
         case .internetExplorer:
             return CGSize(width: 800, height: 560)
+        case .mediaPlayer:
+            return CGSize(width: 720, height: 500)
         case .runDialog:
             return CGSize(width: 400, height: 180)
         }

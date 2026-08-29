@@ -524,9 +524,12 @@ public class FileSystemService: ObservableObject {
 
         let ext = item.fileExtension.lowercased()
         let textExtensions: Set<String> = ["txt", "md", "json", "swift", "c", "h", "cpp", "py", "sh", "zsh", "js", "ts", "html", "css", "xml", "log", "ini", "yaml", "yml", "csv"]
+        let mediaExtensions: Set<String> = ["mp3", "wav", "m4a", "flac", "aac", "ogg", "wma", "mp4", "mov", "avi", "mkv", "wmv"]
 
         if textExtensions.contains(ext) {
             windowManager?.openWindow(appType: .notepad(fileURL: item.url), title: "\(item.name) - Notepad")
+        } else if mediaExtensions.contains(ext) {
+            windowManager?.openWindow(appType: .mediaPlayer(fileURL: item.url), title: "\(item.name) - Windows Media Player")
         } else {
             #if os(macOS)
             NSWorkspace.shared.open(item.url)

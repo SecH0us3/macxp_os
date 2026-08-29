@@ -63,6 +63,15 @@ public class StartMenuModel: ObservableObject {
                 action: { wm in
                     wm.openWindow(appType: .notepad(fileURL: nil), title: "Outlook Express", icon: "envelope.fill")
                 }
+            ),
+            StartMenuItem(
+                title: "Windows Media Player",
+                subtitle: "Play Music & Videos",
+                iconName: "play.rectangle.fill",
+                isBold: true,
+                action: { wm in
+                    wm.openWindow(appType: .mediaPlayer(fileURL: nil), title: "Windows Media Player", icon: "play.rectangle.fill")
+                }
             )
         ]
 
@@ -163,6 +172,7 @@ public class StartMenuModel: ObservableObject {
             StartMenuItem(title: "Minesweeper", iconName: "flag.fill", action: { wm in wm.openWindow(appType: .minesweeper) }),
             StartMenuItem(title: "Paint", iconName: "paintbrush.fill", action: { wm in wm.openWindow(appType: .paint) }),
             StartMenuItem(title: "Windows Explorer", iconName: "folder.fill", action: { wm in wm.openWindow(appType: .explorer(path: "/")) }),
+            StartMenuItem(title: "Windows Media Player", iconName: "play.rectangle.fill", action: { wm in wm.openWindow(appType: .mediaPlayer(fileURL: nil)) }),
             StartMenuItem(title: "Control Panel", iconName: "gearshape.fill", action: { wm in wm.openWindow(appType: .controlPanel) }),
             StartMenuItem(title: "System Properties", iconName: "info.circle.fill", action: { wm in wm.openWindow(appType: .systemProperties) })
         ]
@@ -614,6 +624,9 @@ public struct StartMenuView: View {
                         }
                         xpAppRow(title: "Internet Explorer", icon: "globe") {
                             windowManager.openWindow(appType: .internetExplorer())
+                        }
+                        xpAppRow(title: "Windows Media Player", icon: "play.rectangle.fill") {
+                            windowManager.openWindow(appType: .mediaPlayer())
                         }
                     case .games:
                         xpAppRow(title: "Minesweeper", icon: "flag.fill") {

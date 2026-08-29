@@ -87,6 +87,13 @@ public class DesktopManager: ObservableObject {
                 isSystem: true,
                 appType: .internetExplorer(url: "https://www.google.com"),
                 position: CGPoint(x: 20, y: 290)
+            ),
+            DesktopIconItem(
+                title: "Windows Media Player",
+                iconName: "play.rectangle.fill",
+                isSystem: true,
+                appType: .mediaPlayer(fileURL: nil),
+                position: CGPoint(x: 20, y: 380)
             )
         ]
     }
