@@ -230,22 +230,14 @@ public struct StartMenuView: View {
             }
             .frame(width: 380)
             .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(TopRoundedRectangle(radius: 6))
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
+                TopRoundedRectangle(radius: 6)
                     .strokeBorder(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.00, green: 0.33, blue: 0.92),
-                                Color(red: 0.05, green: 0.20, blue: 0.65)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 2
+                        Color(red: 0.00, green: 0.20, blue: 0.70),
+                        lineWidth: 1
                     )
             )
-            .shadow(color: Color.black.opacity(0.4), radius: 12, x: 4, y: 4)
 
             // All Programs Flyout
             if isAllProgramsOpen {
@@ -496,11 +488,10 @@ public struct StartMenuView: View {
         .frame(width: 180)
         .padding(.vertical, 4)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .clipShape(RoundedRectangle(cornerRadius: 2))
         .overlay(
-            RoundedRectangle(cornerRadius: 4)
-                .strokeBorder(Color(red: 0.00, green: 0.33, blue: 0.92), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 2)
+                .strokeBorder(Color(red: 0.00, green: 0.20, blue: 0.70), lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.3), radius: 6, x: 2, y: 2)
     }
 }

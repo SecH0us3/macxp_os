@@ -162,12 +162,6 @@ public struct StartButton: View {
                         }
                         .clipShape(StartButtonShape())
                     )
-                    .shadow(
-                        color: Color.black.opacity(isOpen || isPressed ? 0.0 : 0.3),
-                        radius: 2,
-                        x: 1,
-                        y: 1
-                    )
                 }
             }
         }
