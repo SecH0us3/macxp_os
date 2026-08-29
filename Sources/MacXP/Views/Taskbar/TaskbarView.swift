@@ -90,6 +90,7 @@ public struct TaskbarWindowTab: View {
             .shadow(color: Color.black.opacity(isActive ? 0.0 : 0.2), radius: 1, x: 0, y: 1)
         }
         .buttonStyle(PlainButtonStyle())
+        .focusable(false)
         .onHover { hovering in
             isHovered = hovering
         }
@@ -189,6 +190,7 @@ public struct TaskbarView: View {
                         .frame(width: 18, height: 20)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .focusable(false)
                 .help("Show Desktop")
 
                 // Explorer
@@ -201,6 +203,7 @@ public struct TaskbarView: View {
                         .frame(width: 18, height: 20)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .focusable(false)
                 .help("Windows Explorer")
 
                 // Command Prompt
@@ -213,6 +216,7 @@ public struct TaskbarView: View {
                         .frame(width: 18, height: 20)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .focusable(false)
                 .help("Command Prompt")
             }
             .padding(.trailing, 2)

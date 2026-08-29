@@ -263,6 +263,7 @@ public struct SystemTrayView: View {
                     .frame(width: 16, height: 16)
             }
             .buttonStyle(PlainButtonStyle())
+            .focusable(false)
             .help(model.isMuted ? "Volume: Muted" : "Volume: \(Int(model.volumeLevel * 100))%")
 
             // Digital Live Clock
@@ -275,6 +276,7 @@ public struct SystemTrayView: View {
                     .shadow(color: Color.black.opacity(0.4), radius: 0.5, x: 0.5, y: 0.5)
             }
             .buttonStyle(PlainButtonStyle())
+            .focusable(false)
             .help(SystemTrayModel.formatFullDate(model.currentDate))
         }
         .padding(.horizontal, 8)

@@ -103,71 +103,71 @@ public struct StartButton: View {
     }
 
     public var body: some View {
-        Button(action: action) {
-            Group {
-                if let img = buttonImage ?? XPAssetProvider.loadStartButtonImage() {
-                    ZStack {
-                        Image(nsImage: img)
-                            .resizable()
-                            .interpolation(.high)
-                            .scaledToFit()
-                            .frame(width: 104, height: 30)
-                            .brightness(isHovered && !isOpen && !isPressed ? 0.12 : 0.0)
-                            .colorMultiply(isOpen || isPressed ? Color(white: 0.82) : Color.white)
-                            .offset(x: isOpen || isPressed ? 1 : 0, y: isOpen || isPressed ? 1 : 0)
-                    }
+        ZStack {
+            if let img = buttonImage ?? XPAssetProvider.loadStartButtonImage() {
+                Image(nsImage: img)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
                     .frame(width: 104, height: 30)
-                } else {
-                    HStack(spacing: 6) {
-                        XPFlagIcon(size: 18)
-                            .padding(.leading, 6)
-
-                        Text("start")
-                            .font(.system(size: 14, weight: .black, design: .rounded))
-                            .italic()
-                            .foregroundColor(.white)
-                            .shadow(color: Color.black.opacity(0.8), radius: 1.5, x: 1, y: 1)
-
-                        Spacer()
-                    }
-                    .frame(width: 104, height: 30)
-                    .background(backgroundGradient)
                     .clipShape(StartButtonShape())
-                    .overlay(
-                        StartButtonShape()
-                            .strokeBorder(
-                                LinearGradient(
-                                    colors: [
-                                        Color.white.opacity(0.4),
-                                        Color(red: 0.08, green: 0.32, blue: 0.08)
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                ),
-                                lineWidth: 1
-                            )
-                    )
-                    .overlay(
-                        VStack {
+                    .brightness(isHovered && !isOpen && !isPressed ? 0.10 : 0.0)
+                    .colorMultiply(isOpen || isPressed ? Color(white: 0.82) : Color.white)
+                    .offset(x: isOpen || isPressed ? 1 : 0, y: isOpen || isPressed ? 1 : 0)
+            } else {
+                HStack(spacing: 6) {
+                    XPFlagIcon(size: 18)
+                        .padding(.leading, 6)
+
+                    Text("start")
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .italic()
+                        .foregroundColor(.white)
+                        .shadow(color: Color.black.opacity(0.8), radius: 1.5, x: 1, y: 1)
+
+                    Spacer()
+                }
+                .frame(width: 104, height: 30)
+                .background(backgroundGradient)
+                .clipShape(StartButtonShape())
+                .overlay(
+                    StartButtonShape()
+                        .strokeBorder(
                             LinearGradient(
                                 colors: [
-                                    Color.white.opacity(isOpen || isPressed ? 0.05 : 0.45),
-                                    Color.white.opacity(0.0)
+                                    Color.white.opacity(0.4),
+                                    Color(red: 0.08, green: 0.32, blue: 0.08)
                                 ],
                                 startPoint: .top,
                                 endPoint: .bottom
-                            )
-                            .frame(height: 14)
-                            Spacer()
-                        }
-                        .clipShape(StartButtonShape())
-                    )
-                }
+                            ),
+                            lineWidth: 1
+                        )
+                )
+                .overlay(
+                    VStack {
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(isOpen || isPressed ? 0.05 : 0.45),
+                                Color.white.opacity(0.0)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 14)
+                        Spacer()
+                    }
+                    .clipShape(StartButtonShape())
+                )
             }
         }
-        .buttonStyle(PlainButtonStyle())
+        .frame(width: 104, height: 30)
+        .contentShape(StartButtonShape())
         .onHover { hovering in
             isHovered = hovering
+        }
+        .onTapGesture {
+            action()
         }
         .onAppear {
             if buttonImage == nil {
