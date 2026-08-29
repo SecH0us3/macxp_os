@@ -164,5 +164,10 @@ MacXP includes automated packaging scripts in `scripts/`:
 
 ## 📄 License
 
-This project is created for educational, design, and nostalgia purposes. Windows XP, Luna, and related assets are trademarks of Microsoft Corporation. Macromedia and Flash are trademarks of Adobe Systems Inc.
+This project's source code is free and open source, released under the [MIT License](LICENSE).
+
+---
+
+### Disclaimer
+Windows XP, Luna, Bliss, and related assets and visual designs are trademarks and copyrights of Microsoft Corporation. Macromedia and Flash are trademarks of Adobe Systems Inc. This software is an independent, open-source educational, recreational, and nostalgic tribute created for the macOS developer and enthusiast community.
 
