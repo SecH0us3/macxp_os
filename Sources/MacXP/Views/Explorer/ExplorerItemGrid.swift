@@ -126,9 +126,7 @@ public struct ExplorerItemGrid: View {
                                 .frame(maxWidth: 88, maxHeight: 72)
                                 .clipShape(RoundedRectangle(cornerRadius: 2))
                         } else {
-                            Image(systemName: item.iconName)
-                                .font(.system(size: 38))
-                                .foregroundColor(iconColor(for: item))
+                            FileItemIconView(item: item, size: 52)
                         }
                     }
 
@@ -184,10 +182,7 @@ public struct ExplorerItemGrid: View {
                 let isRenaming = (renamingItemID == item.id)
 
                 HStack(spacing: 8) {
-                    Image(systemName: item.iconName)
-                        .font(.system(size: 28))
-                        .foregroundColor(iconColor(for: item))
-                        .frame(width: 36, height: 36)
+                    FileItemIconView(item: item, size: 36)
 
                     VStack(alignment: .leading, spacing: 2) {
                         if isRenaming {
@@ -270,9 +265,7 @@ public struct ExplorerItemGrid: View {
                 let isRenaming = (renamingItemID == item.id)
 
                 VStack(spacing: 4) {
-                    Image(systemName: item.iconName)
-                        .font(.system(size: 32))
-                        .foregroundColor(iconColor(for: item))
+                    FileItemIconView(item: item, size: 36)
                         .frame(width: 44, height: 40)
 
                     if isRenaming {
@@ -325,10 +318,7 @@ public struct ExplorerItemGrid: View {
                 let isRenaming = (renamingItemID == item.id)
 
                 HStack(spacing: 6) {
-                    Image(systemName: item.iconName)
-                        .font(.system(size: 14))
-                        .foregroundColor(iconColor(for: item))
-                        .frame(width: 16, height: 16)
+                    FileItemIconView(item: item, size: 16)
 
                     if isRenaming {
                         TextField("", text: renamingText, onCommit: {
@@ -407,10 +397,7 @@ public struct ExplorerItemGrid: View {
                     HStack(spacing: 0) {
                         // Name column
                         HStack(spacing: 6) {
-                            Image(systemName: item.iconName)
-                                .font(.system(size: 14))
-                                .foregroundColor(iconColor(for: item))
-                                .frame(width: 16, height: 16)
+                            FileItemIconView(item: item, size: 16)
 
                             if isRenaming {
                                 TextField("", text: renamingText, onCommit: {

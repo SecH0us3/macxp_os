@@ -287,10 +287,27 @@ public struct DesktopIconView: View {
                         .frame(width: 44, height: 44)
                 }
 
+                #if os(macOS)
+                if let fileURL = item.fileURL, FileManager.default.fileExists(atPath: fileURL.path) {
+                    let nsImage = ItemIconCache.shared.icon(forPath: fileURL.path)
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 34, height: 34)
+                        .shadow(color: Color.black.opacity(0.5), radius: 1.5, x: 1, y: 1)
+                } else {
+                    Image(systemName: item.iconName)
+                        .font(.system(size: 32))
+                        .foregroundColor(iconColor)
+                        .shadow(color: Color.black.opacity(0.6), radius: 1.5, x: 1, y: 1)
+                }
+                #else
                 Image(systemName: item.iconName)
                     .font(.system(size: 32))
                     .foregroundColor(iconColor)
                     .shadow(color: Color.black.opacity(0.6), radius: 1.5, x: 1, y: 1)
+                #endif
             }
             .frame(width: 48, height: 44)
 

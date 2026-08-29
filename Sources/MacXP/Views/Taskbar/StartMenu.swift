@@ -689,10 +689,26 @@ public struct StartMenuView: View {
             onClose()
         }) {
             HStack(spacing: 8) {
+                #if os(macOS)
+                if FileManager.default.fileExists(atPath: app.url.path) {
+                    let nsImage = ItemIconCache.shared.icon(forPath: app.url.path)
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                } else {
+                    Image(systemName: app.iconName)
+                        .font(.system(size: 13))
+                        .foregroundColor(isHovered ? .white : Color(red: 0.15, green: 0.45, blue: 0.85))
+                        .frame(width: 18, height: 18)
+                }
+                #else
                 Image(systemName: app.iconName)
                     .font(.system(size: 13))
                     .foregroundColor(isHovered ? .white : Color(red: 0.15, green: 0.45, blue: 0.85))
-                    .frame(width: 20, height: 20)
+                    .frame(width: 18, height: 18)
+                #endif
 
                 Text(app.name)
                     .font(.system(size: 11))
