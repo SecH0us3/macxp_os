@@ -101,6 +101,32 @@ public final class XPAssetProvider {
         return nil
     }
 
+    /// Loads authentic Windows XP WAV audio data for the specified sound type
+    public static func loadSoundData(for sound: XPSound) -> Data? {
+        let filename = sound.rawValue
+        let searchPaths: [URL?] = [
+            Bundle.main.url(forResource: filename, withExtension: "wav", subdirectory: "Sounds"),
+            Bundle.main.url(forResource: filename, withExtension: "wav"),
+            Bundle.main.resourceURL?.appendingPathComponent("Sounds/\(filename).wav"),
+            Bundle.main.resourceURL?.appendingPathComponent("\(filename).wav"),
+            URL(fileURLWithPath: "Resources/Sounds/\(filename).wav"),
+            URL(fileURLWithPath: "Resources/\(filename).wav"),
+            URL(fileURLWithPath: "../Resources/Sounds/\(filename).wav"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Sounds/\(filename).wav")
+        ]
+
+        for case let url? in searchPaths {
+            if FileManager.default.fileExists(atPath: url.path),
+               let data = try? Data(contentsOf: url),
+               data.count > 44,
+               data.starts(with: "RIFF".utf8) {
+                return data
+            }
+        }
+
+        return nil
+    }
+
     /// Renders or returns an authentic Windows XP Start Button bitmap texture
     public static func renderStartButtonTexture(width: CGFloat, height: CGFloat, isPressed: Bool, isHovered: Bool) -> NSImage {
         let size = NSSize(width: width, height: height)

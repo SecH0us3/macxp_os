@@ -3,12 +3,30 @@ import Foundation
 public enum XPSound: String, CaseIterable, Identifiable {
     case startup = "startup"
     case shutdown = "shutdown"
+    case logon = "logon"
+    case logoff = "logoff"
     case navigation = "navigation"
     case error = "error"
     case exclamation = "exclamation"
-    case recycleBin = "recycleBin"
+    case ding = "ding"
+    case asterisk = "asterisk"
+    case recycle = "recycle"
+    case balloon = "balloon"
+    case hardwareInsert = "hardware_insert"
+    case hardwareRemove = "hardware_remove"
+
+    public static var recycleBin: XPSound { .recycle }
 
     public var id: String { rawValue }
+}
+
+public struct SoundEffects {
+    public static func generateSoundData(for sound: XPSound) -> Data {
+        if let bundleData = XPAssetProvider.loadSoundData(for: sound) {
+            return bundleData
+        }
+        return XPSoundSynthesizer.generateWAV(for: sound)
+    }
 }
 
 public struct XPSoundSynthesizer {
@@ -22,14 +40,28 @@ public struct XPSoundSynthesizer {
             samples = generateStartupChime(sampleRate: sampleRate)
         case .shutdown:
             samples = generateShutdownChime(sampleRate: sampleRate)
+        case .logon:
+            samples = generateLogonChime(sampleRate: sampleRate)
+        case .logoff:
+            samples = generateLogoffChime(sampleRate: sampleRate)
         case .navigation:
             samples = generateNavigationClick(sampleRate: sampleRate)
         case .error:
             samples = generateErrorChord(sampleRate: sampleRate)
         case .exclamation:
             samples = generateExclamationDing(sampleRate: sampleRate)
-        case .recycleBin:
+        case .ding:
+            samples = generateDingTone(sampleRate: sampleRate)
+        case .asterisk:
+            samples = generateAsteriskTone(sampleRate: sampleRate)
+        case .recycle:
             samples = generateRecycleBinSwoosh(sampleRate: sampleRate)
+        case .balloon:
+            samples = generateBalloonPop(sampleRate: sampleRate)
+        case .hardwareInsert:
+            samples = generateHardwareInsertTone(sampleRate: sampleRate)
+        case .hardwareRemove:
+            samples = generateHardwareRemoveTone(sampleRate: sampleRate)
         }
 
         return createWAVData(from: samples, sampleRate: Int(sampleRate))
@@ -185,6 +217,126 @@ public struct XPSoundSynthesizer {
             buffer[i] = (fundamental + chime1 + chime2) * envelope * 0.7
         }
 
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateLogonChime(sampleRate: Double) -> [Int16] {
+        let duration = 1.6
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let freqs = [311.13, 392.00, 466.16, 622.25] // Eb4, G4, Bb4, Eb5
+
+        for (idx, freq) in freqs.enumerated() {
+            let offset = Double(idx) * 0.15
+            let start = Int(offset * sampleRate)
+            for i in start..<totalSamples {
+                let t = Double(i - start) / sampleRate
+                let env = min(1.0, t / 0.03) * exp(-t * 3.5)
+                buffer[i] += sin(2.0 * .pi * freq * t) * env * 0.4
+            }
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateLogoffChime(sampleRate: Double) -> [Int16] {
+        let duration = 1.6
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let freqs = [622.25, 466.16, 392.00, 311.13] // Eb5, Bb4, G4, Eb4
+
+        for (idx, freq) in freqs.enumerated() {
+            let offset = Double(idx) * 0.15
+            let start = Int(offset * sampleRate)
+            for i in start..<totalSamples {
+                let t = Double(i - start) / sampleRate
+                let env = min(1.0, t / 0.03) * exp(-t * 3.5)
+                buffer[i] += sin(2.0 * .pi * freq * t) * env * 0.4
+            }
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateDingTone(sampleRate: Double) -> [Int16] {
+        let duration = 0.5
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let freq = 1760.0 // A6
+
+        for i in 0..<totalSamples {
+            let t = Double(i) / sampleRate
+            let env = min(1.0, t / 0.002) * exp(-t * 7.0)
+            buffer[i] = (sin(2.0 * .pi * freq * t) + 0.3 * sin(2.0 * .pi * freq * 2 * t)) * env * 0.7
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateAsteriskTone(sampleRate: Double) -> [Int16] {
+        let duration = 0.6
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let freqs = [523.25, 659.25, 783.99] // C5, E5, G5 major triad
+
+        for i in 0..<totalSamples {
+            let t = Double(i) / sampleRate
+            let env = min(1.0, t / 0.01) * exp(-t * 5.0)
+            var val = 0.0
+            for f in freqs {
+                val += sin(2.0 * .pi * f * t)
+            }
+            buffer[i] = val * env * 0.35
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateBalloonPop(sampleRate: Double) -> [Int16] {
+        let duration = 0.3
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let f1 = 880.0
+        let f2 = 1320.0
+
+        for i in 0..<totalSamples {
+            let t = Double(i) / sampleRate
+            let env = min(1.0, t / 0.008) * exp(-t * 12.0)
+            let tone = (t < 0.1) ? sin(2.0 * .pi * f1 * t) : sin(2.0 * .pi * f2 * (t - 0.1))
+            buffer[i] = tone * env * 0.75
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateHardwareInsertTone(sampleRate: Double) -> [Int16] {
+        let duration = 0.35
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let notes = [440.0, 554.37, 659.25] // A4, C#5, E5
+
+        for (idx, freq) in notes.enumerated() {
+            let offset = Double(idx) * 0.08
+            let start = Int(offset * sampleRate)
+            for i in start..<totalSamples {
+                let t = Double(i - start) / sampleRate
+                let env = min(1.0, t / 0.005) * exp(-t * 14.0)
+                buffer[i] += sin(2.0 * .pi * freq * t) * env * 0.5
+            }
+        }
+        return normalizeAndConvert(buffer)
+    }
+
+    private static func generateHardwareRemoveTone(sampleRate: Double) -> [Int16] {
+        let duration = 0.35
+        let totalSamples = Int(sampleRate * duration)
+        var buffer = [Double](repeating: 0.0, count: totalSamples)
+        let notes = [659.25, 554.37, 440.0] // E5, C#5, A4
+
+        for (idx, freq) in notes.enumerated() {
+            let offset = Double(idx) * 0.08
+            let start = Int(offset * sampleRate)
+            for i in start..<totalSamples {
+                let t = Double(i - start) / sampleRate
+                let env = min(1.0, t / 0.005) * exp(-t * 14.0)
+                buffer[i] += sin(2.0 * .pi * freq * t) * env * 0.5
+            }
+        }
         return normalizeAndConvert(buffer)
     }
 

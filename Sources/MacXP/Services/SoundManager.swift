@@ -58,9 +58,9 @@ public class SoundManager: ObservableObject {
         if let cached = audioDataCache[sound] {
             wavData = cached
         } else {
-            let generated = XPSoundSynthesizer.generateWAV(for: sound)
-            audioDataCache[sound] = generated
-            wavData = generated
+            let loaded = SoundEffects.generateSoundData(for: sound)
+            audioDataCache[sound] = loaded
+            wavData = loaded
         }
         lock.unlock()
 
