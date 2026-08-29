@@ -436,100 +436,45 @@ public struct ExplorerWindowView: View {
                 }
                 .zIndex(101)
             }
+
+            // Authentic Windows XP Menu Dropdown Overlay
+            if let activeMenu = openMenu {
+                Color.black.opacity(0.001)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        openMenu = nil
+                        openSubmenu = nil
+                    }
+
+                VStack {
+                    HStack {
+                        dropdownMenuView(for: activeMenu)
+                            .padding(.leading, menuXOffset(for: activeMenu))
+                            .padding(.top, 22)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .zIndex(50)
+            }
         }
     }
 
-    // MARK: - Menu Bar
+    @State private var openMenu: String? = nil
+    @State private var openSubmenu: String? = nil
+
+    // MARK: - Authentic Windows XP Menu Bar
     private var menuBarView: some View {
-        HStack(spacing: 12) {
-            // File Menu
-            Menu("File") {
-                Menu("New") {
-                    Button("Folder") { viewModel.createNewFolder() }
-                    Button("Text Document") { viewModel.createNewTextDocument() }
-                }
-                Divider()
-                Button("Delete") { viewModel.deleteSelectedItems() }
-                Button("Rename") {
-                    if let first = viewModel.selectedItems.first {
-                        viewModel.startRenaming(item: first)
-                    }
-                }
-                Button("Properties") { viewModel.showProperties() }
-                Divider()
-                Button("Close") {
-                    if let win = window {
-                        windowManager.closeWindow(id: win.id)
-                    }
-                }
-            }
-
-            // Edit Menu
-            Menu("Edit") {
-                Button("Cut") { viewModel.cutSelectedItems() }
-                Button("Copy") { viewModel.copySelectedItems() }
-                Button("Paste") { viewModel.pasteClipboard() }
-                Divider()
-                Button("Select All") { viewModel.selectAll() }
-                Button("Invert Selection") { viewModel.invertSelection() }
-            }
-
-            // View Menu
-            Menu("View") {
-                Menu("Toolbars") {
-                    Button("Standard Buttons") {}
-                    Button("Address Bar") {}
-                }
-                Menu("Explorer Bar") {
-                    Button("Search") { viewModel.toggleSearchCompanion() }
-                    Button("Folders") { viewModel.toggleFolderTree() }
-                }
-                Divider()
-                ForEach(ExplorerViewMode.allCases) { mode in
-                    Button(mode.rawValue) {
-                        viewModel.viewMode = mode
-                    }
-                }
-                Divider()
-                Menu("Arrange Icons By") {
-                    Button("Name") { viewModel.toggleSort(column: .name) }
-                    Button("Size") { viewModel.toggleSort(column: .size) }
-                    Button("Type") { viewModel.toggleSort(column: .type) }
-                    Button("Modified") { viewModel.toggleSort(column: .dateModified) }
-                }
-                Button("Refresh") { viewModel.loadDirectoryContents() }
-            }
-
-            // Favorites Menu
-            Menu("Favorites") {
-                Button("Add to Favorites...") {}
-                Button("Organize Favorites...") {}
-            }
-
-            // Tools Menu
-            Menu("Tools") {
-                Button("Map Network Drive...") {}
-                Button("Disconnect Network Drive...") {}
-                Button("Folder Options...") {
-                    viewModel.isFolderOptionsOpen = true
-                }
-            }
-
-            // Help Menu
-            Menu("Help") {
-                Button("Help and Support Center") {}
-                Divider()
-                Button("About Windows XP") {
-                    windowManager.openWindow(appType: .systemProperties)
-                }
-            }
-
+        HStack(spacing: 0) {
+            menuBarButton(title: "File")
+            menuBarButton(title: "Edit")
+            menuBarButton(title: "View")
+            menuBarButton(title: "Favorites")
+            menuBarButton(title: "Tools")
+            menuBarButton(title: "Help")
             Spacer()
         }
-        .font(.system(size: 11))
-        .foregroundColor(.black)
-        .padding(.horizontal, 8)
-        .frame(height: 20)
+        .frame(height: 22)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.96, green: 0.95, blue: 0.93), Color(red: 0.90, green: 0.89, blue: 0.86)],
@@ -543,6 +488,279 @@ public struct ExplorerWindowView: View {
                 .foregroundColor(Color(red: 0.82, green: 0.80, blue: 0.78)),
             alignment: .bottom
         )
+    }
+
+    private func menuBarButton(title: String) -> some View {
+        let isOpen = (openMenu == title)
+        return Button(action: {
+            if openMenu == title {
+                openMenu = nil
+                openSubmenu = nil
+            } else {
+                openMenu = title
+                openSubmenu = nil
+            }
+        }) {
+            Text(title)
+                .font(.system(size: 11))
+                .foregroundColor(.black)
+                .padding(.horizontal, 7)
+                .frame(height: 20)
+                .background(
+                    isOpen ? Color(red: 0.19, green: 0.42, blue: 0.77).opacity(0.18) : Color.clear
+                )
+                .overlay(
+                    isOpen ? RoundedRectangle(cornerRadius: 2).stroke(Color(red: 0.19, green: 0.42, blue: 0.77), lineWidth: 1) : nil
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private func menuXOffset(for menu: String) -> CGFloat {
+        switch menu {
+        case "File": return 4
+        case "Edit": return 32
+        case "View": return 64
+        case "Favorites": return 100
+        case "Tools": return 156
+        case "Help": return 198
+        default: return 4
+        }
+    }
+
+    // MARK: - Dropdown Menus
+    @ViewBuilder
+    private func dropdownMenuView(for menu: String) -> some View {
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 0) {
+                switch menu {
+                case "File":
+                    fileDropdownMenu
+                case "Edit":
+                    editDropdownMenu
+                case "View":
+                    viewDropdownMenu
+                case "Favorites":
+                    favoritesDropdownMenu
+                case "Tools":
+                    toolsDropdownMenu
+                case "Help":
+                    helpDropdownMenu
+                default:
+                    EmptyView()
+                }
+            }
+            .frame(width: 175)
+            .padding(.vertical, 2)
+            .background(Color.white)
+            .overlay(Rectangle().stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1))
+            .shadow(color: Color.black.opacity(0.22), radius: 5, x: 2, y: 3)
+
+            // Submenus Flyout
+            if let sub = openSubmenu {
+                submenuFlyoutView(for: sub)
+                    .offset(x: 173, y: submenuYOffset(for: sub))
+            }
+        }
+    }
+
+    private var fileDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "New", hasSubmenu: true) {
+                openSubmenu = (openSubmenu == "New" ? nil : "New")
+            }
+            menuDivider
+            XPMenuRow(title: "Delete", shortcut: "Del", isEnabled: !viewModel.selectedItems.isEmpty) {
+                closeAllMenus()
+                viewModel.deleteSelectedItems()
+            }
+            XPMenuRow(title: "Rename", shortcut: "F2", isEnabled: viewModel.selectedItems.count == 1) {
+                closeAllMenus()
+                if let first = viewModel.selectedItems.first {
+                    viewModel.startRenaming(item: first)
+                }
+            }
+            XPMenuRow(title: "Properties") {
+                closeAllMenus()
+                viewModel.showProperties()
+            }
+            menuDivider
+            XPMenuRow(title: "Close", shortcut: "Alt+F4") {
+                closeAllMenus()
+                if let win = window {
+                    windowManager.closeWindow(id: win.id)
+                }
+            }
+        }
+    }
+
+    private var editDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "Cut", shortcut: "Ctrl+X", isEnabled: !viewModel.selectedItems.isEmpty) {
+                closeAllMenus()
+                viewModel.cutSelectedItems()
+            }
+            XPMenuRow(title: "Copy", shortcut: "Ctrl+C", isEnabled: !viewModel.selectedItems.isEmpty) {
+                closeAllMenus()
+                viewModel.copySelectedItems()
+            }
+            XPMenuRow(title: "Paste", shortcut: "Ctrl+V", isEnabled: ExplorerClipboard.shared.hasContent) {
+                closeAllMenus()
+                viewModel.pasteClipboard()
+            }
+            menuDivider
+            XPMenuRow(title: "Select All", shortcut: "Ctrl+A") {
+                closeAllMenus()
+                viewModel.selectAll()
+            }
+            XPMenuRow(title: "Invert Selection") {
+                closeAllMenus()
+                viewModel.invertSelection()
+            }
+        }
+    }
+
+    private var viewDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "Toolbars", hasSubmenu: true) {
+                openSubmenu = (openSubmenu == "Toolbars" ? nil : "Toolbars")
+            }
+            XPMenuRow(title: "Explorer Bar", hasSubmenu: true) {
+                openSubmenu = (openSubmenu == "ExplorerBar" ? nil : "ExplorerBar")
+            }
+            menuDivider
+            ForEach(ExplorerViewMode.allCases) { mode in
+                XPMenuRow(title: mode.rawValue, isChecked: viewModel.viewMode == mode) {
+                    closeAllMenus()
+                    viewModel.viewMode = mode
+                }
+            }
+            menuDivider
+            XPMenuRow(title: "Arrange Icons By", hasSubmenu: true) {
+                openSubmenu = (openSubmenu == "Arrange" ? nil : "Arrange")
+            }
+            menuDivider
+            XPMenuRow(title: "Refresh", shortcut: "F5") {
+                closeAllMenus()
+                viewModel.loadDirectoryContents()
+            }
+        }
+    }
+
+    private var favoritesDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "Add to Favorites...") {
+                closeAllMenus()
+            }
+            XPMenuRow(title: "Organize Favorites...") {
+                closeAllMenus()
+            }
+        }
+    }
+
+    private var toolsDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "Map Network Drive...") {
+                closeAllMenus()
+            }
+            XPMenuRow(title: "Disconnect Network Drive...") {
+                closeAllMenus()
+            }
+            menuDivider
+            XPMenuRow(title: "Folder Options...") {
+                closeAllMenus()
+                viewModel.isFolderOptionsOpen = true
+            }
+        }
+    }
+
+    private var helpDropdownMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            XPMenuRow(title: "Help and Support Center") {
+                closeAllMenus()
+            }
+            menuDivider
+            XPMenuRow(title: "About Windows XP") {
+                closeAllMenus()
+                windowManager.openWindow(appType: .systemProperties)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func submenuFlyoutView(for submenu: String) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            switch submenu {
+            case "New":
+                XPMenuRow(title: "Folder", icon: "folder.fill") {
+                    closeAllMenus()
+                    viewModel.createNewFolder()
+                }
+                XPMenuRow(title: "Text Document", icon: "doc.text.fill") {
+                    closeAllMenus()
+                    viewModel.createNewTextDocument()
+                }
+            case "Toolbars":
+                XPMenuRow(title: "Standard Buttons", isChecked: true) {}
+                XPMenuRow(title: "Address Bar", isChecked: true) {}
+            case "ExplorerBar":
+                XPMenuRow(title: "Search", isChecked: viewModel.isSearchActive) {
+                    closeAllMenus()
+                    viewModel.toggleSearchCompanion()
+                }
+                XPMenuRow(title: "Folders", isChecked: viewModel.isFolderTreeActive) {
+                    closeAllMenus()
+                    viewModel.toggleFolderTree()
+                }
+            case "Arrange":
+                XPMenuRow(title: "Name", isChecked: viewModel.sortColumn == .name) {
+                    closeAllMenus()
+                    viewModel.toggleSort(column: .name)
+                }
+                XPMenuRow(title: "Size", isChecked: viewModel.sortColumn == .size) {
+                    closeAllMenus()
+                    viewModel.toggleSort(column: .size)
+                }
+                XPMenuRow(title: "Type", isChecked: viewModel.sortColumn == .type) {
+                    closeAllMenus()
+                    viewModel.toggleSort(column: .type)
+                }
+                XPMenuRow(title: "Modified", isChecked: viewModel.sortColumn == .dateModified) {
+                    closeAllMenus()
+                    viewModel.toggleSort(column: .dateModified)
+                }
+            default:
+                EmptyView()
+            }
+        }
+        .frame(width: 155)
+        .padding(.vertical, 2)
+        .background(Color.white)
+        .overlay(Rectangle().stroke(Color(red: 0.45, green: 0.45, blue: 0.45), lineWidth: 1))
+        .shadow(color: Color.black.opacity(0.22), radius: 5, x: 2, y: 3)
+    }
+
+    private func submenuYOffset(for submenu: String) -> CGFloat {
+        switch submenu {
+        case "New": return 0
+        case "Toolbars": return 0
+        case "ExplorerBar": return 22
+        case "Arrange": return 138
+        default: return 0
+        }
+    }
+
+    private var menuDivider: some View {
+        Rectangle()
+            .frame(height: 1)
+            .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85))
+            .padding(.horizontal, 4)
+            .padding(.vertical, 3)
+    }
+
+    private func closeAllMenus() {
+        openMenu = nil
+        openSubmenu = nil
     }
 
     // MARK: - Search Bar
@@ -806,3 +1024,84 @@ public struct ExplorerWindowView: View {
         return formatter.string(from: date)
     }
 }
+
+public struct XPMenuRow: View {
+    public let title: String
+    public var shortcut: String? = nil
+    public var icon: String? = nil
+    public var isChecked: Bool = false
+    public var hasSubmenu: Bool = false
+    public var isEnabled: Bool = true
+    public let action: () -> Void
+
+    @State private var isHovered: Bool = false
+
+    public init(
+        title: String,
+        shortcut: String? = nil,
+        icon: String? = nil,
+        isChecked: Bool = false,
+        hasSubmenu: Bool = false,
+        isEnabled: Bool = true,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.shortcut = shortcut
+        self.icon = icon
+        self.isChecked = isChecked
+        self.hasSubmenu = hasSubmenu
+        self.isEnabled = isEnabled
+        self.action = action
+    }
+
+    public var body: some View {
+        Button(action: {
+            if isEnabled {
+                action()
+            }
+        }) {
+            HStack(spacing: 6) {
+                // Gutter Icon / Checkmark
+                ZStack {
+                    if isChecked {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(isHovered ? .white : .black)
+                    } else if let icon = icon {
+                        Image(systemName: icon)
+                            .font(.system(size: 11))
+                            .foregroundColor(isHovered ? .white : Color(red: 0.20, green: 0.40, blue: 0.80))
+                    }
+                }
+                .frame(width: 16)
+
+                // Title
+                Text(title)
+                    .font(.system(size: 11))
+                    .foregroundColor(isEnabled ? (isHovered ? .white : .black) : Color.gray)
+
+                Spacer()
+
+                // Shortcut / Submenu indicator
+                if let shortcut = shortcut {
+                    Text(shortcut)
+                        .font(.system(size: 10))
+                        .foregroundColor(isEnabled ? (isHovered ? .white.opacity(0.9) : Color.gray) : Color.gray.opacity(0.5))
+                } else if hasSubmenu {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 6))
+                        .foregroundColor(isHovered ? .white : Color.black.opacity(0.7))
+                }
+            }
+            .padding(.horizontal, 6)
+            .frame(height: 22)
+            .background(isHovered && isEnabled ? Color(red: 0.19, green: 0.42, blue: 0.77) : Color.clear)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .onHover { hovering in
+            isHovered = hovering
+        }
+    }
+}
+
