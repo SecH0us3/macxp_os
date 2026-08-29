@@ -403,13 +403,18 @@ public struct StartMenuView: View {
             onClose()
         }) {
             HStack(spacing: 8) {
-                Image(systemName: item.iconName)
-                    .font(.system(size: isLeftColumn ? 18 : 15))
-                    .foregroundColor(
-                        isHovered ? .white :
-                            (isLeftColumn ? Color(red: 0.15, green: 0.45, blue: 0.85) : Color(red: 0.05, green: 0.25, blue: 0.65))
-                    )
-                    .frame(width: 24, height: 24)
+                if item.title == "Internet" || item.subtitle == "Internet Explorer" {
+                    IEIconView(size: isLeftColumn ? 22 : 18)
+                        .frame(width: 24, height: 24)
+                } else {
+                    Image(systemName: item.iconName)
+                        .font(.system(size: isLeftColumn ? 18 : 15))
+                        .foregroundColor(
+                            isHovered ? .white :
+                                (isLeftColumn ? Color(red: 0.15, green: 0.45, blue: 0.85) : Color(red: 0.05, green: 0.25, blue: 0.65))
+                        )
+                        .frame(width: 24, height: 24)
+                }
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(item.title)
@@ -674,10 +679,15 @@ public struct StartMenuView: View {
             onClose()
         }) {
             HStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 13))
-                    .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.85))
-                    .frame(width: 20, height: 20)
+                if title == "Internet Explorer" {
+                    IEIconView(size: 18)
+                        .frame(width: 20, height: 20)
+                } else {
+                    Image(systemName: icon)
+                        .font(.system(size: 13))
+                        .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.85))
+                        .frame(width: 20, height: 20)
+                }
 
                 Text(title)
                     .font(.system(size: 11))

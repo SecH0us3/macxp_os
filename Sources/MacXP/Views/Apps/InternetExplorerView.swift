@@ -440,10 +440,15 @@ public struct InternetExplorerView: View {
                 .padding(.leading, 6)
 
             HStack(spacing: 4) {
-                Image(systemName: viewModel.isSecure ? "lock.fill" : "globe")
-                    .font(.system(size: 10))
-                    .foregroundColor(viewModel.isSecure ? Color(red: 0.2, green: 0.6, blue: 0.2) : Color.blue)
-                    .frame(width: 14)
+                if viewModel.isSecure {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(Color(red: 0.2, green: 0.6, blue: 0.2))
+                        .frame(width: 14)
+                } else {
+                    IEIconView(size: 13)
+                        .frame(width: 14)
+                }
 
                 TextField("", text: $viewModel.addressBarText, onCommit: {
                     viewModel.navigateTo(input: viewModel.addressBarText)

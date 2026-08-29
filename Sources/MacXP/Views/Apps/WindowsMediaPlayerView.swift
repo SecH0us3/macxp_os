@@ -57,6 +57,7 @@ public class MediaPlayerViewModel: ObservableObject {
     @Published public var isRepeatOn: Bool = false
     @Published public var isShuffleOn: Bool = false
 
+    private var audioPlayer: AVAudioPlayer?
     private var avPlayer: AVPlayer?
     private var timer: Timer?
 
@@ -79,19 +80,19 @@ public class MediaPlayerViewModel: ObservableObject {
             MediaPlayerTrack(
                 title: "Like Humans Do",
                 artist: "David Byrne",
-                duration: 213,
+                duration: 32,
                 isSample: true
             ),
             MediaPlayerTrack(
                 title: "Windows XP Tour (Title)",
                 artist: "Microsoft Sound Team",
-                duration: 144,
+                duration: 32,
                 isSample: true
             ),
             MediaPlayerTrack(
                 title: "Symphony No. 9 in D minor",
                 artist: "Ludwig van Beethoven",
-                duration: 320,
+                duration: 32,
                 isSample: true
             )
         ]
@@ -103,6 +104,7 @@ public class MediaPlayerViewModel: ObservableObject {
 
     public func selectTrack(at index: Int) {
         guard index >= 0 && index < playlist.count else { return }
+        stop()
         currentTrackIndex = index
         currentTime = 0
         if let track = currentTrack {
@@ -115,14 +117,53 @@ public class MediaPlayerViewModel: ObservableObject {
         guard let track = currentTrack else { return }
         playbackState = .playing
 
-        if let fileURL = track.url {
-            let item = AVPlayerItem(url: fileURL)
-            avPlayer = AVPlayer(playerItem: item)
-            avPlayer?.volume = isMuted ? 0 : volume
-            avPlayer?.play()
+        if let fileURL = track.url, FileManager.default.fileExists(atPath: fileURL.path) {
+            let ext = fileURL.pathExtension.lowercased()
+            if ext == "mp4" || ext == "mov" || ext == "m4v" {
+                let item = AVPlayerItem(url: fileURL)
+                avPlayer = AVPlayer(playerItem: item)
+                avPlayer?.volume = isMuted ? 0 : volume
+                avPlayer?.play()
+            } else {
+                do {
+                    audioPlayer = try AVAudioPlayer(contentsOf: fileURL)
+                    audioPlayer?.volume = isMuted ? 0 : volume
+                    audioPlayer?.currentTime = currentTime
+                    audioPlayer?.prepareToPlay()
+                    audioPlayer?.play()
+                    if let dur = audioPlayer?.duration, dur > 0 {
+                        self.duration = dur
+                    }
+                } catch {
+                    print("Error playing file: \(error)")
+                }
+            }
         } else {
-            // Sample synthesized audio track
-            SoundManager.shared.play(.navigation)
+            // Load sample track by music key
+            let name: String
+            if track.title.contains("Humans") {
+                name = "like_humans_do"
+            } else if track.title.contains("Title") || track.title.contains("Tour") {
+                name = "title"
+            } else {
+                name = "beethoven"
+            }
+
+            if let musicData = XPAssetProvider.loadMusicData(for: name) {
+                do {
+                    audioPlayer = try AVAudioPlayer(data: musicData)
+                    audioPlayer?.volume = isMuted ? 0 : volume
+                    audioPlayer?.currentTime = currentTime
+                    audioPlayer?.numberOfLoops = isRepeatOn ? -1 : 0
+                    audioPlayer?.prepareToPlay()
+                    audioPlayer?.play()
+                    if let dur = audioPlayer?.duration, dur > 0 {
+                        self.duration = dur
+                    }
+                } catch {
+                    print("Error playing sample music: \(error)")
+                }
+            }
         }
 
         startTimer()
@@ -130,6 +171,7 @@ public class MediaPlayerViewModel: ObservableObject {
 
     public func pause() {
         playbackState = .paused
+        audioPlayer?.pause()
         avPlayer?.pause()
         stopTimer()
     }
@@ -137,6 +179,8 @@ public class MediaPlayerViewModel: ObservableObject {
     public func stop() {
         playbackState = .stopped
         currentTime = 0
+        audioPlayer?.stop()
+        audioPlayer?.currentTime = 0
         avPlayer?.pause()
         avPlayer?.seek(to: .zero)
         stopTimer()
@@ -144,6 +188,7 @@ public class MediaPlayerViewModel: ObservableObject {
 
     public func nextTrack() {
         guard !playlist.isEmpty else { return }
+        stop()
         if isShuffleOn {
             currentTrackIndex = Int.random(in: 0..<playlist.count)
         } else {
@@ -162,6 +207,7 @@ public class MediaPlayerViewModel: ObservableObject {
             seek(to: 0)
             return
         }
+        stop()
         currentTrackIndex = (currentTrackIndex - 1 + playlist.count) % playlist.count
         currentTime = 0
         if let track = currentTrack {
@@ -172,6 +218,7 @@ public class MediaPlayerViewModel: ObservableObject {
 
     public func seek(to time: TimeInterval) {
         currentTime = max(0, min(time, duration))
+        audioPlayer?.currentTime = currentTime
         if let player = avPlayer {
             let cmTime = CMTime(seconds: currentTime, preferredTimescale: 600)
             player.seek(to: cmTime)

@@ -295,7 +295,10 @@ public struct DesktopIconView: View {
                 }
 
                 #if os(macOS)
-                if let fileURL = item.fileURL, FileManager.default.fileExists(atPath: fileURL.path) {
+                if case .internetExplorer = item.appType {
+                    IEIconView(size: 34)
+                        .shadow(color: Color.black.opacity(0.5), radius: 1.5, x: 1, y: 1)
+                } else if let fileURL = item.fileURL, FileManager.default.fileExists(atPath: fileURL.path) {
                     let nsImage = ItemIconCache.shared.icon(forPath: fileURL.path)
                     Image(nsImage: nsImage)
                         .resizable()
@@ -310,10 +313,14 @@ public struct DesktopIconView: View {
                         .shadow(color: Color.black.opacity(0.6), radius: 1.5, x: 1, y: 1)
                 }
                 #else
-                Image(systemName: item.iconName)
-                    .font(.system(size: 32))
-                    .foregroundColor(iconColor)
-                    .shadow(color: Color.black.opacity(0.6), radius: 1.5, x: 1, y: 1)
+                if case .internetExplorer = item.appType {
+                    IEIconView(size: 34)
+                } else {
+                    Image(systemName: item.iconName)
+                        .font(.system(size: 32))
+                        .foregroundColor(iconColor)
+                        .shadow(color: Color.black.opacity(0.6), radius: 1.5, x: 1, y: 1)
+                }
                 #endif
             }
             .frame(width: 48, height: 44)

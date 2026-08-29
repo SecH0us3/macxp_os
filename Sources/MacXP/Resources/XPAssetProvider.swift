@@ -101,26 +101,88 @@ public final class XPAssetProvider {
         return nil
     }
 
-    /// Loads authentic Windows XP WAV audio data for the specified sound type
-    public static func loadSoundData(for sound: XPSound) -> Data? {
-        let filename = sound.rawValue
+    private var cachedIEIcon: NSImage?
+
+    /// Loads the authentic Windows XP Internet Explorer 6 icon
+    public static func loadIEIcon() -> NSImage? {
+        if let cached = shared.cachedIEIcon {
+            return cached
+        }
+
         let searchPaths: [URL?] = [
-            Bundle.main.url(forResource: filename, withExtension: "wav", subdirectory: "Sounds"),
-            Bundle.main.url(forResource: filename, withExtension: "wav"),
-            Bundle.main.resourceURL?.appendingPathComponent("Sounds/\(filename).wav"),
-            Bundle.main.resourceURL?.appendingPathComponent("\(filename).wav"),
-            URL(fileURLWithPath: "Resources/Sounds/\(filename).wav"),
-            URL(fileURLWithPath: "Resources/\(filename).wav"),
-            URL(fileURLWithPath: "../Resources/Sounds/\(filename).wav"),
-            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Sounds/\(filename).wav")
+            Bundle.main.url(forResource: "ie", withExtension: "png"),
+            Bundle.main.resourceURL?.appendingPathComponent("ie.png"),
+            URL(fileURLWithPath: "Resources/ie.png"),
+            URL(fileURLWithPath: "Sources/MacXP/Resources/ie.png"),
+            URL(fileURLWithPath: "../Resources/ie.png"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/ie.png")
         ]
 
         for case let url? in searchPaths {
             if FileManager.default.fileExists(atPath: url.path),
-               let data = try? Data(contentsOf: url),
-               data.count > 44,
-               data.starts(with: "RIFF".utf8) {
-                return data
+               let image = NSImage(contentsOf: url) {
+                shared.cachedIEIcon = image
+                return image
+            }
+        }
+
+        return nil
+    }
+
+    /// Loads authentic Windows XP audio data (MP3 or WAV) for the specified sound type
+    public static func loadSoundData(for sound: XPSound) -> Data? {
+        let filename = sound.rawValue
+        let exts = ["mp3", "wav"]
+
+        for ext in exts {
+            let searchPaths: [URL?] = [
+                Bundle.main.url(forResource: filename, withExtension: ext, subdirectory: "Sounds"),
+                Bundle.main.url(forResource: filename, withExtension: ext),
+                Bundle.main.resourceURL?.appendingPathComponent("Sounds/\(filename).\(ext)"),
+                Bundle.main.resourceURL?.appendingPathComponent("\(filename).\(ext)"),
+                URL(fileURLWithPath: "Resources/Sounds/\(filename).\(ext)"),
+                URL(fileURLWithPath: "Resources/\(filename).\(ext)"),
+                URL(fileURLWithPath: "Sources/MacXP/Resources/Sounds/\(filename).\(ext)"),
+                URL(fileURLWithPath: "../Resources/Sounds/\(filename).\(ext)"),
+                Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Sounds/\(filename).\(ext)"),
+                Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/\(filename).\(ext)")
+            ]
+
+            for case let url? in searchPaths {
+                if FileManager.default.fileExists(atPath: url.path),
+                   let data = try? Data(contentsOf: url),
+                   data.count > 100 {
+                    return data
+                }
+            }
+        }
+
+        return nil
+    }
+
+    /// Loads sample music audio data (MP3 or WAV) by name
+    public static func loadMusicData(for name: String) -> Data? {
+        let exts = ["wav", "mp3", "m4a"]
+
+        for ext in exts {
+            let base = (name as NSString).deletingPathExtension
+            let searchPaths: [URL?] = [
+                Bundle.main.url(forResource: base, withExtension: ext, subdirectory: "Music"),
+                Bundle.main.url(forResource: base, withExtension: ext),
+                Bundle.main.resourceURL?.appendingPathComponent("Music/\(base).\(ext)"),
+                Bundle.main.resourceURL?.appendingPathComponent("\(base).\(ext)"),
+                URL(fileURLWithPath: "Resources/Music/\(base).\(ext)"),
+                URL(fileURLWithPath: "Resources/\(base).\(ext)"),
+                URL(fileURLWithPath: "../Resources/Music/\(base).\(ext)"),
+                Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/Music/\(base).\(ext)")
+            ]
+
+            for case let url? in searchPaths {
+                if FileManager.default.fileExists(atPath: url.path),
+                   let data = try? Data(contentsOf: url),
+                   data.count > 100 {
+                    return data
+                }
             }
         }
 

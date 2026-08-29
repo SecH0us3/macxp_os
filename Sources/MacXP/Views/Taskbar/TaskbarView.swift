@@ -46,7 +46,9 @@ public struct TaskbarWindowTab: View {
     public var body: some View {
         Button(action: onClick) {
             HStack(spacing: 5) {
-                if !window.icon.isEmpty {
+                if case .internetExplorer = window.appType {
+                    IEIconView(size: 14)
+                } else if !window.icon.isEmpty {
                     Image(systemName: window.icon)
                         .font(.system(size: 11))
                         .foregroundColor(.white)

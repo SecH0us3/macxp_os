@@ -163,7 +163,9 @@ public struct LunaWindowView<Content: View>: View {
     private var titleBarView: some View {
         HStack(spacing: 6) {
             // App Icon
-            if !window.icon.isEmpty {
+            if case .internetExplorer = window.appType {
+                IEIconView(size: 15)
+            } else if !window.icon.isEmpty {
                 Image(systemName: window.icon)
                     .font(.system(size: 13))
                     .foregroundColor(.white)
