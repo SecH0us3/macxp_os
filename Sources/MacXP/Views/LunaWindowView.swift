@@ -196,6 +196,16 @@ public struct LunaWindowView<Content: View>: View {
                 } else {
                     fallbackTitleIcon
                 }
+            } else if case .flashPlayer = window.appType {
+                if let icon = XPAssetProvider.loadFlashIcon() {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                } else {
+                    fallbackTitleIcon
+                }
             } else if case .explorer = window.appType {
                 if let icon = XPAssetProvider.loadFolderIcon() {
                     Image(nsImage: icon)

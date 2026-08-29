@@ -46,13 +46,25 @@ public struct TaskbarWindowTab: View {
     public var body: some View {
         Button(action: onClick) {
             HStack(spacing: 5) {
+                #if os(macOS)
                 if case .internetExplorer = window.appType {
                     IEIconView(size: 14)
+                } else if case .flashPlayer = window.appType {
+                    if let icon = XPAssetProvider.loadFlashIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 14, height: 14)
+                    } else {
+                        fallbackTabIcon
+                    }
                 } else if !window.icon.isEmpty {
-                    Image(systemName: window.icon)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white)
+                    fallbackTabIcon
                 }
+                #else
+                fallbackTabIcon
+                #endif
 
                 Text(window.title)
                     .font(.system(size: 11, weight: isActive ? .bold : .regular))
@@ -108,6 +120,16 @@ public struct TaskbarWindowTab: View {
             }
             Divider()
             Button("Close") { onClose?() }
+        }
+    }
+
+    private var fallbackTabIcon: some View {
+        Group {
+            if !window.icon.isEmpty {
+                Image(systemName: window.icon)
+                    .font(.system(size: 11))
+                    .foregroundColor(.white)
+            }
         }
     }
 

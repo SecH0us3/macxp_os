@@ -100,6 +100,11 @@ public class StartMenuModel: ObservableObject {
                 title: "Paint",
                 iconName: "paintbrush.fill",
                 action: { wm in wm.openWindow(appType: .paint) }
+            ),
+            StartMenuItem(
+                title: "Macromedia Flash Player",
+                iconName: "flame.fill",
+                action: { wm in wm.openWindow(appType: .flashPlayer()) }
             )
         ]
 
@@ -171,6 +176,7 @@ public class StartMenuModel: ObservableObject {
             StartMenuItem(title: "Calculator", iconName: "plus.forwardslash.minus", action: { wm in wm.openWindow(appType: .calculator) }),
             StartMenuItem(title: "Minesweeper", iconName: "flag.fill", action: { wm in wm.openWindow(appType: .minesweeper) }),
             StartMenuItem(title: "Paint", iconName: "paintbrush.fill", action: { wm in wm.openWindow(appType: .paint) }),
+            StartMenuItem(title: "Macromedia Flash Player", iconName: "flame.fill", action: { wm in wm.openWindow(appType: .flashPlayer()) }),
             StartMenuItem(title: "Windows Explorer", iconName: "folder.fill", action: { wm in wm.openWindow(appType: .explorer(path: "/")) }),
             StartMenuItem(title: "Windows Media Player", iconName: "play.rectangle.fill", action: { wm in wm.openWindow(appType: .mediaPlayer(fileURL: nil)) }),
             StartMenuItem(title: "Control Panel", iconName: "gearshape.fill", action: { wm in wm.openWindow(appType: .controlPanel) }),
@@ -467,6 +473,16 @@ public struct StartMenuView: View {
                     } else {
                         menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
                     }
+                } else if item.title == "Macromedia Flash Player" || item.title.contains("Flash") {
+                    if let icon = XPAssetProvider.loadFlashIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: isLeftColumn ? 22 : 18, height: isLeftColumn ? 22 : 18)
+                    } else {
+                        menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
+                    }
                 } else {
                     menuItemFallbackIcon(item: item, isLeftColumn: isLeftColumn, isHovered: isHovered)
                 }
@@ -702,6 +718,9 @@ public struct StartMenuView: View {
                             windowManager.openWindow(appType: .mediaPlayer())
                         }
                     case .games:
+                        xpAppRow(title: "Macromedia Flash Player", icon: "flame.fill") {
+                            windowManager.openWindow(appType: .flashPlayer())
+                        }
                         xpAppRow(title: "Minesweeper", icon: "flag.fill") {
                             windowManager.openWindow(appType: .minesweeper)
                         }
@@ -803,6 +822,16 @@ public struct StartMenuView: View {
                     }
                 } else if title == "Minesweeper" {
                     if let iconImg = XPAssetProvider.loadIcon(named: "minesweeper") {
+                        Image(nsImage: iconImg)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                    } else {
+                        fallbackXpAppIcon(icon: icon)
+                    }
+                } else if title == "Macromedia Flash Player" || title.contains("Flash") {
+                    if let iconImg = XPAssetProvider.loadFlashIcon() {
                         Image(nsImage: iconImg)
                             .resizable()
                             .interpolation(.high)

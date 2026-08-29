@@ -179,6 +179,11 @@ public final class XPAssetProvider {
         loadIcon(named: "drive_removable")
     }
 
+    /// Loads the authentic Macromedia Flash Player icon
+    public static func loadFlashIcon() -> NSImage? {
+        loadIcon(named: "flash") ?? loadIcon(named: "macromedia")
+    }
+
     /// Loads the authentic Windows XP Control Panel icon
     public static func loadControlPanelIcon() -> NSImage? {
         loadIcon(named: "control_panel")
