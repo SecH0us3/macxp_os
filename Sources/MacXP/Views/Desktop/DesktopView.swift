@@ -102,6 +102,7 @@ public struct BlissWallpaperView: View {
 public struct DesktopView: View {
     @ObservedObject public var windowManager: WindowManager
     @ObservedObject public var hotkeyManager: HotkeyManager = HotkeyManager.shared
+    @ObservedObject public var screenSaverManager: ScreenSaverManager = ScreenSaverManager.shared
     @StateObject public var desktopManager = DesktopManager()
     @StateObject public var systemTrayModel = SystemTrayModel()
     @StateObject public var startMenuModel = StartMenuModel()
@@ -161,7 +162,7 @@ public struct DesktopView: View {
                             desktopManager.createNewTextDocument()
                         },
                         onProperties: {
-                            windowManager.openWindow(appType: .systemProperties)
+                            windowManager.openWindow(appType: .displayProperties)
                         }
                     )
 
@@ -342,6 +343,13 @@ public struct DesktopView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .zIndex(100000)
                 }
+
+                // 11. Fullscreen Screensaver Overlay
+                if screenSaverManager.isFullScreenActive {
+                    FullScreenSaverOverlay()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .zIndex(100005)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
@@ -445,6 +453,10 @@ public struct DesktopView: View {
             ControlPanelView(windowManager: windowManager, window: window)
         case .systemProperties:
             SystemPropertiesView(windowManager: windowManager, window: window)
+        case .displayProperties:
+            DisplayPropertiesView(onClose: {
+                windowManager.closeWindow(id: window.id)
+            })
         case .runDialog:
             RunDialogView(windowManager: windowManager, window: window)
         }

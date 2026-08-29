@@ -10,6 +10,7 @@ public enum XPAppType: Equatable, Hashable {
     case paint
     case controlPanel
     case systemProperties
+    case displayProperties
     case runDialog
     
     public var defaultTitle: String {
@@ -37,6 +38,8 @@ public enum XPAppType: Equatable, Hashable {
             return "Control Panel"
         case .systemProperties:
             return "System Properties"
+        case .displayProperties:
+            return "Display Properties"
         case .runDialog:
             return "Run"
         }
@@ -60,6 +63,8 @@ public enum XPAppType: Equatable, Hashable {
             return "gearshape"
         case .systemProperties:
             return "desktopcomputer"
+        case .displayProperties:
+            return "display"
         case .runDialog:
             return "play.circle"
         }
@@ -83,6 +88,8 @@ public enum XPAppType: Equatable, Hashable {
             return CGSize(width: 640, height: 440)
         case .systemProperties:
             return CGSize(width: 440, height: 480)
+        case .displayProperties:
+            return CGSize(width: 440, height: 490)
         case .runDialog:
             return CGSize(width: 400, height: 180)
         }
