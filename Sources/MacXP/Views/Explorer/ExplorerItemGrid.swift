@@ -70,6 +70,15 @@ public struct ExplorerItemGrid: View {
         self.onProperties = onProperties
     }
 
+    @ObservedObject public var folderOptions = FolderOptionsSettings.shared
+
+    public var displayedFilteredItems: [FileItem] {
+        if folderOptions.showHiddenFiles {
+            return items
+        }
+        return items.filter { !$0.name.hasPrefix(".") }
+    }
+
     public var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             Group {
@@ -94,25 +103,33 @@ public struct ExplorerItemGrid: View {
     // MARK: - 1. Thumbnails View
     private var thumbnailsView: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 110, maximum: 130), spacing: 12)], spacing: 12) {
-            ForEach(items) { item in
+            ForEach(displayedFilteredItems) { item in
                 let isSelected = selectedIDs.contains(item.id)
                 let isRenaming = (renamingItemID == item.id)
 
                 VStack(spacing: 6) {
-                    // Preview Card Box
+                    // Preview Card Box (Classic XP Photo Frame)
                     ZStack {
                         RoundedRectangle(cornerRadius: 3)
-                            .fill(Color(red: 0.95, green: 0.95, blue: 0.96))
+                            .fill(Color.white)
                             .frame(width: 96, height: 80)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 3)
-                                    .strokeBorder(Color.gray.opacity(0.35), lineWidth: 1)
+                                    .strokeBorder(Color.gray.opacity(0.4), lineWidth: 1)
                             )
-                            .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+                            .shadow(color: Color.black.opacity(0.12), radius: 2, x: 1, y: 1)
 
-                        Image(systemName: item.iconName)
-                            .font(.system(size: 38))
-                            .foregroundColor(iconColor(for: item))
+                        if isImageFile(item), let img = NSImage(contentsOf: item.url) {
+                            Image(nsImage: img)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 88, maxHeight: 72)
+                                .clipShape(RoundedRectangle(cornerRadius: 2))
+                        } else {
+                            Image(systemName: item.iconName)
+                                .font(.system(size: 38))
+                                .foregroundColor(iconColor(for: item))
+                        }
                     }
 
                     // Label / Rename
@@ -126,7 +143,7 @@ public struct ExplorerItemGrid: View {
                         .background(Color.white)
                         .border(Color(red: 0.19, green: 0.42, blue: 0.77), width: 1)
                     } else {
-                        Text(item.name)
+                        Text(displayName(for: item))
                             .font(.system(size: 11))
                             .foregroundColor(isSelected ? .white : .black)
                             .multilineTextAlignment(.center)
@@ -161,8 +178,8 @@ public struct ExplorerItemGrid: View {
 
     // MARK: - 2. Tiles View
     private var tilesView: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 180, maximum: 240), spacing: 10)], spacing: 10) {
-            ForEach(items) { item in
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 190, maximum: 260), spacing: 10)], spacing: 10) {
+            ForEach(displayedFilteredItems) { item in
                 let isSelected = selectedIDs.contains(item.id)
                 let isRenaming = (renamingItemID == item.id)
 
@@ -182,16 +199,29 @@ public struct ExplorerItemGrid: View {
                             .background(Color.white)
                             .border(Color(red: 0.19, green: 0.42, blue: 0.77), width: 1)
                         } else {
-                            Text(item.name)
+                            Text(displayName(for: item))
                                 .font(.system(size: 11, weight: .regular))
                                 .foregroundColor(isSelected ? .white : .black)
                                 .lineLimit(1)
                         }
 
-                        Text(item.isDirectory ? item.typeDescription : (item.formattedSize.isEmpty ? item.typeDescription : "\(item.typeDescription)\n\(item.formattedSize)"))
-                            .font(.system(size: 10))
-                            .foregroundColor(isSelected ? Color.white.opacity(0.85) : Color.gray)
-                            .lineLimit(2)
+                        if item.isVolume || item.path == "/" {
+                            // Authentic Drive Free Space Bar
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.formattedSize.isEmpty ? "Local Disk" : "Free Space: \(item.formattedSize)")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(isSelected ? Color.white.opacity(0.85) : Color.gray)
+
+                                ProgressView(value: 0.65)
+                                    .progressViewStyle(LinearProgressViewStyle(tint: Color(red: 0.20, green: 0.50, blue: 0.90)))
+                                    .frame(width: 80, height: 4)
+                            }
+                        } else {
+                            Text(item.isDirectory ? item.typeDescription : (item.formattedSize.isEmpty ? item.typeDescription : "\(item.typeDescription)\n\(item.formattedSize)"))
+                                .font(.system(size: 10))
+                                .foregroundColor(isSelected ? Color.white.opacity(0.85) : Color.gray)
+                                .lineLimit(2)
+                        }
                     }
 
                     Spacer()
@@ -220,10 +250,22 @@ public struct ExplorerItemGrid: View {
         }
     }
 
+    private func isImageFile(_ item: FileItem) -> Bool {
+        let exts = ["png", "jpg", "jpeg", "gif", "webp", "bmp", "icns", "tif", "tiff"]
+        return exts.contains(item.fileExtension.lowercased())
+    }
+
+    private func displayName(for item: FileItem) -> String {
+        if folderOptions.hideExtensions && !item.isDirectory && !item.fileExtension.isEmpty {
+            return (item.name as NSString).deletingPathExtension
+        }
+        return item.name
+    }
+
     // MARK: - 3. Icons View
     private var iconsView: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80, maximum: 95), spacing: 10)], spacing: 10) {
-            ForEach(items) { item in
+            ForEach(displayedFilteredItems) { item in
                 let isSelected = selectedIDs.contains(item.id)
                 let isRenaming = (renamingItemID == item.id)
 
@@ -242,7 +284,7 @@ public struct ExplorerItemGrid: View {
                         .background(Color.white)
                         .border(Color(red: 0.19, green: 0.42, blue: 0.77), width: 1)
                     } else {
-                        Text(item.name)
+                        Text(displayName(for: item))
                             .font(.system(size: 11))
                             .foregroundColor(isSelected ? .white : .black)
                             .multilineTextAlignment(.center)
@@ -278,7 +320,7 @@ public struct ExplorerItemGrid: View {
     // MARK: - 4. List View
     private var listView: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 160, maximum: 200), spacing: 6)], spacing: 4) {
-            ForEach(items) { item in
+            ForEach(displayedFilteredItems) { item in
                 let isSelected = selectedIDs.contains(item.id)
                 let isRenaming = (renamingItemID == item.id)
 
@@ -297,7 +339,7 @@ public struct ExplorerItemGrid: View {
                         .background(Color.white)
                         .border(Color(red: 0.19, green: 0.42, blue: 0.77), width: 1)
                     } else {
-                        Text(item.name)
+                        Text(displayName(for: item))
                             .font(.system(size: 11))
                             .foregroundColor(isSelected ? .white : .black)
                             .lineLimit(1)
@@ -358,7 +400,7 @@ public struct ExplorerItemGrid: View {
 
             // Rows
             VStack(spacing: 0) {
-                ForEach(items) { item in
+                ForEach(displayedFilteredItems) { item in
                     let isSelected = selectedIDs.contains(item.id)
                     let isRenaming = (renamingItemID == item.id)
 
@@ -379,7 +421,7 @@ public struct ExplorerItemGrid: View {
                                 .background(Color.white)
                                 .border(Color(red: 0.19, green: 0.42, blue: 0.77), width: 1)
                             } else {
-                                Text(item.name)
+                                Text(displayName(for: item))
                                     .font(.system(size: 11))
                                     .foregroundColor(isSelected ? .white : .black)
                                     .lineLimit(1)

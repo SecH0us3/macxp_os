@@ -23,6 +23,9 @@ public class HotkeyManager: ObservableObject {
     @Published public var isTaskSwitcherVisible: Bool = false
     @Published public var taskSwitcherIndex: Int = 0
 
+    private var isCmdDown: Bool = false
+    private var otherKeyPressedWhileCmdDown: Bool = false
+
     #if os(macOS)
     private var localKeyDownMonitor: Any? = nil
     private var localFlagsMonitor: Any? = nil
@@ -33,6 +36,38 @@ public class HotkeyManager: ObservableObject {
     deinit {
         stopMonitoring()
     }
+
+    public func recordKeyDownWhileModifier() {
+        if isCmdDown {
+            otherKeyPressedWhileCmdDown = true
+        }
+    }
+
+    #if os(macOS)
+    public func handleFlagsChanged(
+        keyCode: UInt16,
+        modifierFlags: NSEvent.ModifierFlags,
+        onToggleStartMenu: (() -> Void)?
+    ) {
+        let hasCmd = modifierFlags.contains(.command)
+        let isCmdKey = (keyCode == 55 || keyCode == 54)
+
+        if hasCmd {
+            if !isCmdDown {
+                isCmdDown = true
+                otherKeyPressedWhileCmdDown = false
+            }
+        } else {
+            if isCmdDown {
+                isCmdDown = false
+                if !otherKeyPressedWhileCmdDown && isCmdKey {
+                    onToggleStartMenu?()
+                }
+                otherKeyPressedWhileCmdDown = false
+            }
+        }
+    }
+    #endif
 
     // MARK: - Key Parsing
 
@@ -47,6 +82,11 @@ public class HotkeyManager: ObservableObject {
         let isOpt = cleanFlags.contains(.option)
         let isCtrl = cleanFlags.contains(.control)
         let isShift = cleanFlags.contains(.shift)
+
+        // 0. Standalone Command key tap (Left Cmd: 55, Right Cmd: 54)
+        if (keyCode == 55 || keyCode == 54) && isCmd && cleanFlags == [.command] {
+            return .toggleStartMenu
+        }
 
         // 1. Task Switcher active navigation
         if isTaskSwitcherVisible {
@@ -162,6 +202,8 @@ public class HotkeyManager: ObservableObject {
         localKeyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self = self else { return event }
 
+            self.recordKeyDownWhileModifier()
+
             if let action = self.parseKey(
                 keyCode: event.keyCode,
                 characters: event.characters,
@@ -214,6 +256,13 @@ public class HotkeyManager: ObservableObject {
 
         localFlagsMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
             guard let self = self else { return event }
+
+            self.handleFlagsChanged(
+                keyCode: event.keyCode,
+                modifierFlags: event.modifierFlags,
+                onToggleStartMenu: onToggleStartMenu
+            )
+
             // If Alt or Cmd released while Task Switcher is open, confirm selection
             let cleanFlags = event.modifierFlags.intersection([.command, .option])
             if self.isTaskSwitcherVisible && cleanFlags.isEmpty {

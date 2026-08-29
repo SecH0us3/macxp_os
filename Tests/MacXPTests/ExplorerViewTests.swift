@@ -204,9 +204,71 @@ final class ExplorerViewTests: XCTestCase {
         XCTAssertNotNil(sidebar.body)
     }
 
-    func testExplorerWindowViewCompiles() {
-        let window = XPWindowInstance(appType: .explorer(path: "/"))
-        let view = ExplorerWindowView(initialPath: "/", windowManager: windowManager, window: window)
-        XCTAssertNotNil(view.body)
+    // MARK: - Advanced Explorer Features Tests
+
+    func testSearchCompanionRoverState() {
+        let vm = ExplorerViewModel(initialPath: tempDirectory.path)
+        XCTAssertFalse(vm.isSearchActive)
+        
+        vm.toggleSearchCompanion()
+        XCTAssertTrue(vm.isSearchActive)
+        XCTAssertEqual(vm.searchCategory, .allFiles)
+        
+        vm.searchCategory = .picturesAndMusic
+        XCTAssertEqual(vm.searchCategory, .picturesAndMusic)
+    }
+
+    func testFolderTreeViewNavigation() {
+        let vm = ExplorerViewModel(initialPath: "computer://")
+        XCTAssertFalse(vm.isFolderTreeActive)
+        
+        vm.toggleFolderTree()
+        XCTAssertTrue(vm.isFolderTreeActive)
+
+        let rootNodes = FolderTreeService.shared.getRootNodes()
+        XCTAssertFalse(rootNodes.isEmpty)
+        XCTAssertTrue(rootNodes.contains(where: { $0.title == "Desktop" }))
+        XCTAssertTrue(rootNodes.first?.children.contains(where: { $0.title == "My Computer" }) ?? false)
+    }
+
+    func testFolderOptionsDialogState() {
+        let vm = ExplorerViewModel(initialPath: "computer://")
+        XCTAssertFalse(vm.isFolderOptionsOpen)
+
+        vm.isFolderOptionsOpen = true
+        XCTAssertTrue(vm.isFolderOptionsOpen)
+        
+        let settings = FolderOptionsSettings.shared
+        let initialHidden = settings.showHiddenFiles
+        settings.showHiddenFiles.toggle()
+        XCTAssertNotEqual(settings.showHiddenFiles, initialHidden)
+        settings.showHiddenFiles.toggle() // restore
+    }
+
+    func testClipboardCutCopyPaste() throws {
+        let vm = ExplorerViewModel(initialPath: tempDirectory.path)
+        let file = tempDirectory.appendingPathComponent("Original.txt")
+        try "Original Content".write(to: file, atomically: true, encoding: .utf8)
+        vm.loadDirectoryContents()
+
+        guard let item = vm.items.first(where: { $0.name == "Original.txt" }) else {
+            XCTFail("Original file not found")
+            return
+        }
+
+        vm.selectItem(item)
+        vm.copySelectedItems()
+        XCTAssertTrue(ExplorerClipboard.shared.hasContent)
+        XCTAssertEqual(ExplorerClipboard.shared.items.first?.name, "Original.txt")
+
+        // Test paste
+        let subDir = tempDirectory.appendingPathComponent("SubFolder")
+        try FileManager.default.createDirectory(at: subDir, withIntermediateDirectories: true)
+        
+        vm.navigateTo(path: subDir.path)
+        vm.pasteClipboard()
+        vm.loadDirectoryContents()
+        XCTAssertTrue(vm.items.contains(where: { $0.name == "Original.txt" }))
     }
 }
+

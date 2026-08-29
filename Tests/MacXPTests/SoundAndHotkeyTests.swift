@@ -173,6 +173,44 @@ final class SoundAndHotkeyTests: XCTestCase {
             modifierFlags: .control
         )
         XCTAssertEqual(actionCtrlEsc, .toggleStartMenu)
+
+        // Cmd key alone (55 / 54) -> Toggle Start Menu
+        let actionCmd = hotkeyManager.parseKey(
+            keyCode: 55, // Left Command
+            characters: nil,
+            modifierFlags: .command
+        )
+        XCTAssertEqual(actionCmd, .toggleStartMenu)
+    }
+
+    func testHotkeyManagerCmdTapTogglesStartMenu() {
+        let hotkeyManager = HotkeyManager()
+        var toggledCount = 0
+        let onToggle = { toggledCount += 1 }
+
+        // Press Cmd down (keyCode 55, modifierFlags has .command)
+        hotkeyManager.handleFlagsChanged(keyCode: 55, modifierFlags: .command, onToggleStartMenu: onToggle)
+        XCTAssertEqual(toggledCount, 0, "Should not toggle on press down")
+
+        // Release Cmd (keyCode 55, modifierFlags empty)
+        hotkeyManager.handleFlagsChanged(keyCode: 55, modifierFlags: [], onToggleStartMenu: onToggle)
+        XCTAssertEqual(toggledCount, 1, "Should toggle on clean Cmd tap release")
+    }
+
+    func testHotkeyManagerCmdCombinationDoesNotToggleStartMenu() {
+        let hotkeyManager = HotkeyManager()
+        var toggledCount = 0
+        let onToggle = { toggledCount += 1 }
+
+        // Press Cmd down
+        hotkeyManager.handleFlagsChanged(keyCode: 55, modifierFlags: .command, onToggleStartMenu: onToggle)
+        
+        // Intervening KeyDown (e.g. Cmd+E)
+        hotkeyManager.recordKeyDownWhileModifier()
+
+        // Release Cmd
+        hotkeyManager.handleFlagsChanged(keyCode: 55, modifierFlags: [], onToggleStartMenu: onToggle)
+        XCTAssertEqual(toggledCount, 0, "Should NOT toggle Start Menu when Cmd was used in a shortcut combination")
     }
 
     func testHotkeyManagerTaskSwitcherCycle() {

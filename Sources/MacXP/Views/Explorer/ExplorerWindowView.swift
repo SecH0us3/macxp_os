@@ -9,6 +9,10 @@ public class ExplorerViewModel: ObservableObject {
     @Published public var sortAscending: Bool = true
     @Published public var isSidebarVisible: Bool = true
     @Published public var isSearchActive: Bool = false
+    @Published public var isFolderTreeActive: Bool = false
+    @Published public var searchCategory: SearchCategory = .allFiles
+    @Published public var isSearchingRunning: Bool = false
+    @Published public var isFolderOptionsOpen: Bool = false
     @Published public var searchQuery: String = ""
     @Published public var renamingItemID: UUID? = nil
     @Published public var renamingText: String = ""
@@ -210,6 +214,37 @@ public class ExplorerViewModel: ObservableObject {
         }
         isPropertiesOpen = true
     }
+
+    public func toggleSearchCompanion() {
+        withAnimation {
+            isSearchActive.toggle()
+            if isSearchActive {
+                isFolderTreeActive = false
+            }
+        }
+    }
+
+    public func toggleFolderTree() {
+        withAnimation {
+            isFolderTreeActive.toggle()
+            if isFolderTreeActive {
+                isSearchActive = false
+            }
+        }
+    }
+
+    public func copySelectedItems() {
+        ExplorerClipboard.shared.copy(items: selectedItems)
+    }
+
+    public func cutSelectedItems() {
+        ExplorerClipboard.shared.cut(items: selectedItems)
+    }
+
+    public func pasteClipboard() {
+        ExplorerClipboard.shared.paste(toDestinationPath: state.currentPath)
+        loadDirectoryContents()
+    }
 }
 
 public struct ExplorerWindowView: View {
@@ -238,21 +273,17 @@ public struct ExplorerWindowView: View {
                     canGoBack: viewModel.state.canGoBack,
                     canGoForward: viewModel.state.canGoForward,
                     canGoUp: viewModel.state.canGoUp,
-                    isFoldersActive: viewModel.isSidebarVisible,
+                    isFoldersActive: viewModel.isFolderTreeActive,
                     isSearchActive: viewModel.isSearchActive,
                     currentViewMode: viewModel.viewMode,
                     onBack: { viewModel.goBack() },
                     onForward: { viewModel.goForward() },
                     onUp: { viewModel.goUp() },
                     onSearch: {
-                        withAnimation {
-                            viewModel.isSearchActive.toggle()
-                        }
+                        viewModel.toggleSearchCompanion()
                     },
                     onToggleFolders: {
-                        withAnimation {
-                            viewModel.isSidebarVisible.toggle()
-                        }
+                        viewModel.toggleFolderTree()
                     },
                     onSelectViewMode: { mode in
                         viewModel.viewMode = mode
@@ -267,14 +298,29 @@ public struct ExplorerWindowView: View {
                     }
                 )
 
-                // Search Bar Overlay (if Search is active)
-                if viewModel.isSearchActive {
-                    searchBarView
-                }
-
-                // 4. Main Body: Left Sidebar + Viewport
+                // 4. Main Body: Left Sidebar (Search Companion / Folder Tree / Common Tasks) + Viewport
                 HStack(spacing: 0) {
-                    if viewModel.isSidebarVisible {
+                    if viewModel.isSearchActive {
+                        SearchCompanionView(viewModel: viewModel) { query in
+                            viewModel.isSearchingRunning = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                viewModel.isSearchingRunning = false
+                                viewModel.loadDirectoryContents()
+                            }
+                        }
+
+                        Rectangle()
+                            .frame(width: 1)
+                            .foregroundColor(Color(red: 0.70, green: 0.75, blue: 0.85))
+                    } else if viewModel.isFolderTreeActive {
+                        FolderTreeView(currentPath: viewModel.currentPath) { newPath in
+                            viewModel.navigateTo(path: newPath)
+                        }
+
+                        Rectangle()
+                            .frame(width: 1)
+                            .foregroundColor(Color(red: 0.70, green: 0.75, blue: 0.85))
+                    } else if viewModel.isSidebarVisible {
                         ExplorerSidebar(
                             currentPath: viewModel.currentPath,
                             selectedItems: viewModel.selectedItems,
@@ -375,6 +421,21 @@ public struct ExplorerWindowView: View {
                 propertiesDialog(for: propItem)
                     .zIndex(100)
             }
+
+            // Folder Options Dialog Modal
+            if viewModel.isFolderOptionsOpen {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.isFolderOptionsOpen = false
+                    }
+
+                FolderOptionsDialog {
+                    viewModel.isFolderOptionsOpen = false
+                    viewModel.loadDirectoryContents()
+                }
+                .zIndex(101)
+            }
         }
     }
 
@@ -405,9 +466,9 @@ public struct ExplorerWindowView: View {
 
             // Edit Menu
             Menu("Edit") {
-                Button("Cut") {}
-                Button("Copy") {}
-                Button("Paste") {}
+                Button("Cut") { viewModel.cutSelectedItems() }
+                Button("Copy") { viewModel.copySelectedItems() }
+                Button("Paste") { viewModel.pasteClipboard() }
                 Divider()
                 Button("Select All") { viewModel.selectAll() }
                 Button("Invert Selection") { viewModel.invertSelection() }
@@ -420,8 +481,8 @@ public struct ExplorerWindowView: View {
                     Button("Address Bar") {}
                 }
                 Menu("Explorer Bar") {
-                    Button("Search") { viewModel.isSearchActive.toggle() }
-                    Button("Folders") { viewModel.isSidebarVisible.toggle() }
+                    Button("Search") { viewModel.toggleSearchCompanion() }
+                    Button("Folders") { viewModel.toggleFolderTree() }
                 }
                 Divider()
                 ForEach(ExplorerViewMode.allCases) { mode in
@@ -449,7 +510,9 @@ public struct ExplorerWindowView: View {
             Menu("Tools") {
                 Button("Map Network Drive...") {}
                 Button("Disconnect Network Drive...") {}
-                Button("Folder Options...") {}
+                Button("Folder Options...") {
+                    viewModel.isFolderOptionsOpen = true
+                }
             }
 
             // Help Menu
