@@ -18,12 +18,17 @@ public final class XPAssetProvider {
 
         // Search locations in priority order:
         let searchPaths: [URL?] = [
-            Bundle.main.url(forResource: "bliss", withExtension: "png"),
             Bundle.main.url(forResource: "bliss", withExtension: "jpg"),
+            Bundle.main.url(forResource: "bliss", withExtension: "png"),
+            Bundle.main.resourceURL?.appendingPathComponent("bliss.jpg"),
             Bundle.main.resourceURL?.appendingPathComponent("bliss.png"),
+            URL(fileURLWithPath: "Resources/bliss.jpg"),
             URL(fileURLWithPath: "Resources/bliss.png"),
+            URL(fileURLWithPath: "Sources/MacXP/Resources/bliss.jpg"),
             URL(fileURLWithPath: "Sources/MacXP/Resources/bliss.png"),
+            URL(fileURLWithPath: "../Resources/bliss.jpg"),
             URL(fileURLWithPath: "../Resources/bliss.png"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/bliss.jpg"),
             Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/bliss.png")
         ]
 
@@ -31,6 +36,35 @@ public final class XPAssetProvider {
             if FileManager.default.fileExists(atPath: url.path),
                let image = NSImage(contentsOf: url) {
                 shared.cachedBliss = image
+                return image
+            }
+        }
+
+        return nil
+    }
+
+    /// Loads the authentic Windows XP Start Button image
+    public static func loadStartButtonImage() -> NSImage? {
+        if let cached = shared.cachedStartButton {
+            return cached
+        }
+
+        let searchPaths: [URL?] = [
+            Bundle.main.url(forResource: "start_button", withExtension: "png"),
+            Bundle.main.url(forResource: "start", withExtension: "png"),
+            Bundle.main.resourceURL?.appendingPathComponent("start_button.png"),
+            Bundle.main.resourceURL?.appendingPathComponent("start.png"),
+            URL(fileURLWithPath: "Resources/start_button.png"),
+            URL(fileURLWithPath: "Resources/start.png"),
+            URL(fileURLWithPath: "Sources/MacXP/Resources/start_button.png"),
+            URL(fileURLWithPath: "../Resources/start_button.png"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/start_button.png")
+        ]
+
+        for case let url? in searchPaths {
+            if FileManager.default.fileExists(atPath: url.path),
+               let image = NSImage(contentsOf: url) {
+                shared.cachedStartButton = image
                 return image
             }
         }
