@@ -1,6 +1,57 @@
+# ==============================================================================
+# MacXP OS - .gitignore
+# ==============================================================================
+
+# Swift Package Manager & Builds
 .build/
 .swiftpm/
-*.xcodeproj
-.DS_Store
+Package.resolved
+DerivedData/
 build/
+dist/
+dmg_staging/
 
+# Binaries & Bundles
+*.app/
+*.dmg
+*.ipa
+*.pkg
+
+# Xcode & Apple Developer Tools
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+*.xcbkptlist
+
+# macOS System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon\r\r
+
+# IDEs & Text Editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# Superpowers & Agent Working Directories
+.superpowers/
