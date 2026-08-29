@@ -46,6 +46,8 @@ public class RunDialogEngine: ObservableObject {
             return .openApp(.controlPanel)
         case "sysdm.cpl", "sysproperties", "system":
             return .openApp(.systemProperties)
+        case "desk.cpl", "display", "screensaver":
+            return .openApp(.displayProperties)
         case "explorer", "explorer.exe":
             return .openApp(.explorer(path: "/"))
         default:

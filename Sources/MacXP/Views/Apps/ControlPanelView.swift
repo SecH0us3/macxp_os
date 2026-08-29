@@ -25,7 +25,7 @@ public struct ControlPanelView: View {
                 title: "Appearance and Themes",
                 description: "Change the appearance of desktop items, apply a theme or screen saver, or customize the Start menu and taskbar.",
                 iconName: "paintbrush.fill",
-                action: { wm in wm.openWindow(appType: .systemProperties, title: "Display Properties") }
+                action: { wm in wm.openWindow(appType: .displayProperties) }
             ),
             ControlCategoryItem(
                 title: "Network and Internet Connections",

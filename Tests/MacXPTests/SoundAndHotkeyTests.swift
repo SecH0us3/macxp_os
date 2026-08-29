@@ -21,7 +21,11 @@ final class SoundAndHotkeyTests: XCTestCase {
     }
 
     func testSoundEnumAllCases() {
-        let expectedCases: [XPSound] = [.startup, .shutdown, .navigation, .error, .exclamation, .recycleBin]
+        let expectedCases: [XPSound] = [
+            .startup, .shutdown, .logon, .logoff, .navigation,
+            .error, .exclamation, .ding, .asterisk, .recycle,
+            .balloon, .hardwareInsert, .hardwareRemove
+        ]
         XCTAssertEqual(XPSound.allCases.count, expectedCases.count)
         for sound in expectedCases {
             XCTAssertTrue(XPSound.allCases.contains(sound))
