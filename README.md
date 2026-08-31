@@ -10,13 +10,18 @@ MacXP is a standalone, pixel-accurate recreation of Microsoft Windows XP (Luna B
 
 Watch MacXP in action:
 
+https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4
+
 <p align="center">
-  <video src="build/demo.mov" controls="controls" width="100%" style="max-width: 800px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
-    <p>Your browser does not support the video tag. <a href="build/demo.mov">Click here to download and view the demo video</a>.</p>
+  <video src="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4" poster="docs/assets/poster.jpg" controls="controls" width="100%" style="max-width: 800px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+    <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4">
+      <img src="docs/assets/poster.jpg" alt="Watch MacXP Demo Video" style="max-width: 100%; border-radius: 8px;" />
+    </a>
+    <p><em>Click image or link above to play the demo video.</em></p>
   </video>
 </p>
 
-> 🎥 **Direct Video File:** [`build/demo.mov`](build/demo.mov)
+> 🎥 **Download Video:** [`demo.mp4` (HD 720p)](https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4) | 📦 **Latest Release:** [MacXP v1.0.0](https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0)
 
 ---
 
