@@ -6,6 +6,9 @@
   <title>MacXP — The Nostalgic Windows XP Experience for macOS</title>
   <meta name="description" content="A standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built in Swift & SwiftUI for macOS 13.0+." />
   <link rel="icon" type="image/png" href="assets/icons/my_computer.png" />
+  <link rel="alternate" type="text/plain" href="llms.txt" title="LLM Documentation" />
+  <link rel="alternate" type="text/plain" href="llms-full.txt" title="Full LLM Documentation" />
+  <link rel="agents" type="application/json" href=".well-known/agents.json" />
   <style>
     :root {
       --luna-blue-top: #0055ea;
@@ -452,6 +455,23 @@
   </style>
 </head>
 <body>
+
+  <!-- Static Fallback & Instant Redirect for AI Agents / Non-JS Browsers -->
+  <noscript>
+    <div style="background: #ece9d8; border: 2px solid #0055ea; padding: 18px 24px; text-align: center; font-family: Tahoma, sans-serif; margin: 16px auto; max-width: 900px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
+      <h2 style="color: #003399; font-size: 18px; margin-bottom: 8px;">MacXP — Machine-Readable Documentation & AI Interface</h2>
+      <p style="font-size: 13px; color: #333; line-height: 1.5;">
+        AI agents, crawlers, and text-only environments can access structured documentation directly:
+      </p>
+      <p style="margin-top: 10px; font-size: 13px;">
+        📄 <a href="llms.txt" style="color: #0055ea; font-weight: bold; margin: 0 8px;">llms.txt (Standard)</a> | 
+        📚 <a href="llms-full.txt" style="color: #0055ea; font-weight: bold; margin: 0 8px;">llms-full.txt (Consolidated)</a> | 
+        🤖 <a href=".well-known/agents.json" style="color: #0055ea; font-weight: bold; margin: 0 8px;">agents.json (Agent Manifest)</a> | 
+        🛡️ <a href="ai.txt" style="color: #0055ea; font-weight: bold; margin: 0 8px;">ai.txt (Spawning.ai)</a>
+      </p>
+    </div>
+    <meta http-equiv="refresh" content="0; url=llms.txt" />
+  </noscript>
 
   <!-- Top Luna Navigation Bar -->
   <header class="top-bar">

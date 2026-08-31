@@ -1,0 +1,38 @@
+{
+  "$schema": "https://agents.md/schema/v1/agents.json",
+  "name": "MacXP Agent",
+  "version": "1.0.0",
+  "description": "Autonomous AI assistant and operations interface for the MacXP project (Windows XP Luna Blue environment recreated for macOS).",
+  "url": "https://sech0us3.github.io/macxp_os/",
+  "documentation": "https://sech0us3.github.io/macxp_os/llms.txt",
+  "documentation_full": "https://sech0us3.github.io/macxp_os/llms-full.txt",
+  "repository": "https://github.com/SecH0us3/macxp_os",
+  "license": "MIT",
+  "capabilities": [
+    {
+      "name": "run_tests",
+      "description": "Executes the comprehensive Swift unit test suite (144+ tests) using SPM and RTK.",
+      "command": "rtk swift test"
+    },
+    {
+      "name": "build_app",
+      "description": "Compiles release binary and packages the standalone macOS application bundle (build/MacXP.app).",
+      "command": "rtk make app"
+    },
+    {
+      "name": "build_dmg",
+      "description": "Constructs the distributable compressed Apple Disk Image (build/MacXP.dmg) with /Applications symlink.",
+      "command": "rtk make dmg"
+    },
+    {
+      "name": "run_locally",
+      "description": "Launches the MacXP native application locally on macOS.",
+      "command": "rtk make run"
+    }
+  ],
+  "protocols": {
+    "llms_txt": "https://sech0us3.github.io/macxp_os/llms.txt",
+    "ai_txt": "https://sech0us3.github.io/macxp_os/ai.txt",
+    "agents_md": "https://github.com/SecH0us3/macxp_os/blob/main/AGENTS.md"
+  }
+}
