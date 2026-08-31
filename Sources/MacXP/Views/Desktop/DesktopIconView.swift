@@ -94,6 +94,20 @@ public class DesktopManager: ObservableObject {
                 isSystem: true,
                 appType: .mediaPlayer(fileURL: nil),
                 position: CGPoint(x: 20, y: 380)
+            ),
+            DesktopIconItem(
+                title: "3D Pinball",
+                iconName: "pinball",
+                isSystem: true,
+                appType: .pinball,
+                position: CGPoint(x: 20, y: 470)
+            ),
+            DesktopIconItem(
+                title: "Solitaire",
+                iconName: "solitaire",
+                isSystem: true,
+                appType: .solitaire,
+                position: CGPoint(x: 20, y: 560)
             )
         ]
     }
@@ -334,6 +348,32 @@ public struct DesktopIconView: View {
                             .shadow(color: Color.black.opacity(0.5), radius: 1.5, x: 1, y: 1)
                     } else {
                         Image(systemName: item.iconName)
+                            .font(.system(size: 32))
+                            .foregroundColor(iconColor)
+                    }
+                } else if item.title == "3D Pinball" || item.appType == .pinball {
+                    if let icon = XPAssetProvider.loadPinballIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                            .shadow(color: Color.black.opacity(0.5), radius: 1.5, x: 1, y: 1)
+                    } else {
+                        Image(systemName: "circle.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundColor(iconColor)
+                    }
+                } else if item.title == "Solitaire" || item.appType == .solitaire {
+                    if let icon = XPAssetProvider.loadSolitaireIcon() {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .interpolation(.high)
+                            .scaledToFit()
+                            .frame(width: 34, height: 34)
+                            .shadow(color: Color.black.opacity(0.5), radius: 1.5, x: 1, y: 1)
+                    } else {
+                        Image(systemName: "suit.spade.fill")
                             .font(.system(size: 32))
                             .foregroundColor(iconColor)
                     }
