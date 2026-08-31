@@ -107,9 +107,37 @@
     /* Main Container */
     .container {
       max-width: 1060px;
-      margin: 36px auto;
+      margin: 28px auto;
       padding: 0 20px;
       flex: 1;
+    }
+
+    /* Hero Header (Top) */
+    .hero-header {
+      background: rgba(236, 233, 216, 0.92);
+      backdrop-filter: blur(8px);
+      border: 2px solid #0055ea;
+      border-radius: 8px;
+      padding: 24px 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #003399;
+      margin-bottom: 8px;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: #444;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.5;
     }
 
     /* XP Window Container for Video Demo */
@@ -119,7 +147,7 @@
       border: 3px solid #0055ea;
       box-shadow: 0 16px 40px rgba(0,0,0,0.6);
       overflow: hidden;
-      margin-bottom: 40px;
+      margin-bottom: 24px;
     }
 
     .window-titlebar {
@@ -200,34 +228,19 @@
       outline: none;
     }
 
-    /* Hero CTA Section */
-    .hero-cta {
+    /* Buttons & Actions Section (Under Video) */
+    .actions-panel {
       background: rgba(236, 233, 216, 0.95);
       backdrop-filter: blur(8px);
       border: 2px solid #0055ea;
       border-radius: 8px;
-      padding: 32px;
-      margin-bottom: 40px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+      padding: 24px;
+      margin-bottom: 36px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-    }
-
-    .hero-title {
-      font-size: 32px;
-      font-weight: bold;
-      color: #003399;
-      margin-bottom: 10px;
-    }
-
-    .hero-subtitle {
-      font-size: 16px;
-      color: #444;
-      max-width: 720px;
-      line-height: 1.5;
-      margin-bottom: 24px;
+      gap: 16px;
     }
 
     .cta-buttons {
@@ -235,6 +248,7 @@
       flex-wrap: wrap;
       gap: 16px;
       justify-content: center;
+      width: 100%;
     }
 
     .btn-download {
@@ -281,6 +295,24 @@
 
     .btn-secondary:hover {
       transform: translateY(-2px);
+    }
+
+    .badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .badge-item {
+      background: rgba(255,255,255,0.75);
+      border: 1px solid #b2cbe8;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-weight: 500;
     }
 
     /* Features Grid */
@@ -414,7 +446,7 @@
     @media (max-width: 768px) {
       .hero-title { font-size: 24px; }
       .container { margin: 16px auto; }
-      .hero-cta { padding: 20px; }
+      .actions-panel { padding: 18px; }
       .btn-download, .btn-secondary { width: 100%; justify-content: center; }
     }
   </style>
@@ -442,25 +474,15 @@
   <!-- Main Content Container -->
   <main class="container">
 
-    <!-- Hero Title & CTA -->
-    <section class="hero-cta">
+    <!-- 1. Header & Title (Top) -->
+    <header class="hero-header">
       <h1 class="hero-title">The Windows XP Experience for macOS</h1>
       <p class="hero-subtitle">
         A standalone, pixel-accurate, and high-performance recreation of Microsoft Windows XP (Luna Blue) built natively in Swift & SwiftUI for macOS 13.0+ (Ventura, Sonoma, Sequoia).
       </p>
+    </header>
 
-      <div class="cta-buttons">
-        <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/MacXP.dmg" class="btn-download">
-          <img src="assets/icons/my_computer.png" alt="Download" />
-          <span>Download MacXP.dmg (v1.0.0)</span>
-        </a>
-        <a href="https://github.com/SecH0us3/macxp_os" class="btn-secondary" target="_blank" rel="noopener">
-          <span>★ Star on GitHub</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- Embedded Video in Authentic Luna XP Window Chrome -->
+    <!-- 2. Video Showcase (Middle / Under Title) -->
     <section class="xp-window">
       <div class="window-titlebar">
         <div class="window-title">
@@ -490,13 +512,35 @@
           playsinline
         >
           <source src="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4" type="video/mp4" />
-          <source src="assets/demo.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
       </div>
     </section>
 
-    <!-- Features Highlights -->
+    <!-- 3. Action Buttons & Download (Below Video) -->
+    <section class="actions-panel">
+      <div class="cta-buttons">
+        <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/MacXP.dmg" class="btn-download">
+          <img src="assets/icons/my_computer.png" alt="Download" />
+          <span>Download MacXP.dmg (v1.0.0)</span>
+        </a>
+        <a href="https://github.com/SecH0us3/macxp_os" class="btn-secondary" target="_blank" rel="noopener">
+          <span>★ Star on GitHub</span>
+        </a>
+        <a href="https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0" class="btn-secondary" style="background: linear-gradient(180deg, #4d668c 0%, #2f4566 100%); border-color: #1e3048;">
+          <span>📦 Release Notes</span>
+        </a>
+      </div>
+
+      <div class="badges-row">
+        <span class="badge-item">🍏 macOS 13.0+ (Ventura, Sonoma, Sequoia)</span>
+        <span class="badge-item">⚡ 100% Swift & SwiftUI Native</span>
+        <span class="badge-item">🧪 144/144 Tests Passing</span>
+        <span class="badge-item">📄 Open Source MIT License</span>
+      </div>
+    </section>
+
+    <!-- 4. Features Highlights -->
     <h2 class="features-heading">✨ Authentic Nostalgic Features</h2>
     
     <div class="features-grid">
@@ -567,7 +611,7 @@
       </div>
     </div>
 
-    <!-- Built-in Applications Table -->
+    <!-- 5. Built-in Applications Table -->
     <section class="apps-section">
       <h3>💻 Complete Classic Applications Suite</h3>
       <table class="apps-table">
