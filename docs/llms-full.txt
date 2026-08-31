@@ -47,11 +47,11 @@ https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4
 - **Marquee Selection**: Multi-icon rubberband drag selection with authentic translucent blue selection rectangle (`#316ac5`).
 - **Context Menus**: Right-click desktop menu with *Arrange Icons*, *Refresh*, *New Folder*, *New Text Document*, and *Display Properties*.
 
-### ⚡ Macromedia Flash Player & Flash Games
-- **Macromedia Flash Player 8 Interface**: Authentic player frame with the iconic red Flash logo, menu bar (`File`, `View`, `Control`, `Help`), and the legendary **Flash Right-Click Context Menu** (*Zoom In*, *100%*, *Quality: High*, *About Flash Player 8*).
-- **Built-in Nostalgic Flash Games**:
-  - **🚁 Copter 2004 (The Helicopter Game)**: Hold mouse / Space to fly up through scrolling green cavern obstacles with live particle smoke trails and distance scoring.
-  - **👾 Space Alien Blast**: Retro Flash arcade space shooter with laser cannons, alien waves, and combo scoring.
+### 🎮 Retro Games Collection
+- **🚀 3D Pinball for Windows - Space Cadet**: Authentic table physics powered by `SpriteKit`, dual flipper controls (`Z` / `/`), plunger launch (`Space`), 3 high-elasticity bumpers with light flares, rollover multipliers, 7-segment LED scoreboard, and space mission ranks (*Cadet* → *Ensign* → *Fleet Admiral*).
+- **🃏 Solitaire (Косынка)**: Classic Klondike card game with Draw 1 and Draw 3 modes, Standard & Vegas scoring, auto-move on double-click, customizable XP card backs (*Blue Castle*, *Tropical Beach*, *Hand with Cards*, *Robot*), and the legendary **cascading victory card bounce celebration**!
+- **⚡ Macromedia Flash Player 8**: Authentic player frame with retro Flash games (*🚁 Copter 2004*, *👾 Space Alien Blast*), context menu, and .swf game switcher.
+- **💣 Minesweeper**: Classic 3-difficulty minefield with animated yellow smiley face reaction button and LED timer.
 
 ### 🎨 Authentic Luna Theme & Window Management
 - **Luna Blue Window Frames**: Classic rounded royal blue title bars with high-gloss gradients, 3D beveled borders, and authentic close, maximize, and minimize buttons.
@@ -75,6 +75,8 @@ https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4
 
 | Application | Description |
 | :--- | :--- |
+| **🚀 3D Pinball: Space Cadet** | SpriteKit physics engine, dual flippers, spring plunger, bumpers, and LED score display. |
+| **🃏 Solitaire** | Classic XP Klondike solitaire with Draw 1/3, card backs, and bouncing card victory cascade. |
 | **🗂️ Windows Explorer** | Virtualized `C:\` and `computer://` structure, authentic drive/folder icons, breadcrumb address bar, forward/back history, folder task sidebar (*Other Places*), 5 view modes (Tiles, Icons, List, Details), and file context menus. |
 | **⚡ Macromedia Flash Player** | Authentic Flash 8 player with retro Flash games (*Copter 2004*, *Space Alien Blast*), context menu, and .swf game switcher. |
 | **🌐 Internet Explorer 6** | Classic IE6 browser with original gold-halo logo, URL address bar with green Go button, back/forward navigation, and live web rendering. |
@@ -127,7 +129,7 @@ https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4
 # Build the project (debug mode)
 make build
 
-# Run all 144 unit tests
+# Run all 154 unit tests
 make test
 
 # Launch MacXP directly

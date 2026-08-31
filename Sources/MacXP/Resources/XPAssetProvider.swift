@@ -194,6 +194,16 @@ public final class XPAssetProvider {
         loadIcon(named: "network_places")
     }
 
+    /// Loads the authentic 3D Pinball: Space Cadet icon
+    public static func loadPinballIcon() -> NSImage? {
+        loadIcon(named: "pinball")
+    }
+
+    /// Loads the authentic Windows XP Solitaire icon
+    public static func loadSolitaireIcon() -> NSImage? {
+        loadIcon(named: "solitaire")
+    }
+
     /// Loads the authentic Windows XP Internet Explorer 6 icon
     public static func loadIEIcon() -> NSImage? {
         if let cached = shared.cachedIEIcon {

@@ -52,6 +52,10 @@ public class RunDialogEngine: ObservableObject {
             return .openApp(.internetExplorer(url: "https://www.google.com"))
         case "wmplayer", "wmplayer.exe", "wmp", "mplayer2":
             return .openApp(.mediaPlayer(fileURL: nil))
+        case "pinball", "pinball.exe", "spacecadet", "cadet":
+            return .openApp(.pinball)
+        case "sol", "sol.exe", "solitaire", "solitaire.exe", "cards":
+            return .openApp(.solitaire)
         case "explorer", "explorer.exe":
             return .openApp(.explorer(path: "/"))
         default:

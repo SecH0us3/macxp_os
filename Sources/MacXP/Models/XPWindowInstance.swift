@@ -14,6 +14,8 @@ public enum XPAppType: Equatable, Hashable {
     case internetExplorer(url: String = "https://www.google.com")
     case mediaPlayer(fileURL: URL? = nil)
     case flashPlayer(game: String? = nil)
+    case pinball
+    case solitaire
     case runDialog
     
     public var defaultTitle: String {
@@ -55,6 +57,10 @@ public enum XPAppType: Equatable, Hashable {
                 return "Macromedia Flash Player 8 - \(game).swf"
             }
             return "Macromedia Flash Player 8"
+        case .pinball:
+            return "3D Pinball for Windows - Space Cadet"
+        case .solitaire:
+            return "Solitaire"
         case .runDialog:
             return "Run"
         }
@@ -86,6 +92,10 @@ public enum XPAppType: Equatable, Hashable {
             return "play.rectangle.fill"
         case .flashPlayer:
             return "flame.fill"
+        case .pinball:
+            return "pinball"
+        case .solitaire:
+            return "solitaire"
         case .runDialog:
             return "play.circle"
         }
@@ -116,6 +126,10 @@ public enum XPAppType: Equatable, Hashable {
         case .mediaPlayer:
             return CGSize(width: 720, height: 500)
         case .flashPlayer:
+            return CGSize(width: 680, height: 520)
+        case .pinball:
+            return CGSize(width: 520, height: 640)
+        case .solitaire:
             return CGSize(width: 680, height: 520)
         case .runDialog:
             return CGSize(width: 400, height: 180)

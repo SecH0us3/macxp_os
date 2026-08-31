@@ -511,6 +511,10 @@ public struct DesktopView: View {
             WindowsMediaPlayerView(fileURL: fileURL, windowManager: windowManager, window: window)
         case .flashPlayer:
             FlashPlayerView(windowManager: windowManager, window: window)
+        case .pinball:
+            PinballView(windowManager: windowManager, window: window)
+        case .solitaire:
+            SolitaireView(windowManager: windowManager, window: window)
         case .runDialog:
             RunDialogView(windowManager: windowManager, window: window)
         }

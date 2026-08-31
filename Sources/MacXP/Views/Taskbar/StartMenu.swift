@@ -175,6 +175,8 @@ public class StartMenuModel: ObservableObject {
             StartMenuItem(title: "Notepad", iconName: "doc.text.fill", action: { wm in wm.openWindow(appType: .notepad(fileURL: nil)) }),
             StartMenuItem(title: "Calculator", iconName: "plus.forwardslash.minus", action: { wm in wm.openWindow(appType: .calculator) }),
             StartMenuItem(title: "Minesweeper", iconName: "flag.fill", action: { wm in wm.openWindow(appType: .minesweeper) }),
+            StartMenuItem(title: "3D Pinball", iconName: "circle.circle.fill", action: { wm in wm.openWindow(appType: .pinball) }),
+            StartMenuItem(title: "Solitaire", iconName: "suit.spade.fill", action: { wm in wm.openWindow(appType: .solitaire) }),
             StartMenuItem(title: "Paint", iconName: "paintbrush.fill", action: { wm in wm.openWindow(appType: .paint) }),
             StartMenuItem(title: "Macromedia Flash Player", iconName: "flame.fill", action: { wm in wm.openWindow(appType: .flashPlayer()) }),
             StartMenuItem(title: "Windows Explorer", iconName: "folder.fill", action: { wm in wm.openWindow(appType: .explorer(path: "/")) }),
@@ -718,11 +720,17 @@ public struct StartMenuView: View {
                             windowManager.openWindow(appType: .mediaPlayer())
                         }
                     case .games:
-                        xpAppRow(title: "Macromedia Flash Player", icon: "flame.fill") {
-                            windowManager.openWindow(appType: .flashPlayer())
+                        xpAppRow(title: "3D Pinball for Windows", icon: "circle.circle.fill") {
+                            windowManager.openWindow(appType: .pinball)
+                        }
+                        xpAppRow(title: "Solitaire", icon: "suit.spade.fill") {
+                            windowManager.openWindow(appType: .solitaire)
                         }
                         xpAppRow(title: "Minesweeper", icon: "flag.fill") {
                             windowManager.openWindow(appType: .minesweeper)
+                        }
+                        xpAppRow(title: "Macromedia Flash Player", icon: "flame.fill") {
+                            windowManager.openWindow(appType: .flashPlayer())
                         }
                         ForEach(appDiscovery.apps(for: .games)) { app in
                             macAppRow(app: app)
