@@ -2,6 +2,14 @@
 
 > **The Nostalgic Windows XP Experience, Reimagined as a Native macOS Application.**
 
+[![Website](https://img.shields.io/badge/Website-sech0us3.github.io%2Fmacxp__os-blue?style=flat&logo=safari)](https://sech0us3.github.io/macxp_os/)
+[![Release](https://img.shields.io/github/v/release/SecH0us3/macxp_os?style=flat&color=388438)](https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+🌐 **Official Website & Interactive Showcase:** [https://sech0us3.github.io/macxp_os/](https://sech0us3.github.io/macxp_os/)
+
+---
+
 MacXP is a standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built entirely in Swift and SwiftUI for macOS 13.0+ (Ventura, Sonoma, and Sequoia). It brings the golden era of desktop computing back to life with an authentic boot screen, desktop, window manager, start menu, taskbar, sound engine, and a complete suite of classic built-in applications.
 
 ---
