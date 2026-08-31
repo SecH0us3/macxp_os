@@ -3,9 +3,15 @@
 # Standards:
 # - Google Robots: https://developers.google.com/search/docs/crawling-indexing/robots/intro
 # - OpenAI Bots: https://platform.openai.com/docs/bots
+# - Cloudflare Content-Signal: https://blog.cloudflare.com/content-independence-day-ai-options/
 # - Spawning AI: https://site.spawning.ai/spawning-ai-txt
 # - LLMs.txt: https://llmstxt.org/
 # ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Cloudflare Content-Signal Declaration
+# ------------------------------------------------------------------------------
+Content-Signal: search=yes,ai-train=yes,use=reference
 
 # ------------------------------------------------------------------------------
 # OpenAI AI Search & User-Directed Browsing Agents
