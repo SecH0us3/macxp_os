@@ -1,0 +1,74 @@
+# ==============================================================================
+# MacXP — robots.txt
+# Standard: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# OpenAI AI & Search Crawlers
+# ------------------------------------------------------------------------------
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# ------------------------------------------------------------------------------
+# Anthropic Crawlers
+# ------------------------------------------------------------------------------
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# ------------------------------------------------------------------------------
+# Google & Gemini AI Crawlers
+# ------------------------------------------------------------------------------
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# ------------------------------------------------------------------------------
+# Other Leading AI Search & Research Bots
+# ------------------------------------------------------------------------------
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# ------------------------------------------------------------------------------
+# Default Rules for All Other Web Crawlers
+# ------------------------------------------------------------------------------
+User-agent: *
+Allow: /
+
+# AI Permissions Reference (Spawning.ai format)
+# https://site.spawning.ai/spawning-ai-txt
+# See: /ai.txt and /.well-known/ai.txt
