@@ -36,7 +36,7 @@ final class BuiltinAppsTests: XCTestCase {
     
     func testShellServiceDosPathMapping() {
         let shell = ShellService()
-        let unixPath = "/Users/alex/Documents"
+        let unixPath = "/Users/User/Documents"
         let dosPath = shell.convertToDosPath(unixPath: unixPath)
         XCTAssertTrue(dosPath.hasPrefix("C:\\"))
         XCTAssertTrue(dosPath.contains("Documents"))
