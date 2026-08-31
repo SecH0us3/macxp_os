@@ -1,0 +1,17 @@
+# MacXP
+
+> A standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built entirely in Swift and SwiftUI for macOS 13.0+ (Ventura, Sonoma, and Sequoia), featuring an authentic boot screen with animated blue cubes, window manager, start menu, taskbar, sound engine, Macromedia Flash Player with classic games, and a full suite of retro applications.
+
+## Documentation
+
+- [Project Overview & User Guide](README.md): Comprehensive documentation covering features, UI components, application suite, shortcuts, packaging, and architecture.
+- [System Architecture & Design Specification](docs/superpowers/specs/2026-08-29-macxp-os-design.md): In-depth technical specification covering data models, window management, state synchronization, file system virtualization, and UI chrome design.
+- [Component Implementation Plan](docs/superpowers/plans/2026-08-29-macxp-os-plan.md): Step-by-step technical implementation breakdown for window chrome, desktop canvas, Explorer, and built-in apps.
+- [Audio Engine & Screensavers Plan](docs/superpowers/plans/2026-08-29-macxp-sounds-and-screensavers-plan.md): Technical details on audio asset playback, 44.1kHz sound synthesis fallback, and 3D Pipes / Starfield screensavers.
+
+## Reference & Repositories
+
+- [Full Consolidated Context](llms-full.txt): Complete, concatenated Markdown version of all primary technical documentation.
+- [Source Repository](https://github.com/SecH0us3/macxp_os): GitHub repository with release downloads, issue tracking, and build scripts.
+- [Interactive Showcase Website](https://sech0us3.github.io/macxp_os/): Live website with embedded demonstration video and feature highlights.
+- [License](LICENSE): MIT License terms and copyright notices.

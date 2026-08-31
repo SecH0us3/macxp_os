@@ -1,0 +1,642 @@
+# MacXP — Full Technical Documentation & Context\n\n> Comprehensive concatenated Markdown reference for MacXP OS.\n\n\n---\n\n# DOCUMENT: README.md (README.md)\n\n# MacXP 🪟
+
+> **The Nostalgic Windows XP Experience, Reimagined as a Native macOS Application.**
+
+[![Website](https://img.shields.io/badge/Website-sech0us3.github.io%2Fmacxp__os-blue?style=flat&logo=safari)](https://sech0us3.github.io/macxp_os/)
+[![Release](https://img.shields.io/github/v/release/SecH0us3/macxp_os?style=flat&color=388438)](https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+🌐 **Official Website & Interactive Showcase:** [https://sech0us3.github.io/macxp_os/](https://sech0us3.github.io/macxp_os/)
+
+---
+
+MacXP is a standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built entirely in Swift and SwiftUI for macOS 13.0+ (Ventura, Sonoma, and Sequoia). It brings the golden era of desktop computing back to life with an authentic boot screen, desktop, window manager, start menu, taskbar, sound engine, and a complete suite of classic built-in applications.
+
+---
+
+## 🎬 Demo Video
+
+Watch MacXP in action:
+
+https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4
+
+<p align="center">
+  <video src="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4" poster="docs/assets/poster.jpg" controls="controls" width="100%" style="max-width: 800px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+    <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4">
+      <img src="docs/assets/poster.jpg" alt="Watch MacXP Demo Video" style="max-width: 100%; border-radius: 8px;" />
+    </a>
+    <p><em>Click image or link above to play the demo video.</em></p>
+  </video>
+</p>
+
+> 🎥 **Download Video:** [`demo.mp4` (HD 720p)](https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4) | 📦 **Latest Release:** [MacXP v1.0.0](https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0)
+
+---
+
+## ✨ Key Features
+
+### 🚀 Authentic Windows XP Boot Screen
+- **Classic Black Boot Screen**: High-resolution *Microsoft Windows XP Professional* branding with glowing 4-color Windows flag.
+- **The Famous Running Blue Cubes**: Continuous smooth animation of the 3 glowing blue loading blocks gliding across the progress track.
+- **Seamless Startup**: Automatically fades into the desktop while playing the iconic **Windows XP Startup Sound**.
+- **Auto Fullscreen**: Launches directly in full-screen immersion.
+
+### 🏞️ Iconic Desktop & Bliss Wallpaper
+- **Procedural & Original Bliss Wallpaper**: Faithful vector rendering and original high-res Bliss landscape with lush rolling green hills and puffy clouds.
+- **Authentic XP System Icons**: Original icons for *My Computer* (classic CRT monitor + PC tower), *My Documents*, *Recycle Bin*, and *Internet Explorer*.
+- **Marquee Selection**: Multi-icon rubberband drag selection with authentic translucent blue selection rectangle (`#316ac5`).
+- **Context Menus**: Right-click desktop menu with *Arrange Icons*, *Refresh*, *New Folder*, *New Text Document*, and *Display Properties*.
+
+### ⚡ Macromedia Flash Player & Flash Games
+- **Macromedia Flash Player 8 Interface**: Authentic player frame with the iconic red Flash logo, menu bar (`File`, `View`, `Control`, `Help`), and the legendary **Flash Right-Click Context Menu** (*Zoom In*, *100%*, *Quality: High*, *About Flash Player 8*).
+- **Built-in Nostalgic Flash Games**:
+  - **🚁 Copter 2004 (The Helicopter Game)**: Hold mouse / Space to fly up through scrolling green cavern obstacles with live particle smoke trails and distance scoring.
+  - **👾 Space Alien Blast**: Retro Flash arcade space shooter with laser cannons, alien waves, and combo scoring.
+
+### 🎨 Authentic Luna Theme & Window Management
+- **Luna Blue Window Frames**: Classic rounded royal blue title bars with high-gloss gradients, 3D beveled borders, and authentic close, maximize, and minimize buttons.
+- **Multi-Window Desktop**: Drag windows freely across the workspace, resize from 8 directions (edges and corners), and bring windows to front on focus.
+- **Cascading Placement**: New windows cascade intelligently when launched.
+- **Window Snapping & Maximization**: Maximize windows to fill the work area above the taskbar or restore them to their previous dimensions.
+
+### 🟢 Start Menu & Taskbar
+- **Two-Column Start Menu**:
+  - Top header with user avatar and macOS username.
+  - Left column featuring pinned Internet Explorer, Flash Player, and frequently used applications.
+  - *All Programs* flyout menu with categorized accessories, games, and native macOS applications.
+  - Right column with shortcuts to *My Documents*, *My Pictures*, *My Music*, *My Computer*, *Control Panel*, *Search*, and *Run...*.
+  - Bottom bar with *Log Off* and *Turn Off Computer* dialogs.
+- **Luna Taskbar**:
+  - Green **start** button with embossed 4-color Windows XP flag (toggled via `Cmd` / `Win` key or click).
+  - Active window tabs with pressed/active state styling and click-to-minimize/restore behavior.
+  - System tray with real-time digital clock, volume popup slider, and battery indicator.
+
+### 💻 Classic Built-in Applications
+
+| Application | Description |
+| :--- | :--- |
+| **🗂️ Windows Explorer** | Virtualized `C:\` and `computer://` structure, authentic drive/folder icons, breadcrumb address bar, forward/back history, folder task sidebar (*Other Places*), 5 view modes (Tiles, Icons, List, Details), and file context menus. |
+| **⚡ Macromedia Flash Player** | Authentic Flash 8 player with retro Flash games (*Copter 2004*, *Space Alien Blast*), context menu, and .swf game switcher. |
+| **🌐 Internet Explorer 6** | Classic IE6 browser with original gold-halo logo, URL address bar with green Go button, back/forward navigation, and live web rendering. |
+| **🎵 Windows Media Player** | Authentic skin with audible playback engine, volume control, track seeking, and animated spectrum visualizers with classic tracks (*Like Humans Do*, *XP Tour*, *Beethoven No. 9*). |
+| **📝 Notepad** | Lightweight text editor with File (New, Open, Save, Save As), Edit (Undo, Cut, Copy, Paste, Delete, Time/Date `F5`), Word Wrap toggle, and status bar line/column tracking. |
+| **🔢 Calculator** | Standard XP calculator supporting memory operations (`MC`, `MR`, `MS`, `M+`), arithmetic (`+`, `-`, `*`, `/`), square root, reciprocal, percentage, and full keyboard control. |
+| **🎨 Paint** | Classic raster canvas with Pencil, Brush, Line, Rectangle, Ellipse, and Eraser tools, 28-color palette, brush thickness controls, and Undo history. |
+| **⌨️ Command Prompt (`cmd.exe`)** | Real terminal session connected to macOS subprocess with DOS command aliases (`DIR`, `CD`, `CLS`, `ECHO`, `HELP`, `VER`, `PING`, `COLOR`, `EXIT`). |
+| **💣 Minesweeper** | Authentic gameplay with Beginner (9x9), Intermediate (16x16), and Expert (30x16) modes, yellow smiley face reaction button, 7-segment digital LED timer, and high scores. |
+| **⚙️ Control Panel & System Properties** | Real Mac hardware specs (chip, memory, macOS version) displayed in classic XP System Properties tabs. |
+| **🌌 3D Pipes & Starfield Screensavers** | Authentic 3D OpenGL-style Pipes screensaver, retro Starfield warp speed simulation, and Display Properties config dialog. |
+| **🚀 Run Dialog** | Quick-launch command dialog (`Win+R`) with persistent history for launching system applications and DOS commands. |
+| **🔌 Turn Off Computer** | Modal dialog with Stand By, Turn Off (with shutdown chime), and Restart (with bootscreen reboot). |
+
+### 🔊 Sound Engine
+- High-fidelity Windows XP audio:
+  - `Startup`: Harmonious chord greeting.
+  - `Shutdown`: Descending harmonic resolution.
+  - `Navigation`: Crisp tactile click for folders and links.
+  - `Error / Hand`: Classic alert chord for invalid actions.
+  - `Exclamation / Ding`: High bell chime.
+  - `Recycle Bin`: Paper crumple and whoosh on file deletion.
+- **Audio Control**: System tray volume popup slider and mute toggle.
+
+### ⌨️ Global Hotkeys & Shortcuts
+
+| Shortcut | Action |
+| :--- | :--- |
+| **`Cmd`** / **`Win`** | Toggle Start Menu |
+| **`Cmd+E`** / **`Win+E`** | Open Windows Explorer |
+| **`Cmd+D`** / **`Win+D`** | Show / Hide Desktop (Minimize all windows) |
+| **`Cmd+R`** / **`Win+R`** | Open Run Dialog |
+| **`Cmd+W`** / **`Alt+F4`** | Close Active Window |
+| **`Alt+Tab`** / **`Cmd+Tab`** | Cycle Task Switcher HUD |
+| **`F11`** / **`Cmd+Ctrl+F`** | Toggle Fullscreen |
+| **`F5`** (in Notepad) | Insert Current Date and Time |
+| **`0-9, +, -, *, /, =, Enter, Esc`** | Keyboard calculation in Calculator |
+
+---
+
+## 🛠️ Build & Installation
+
+### Requirements
+- **macOS 13.0 (Ventura)** or later (tested on macOS 14 Sonoma & macOS 15 Sequoia)
+- **Xcode 15+** or **Swift 5.9+** command line tools
+
+### Quick Start with Make
+
+```bash
+# Build the project (debug mode)
+make build
+
+# Run all 144 unit tests
+make test
+
+# Launch MacXP directly
+make run
+
+# Build standalone macOS Application bundle (build/MacXP.app)
+make app
+
+# Package into distributable Apple Disk Image (build/MacXP.dmg)
+make dmg
+
+# Clean build artifacts
+make clean
+```
+
+### Manual Swift Package Manager Commands
+
+```bash
+# Build release binary
+swift build -c release
+
+# Run MacXP
+swift run MacXP
+```
+
+---
+
+## 📦 Packaging & Distribution
+
+MacXP includes automated packaging scripts in `scripts/`:
+
+- **`scripts/build_app.sh`**:
+  - Compiles the release binary with compiler optimizations.
+  - Constructs standard macOS `.app` bundle structure:
+    - `build/MacXP.app/Contents/MacOS/MacXP`
+    - `build/MacXP.app/Contents/Info.plist`
+    - `build/MacXP.app/Contents/Resources/AppIcon.icns`
+    - `build/MacXP.app/Contents/Resources/Icons/`
+    - `build/MacXP.app/Contents/Resources/Sounds/`
+  - Applies ad-hoc code signing.
+
+- **`scripts/build_dmg.sh`**:
+  - Prepares a staging folder with `MacXP.app` and an `/Applications` drag-and-drop symlink.
+  - Generates a compressed `.dmg` disk image at `build/MacXP.dmg`.
+
+---
+
+## 📄 License
+
+This project's source code is free and open source, released under the [MIT License](LICENSE).
+
+---
+
+### Disclaimer
+Windows XP, Luna, Bliss, and related assets and visual designs are trademarks and copyrights of Microsoft Corporation. Macromedia and Flash are trademarks of Adobe Systems Inc. This software is an independent, open-source educational, recreational, and nostalgic tribute created for the macOS developer and enthusiast community.
+
+\n\n---\n\n# DOCUMENT: System Architecture & Design Specification (docs/superpowers/specs/2026-08-29-macxp-os-design.md)\n\n# MacXP OS — Native Windows XP Experience for macOS
+## Design Specification
+
+- **Date:** 2026-08-29
+- **Platform:** macOS 13+ (Apple Silicon & Intel)
+- **Tech Stack:** Swift, SwiftUI, AppKit, AVFoundation, Foundation Process/FileManager
+
+---
+
+## 1. Executive Summary
+
+MacXP OS is a standalone, high-performance, native macOS application designed to faithfully recreate the nostalgic Windows XP experience (Luna Blue theme) while deeply integrating with real macOS system capabilities (filesystem, app launching, terminal execution, system metrics, audio). It starts in immersive fullscreen mode by default, transforming the Mac into a fully interactive Windows XP desktop.
+
+---
+
+## 2. Architectural Overview
+
+### 2.1 Technology Stack
+- **Language:** Swift 5.9+
+- **UI Framework:** SwiftUI for declarative views & state management + AppKit for native windowing, mouse cursor manipulation, and system-level hotkey integration.
+- **Audio:** `AVFoundation` / `NSSound` for authentic XP sound effects.
+- **Filesystem & Process:** `FileManager`, `NSWorkspace`, `Process`, and `Pipe` for real macOS interaction.
+- **Project Structure:** Standalone Swift Package / macOS App with zero heavy third-party dependencies.
+
+### 2.2 Core Subsystems
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                       MacXP Desktop                         │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    WindowManager                      │  │
+│  │  ┌─────────────────┐ ┌───────────────┐ ┌────────────┐ │  │
+│  │  │ Explorer (File) │ │  cmd.exe      │ │ Notepad    │ │  │
+│  │  └─────────────────┘ └───────────────┘ └────────────┘ │  │
+│  │  ┌─────────────────┐ ┌───────────────┐ ┌────────────┐ │  │
+│  │  │ Calculator      │ │ Minesweeper   │ │ Paint      │ │  │
+│  │  └─────────────────┘ └───────────────┘ └────────────┘ │  │
+│  └───────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                      Taskbar                          │  │
+│  │  [Start] [QuickLaunch]   [Window Tabs]     [SysTray]  │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3. Detailed Component Specifications
+
+### 3.1 Window Manager & Luna Blue Chrome
+- **`XPWindowInstance` State Model:**
+  - `id: UUID`: Unique window identifier.
+  - `appType: XPAppType`: Discriminator (`.explorer(path)`, `.notepad(url?)`, `.cmd`, `.calculator`, `.minesweeper`, `.paint`, `.controlPanel`, `.systemProperties`, `.runDialog`).
+  - `title: String`: Window caption with dynamic update.
+  - `icon: String`: XP icon identifier.
+  - `rect: CGRect`: Position and dimensions on desktop.
+  - `state: WindowDisplayState`: `.normal`, `.minimized`, `.maximized`.
+  - `zIndex: Double`: Layering order.
+  - `isFocused: Bool`: Focus state determining title bar gradient.
+  - `minSize: CGSize`: Minimum resize constraints.
+- **Luna Chrome Rendering:**
+  - Active Titlebar: Three-tier blue linear gradient with white glossy highlight stripe (`#0055ea` → `#0a64dc` → `#1c7fed`).
+  - Inactive Titlebar: Desaturated slate-blue gradient (`#769bdf` → `#86a7e9`).
+  - Window Controls:
+    - Minimize (`_`): Embossed blue square with inset white line.
+    - Maximize/Restore (`□` / `❐`): Embossed blue square with inset frame.
+    - Close (`✕`): Red rounded bevel button (`#e04322` → `#d82d0e`) with hover glow and white bold cross.
+  - Borders: 3-pixel XP frame with beveled highlights and 8-direction interactive resize handles.
+
+### 3.2 Desktop & Filesystem Integration
+- **Wallpaper:** High-resolution original "Bliss" (Sonoma green hill with fluffy clouds) scaled aspect-fill.
+- **Desktop Icons:**
+  - "My Computer", "My Documents", "Recycle Bin", "My Network Places", "Internet Explorer".
+  - Real macOS files from user's `~/Desktop` directory.
+- **Interactions:**
+  - Marquee selection box (semi-transparent XP blue rectangle `#316ac5` with dotted/solid border).
+  - Drag-and-drop icon rearrangement on a virtual desktop grid.
+  - Context Menu: View (Large/Small Icons), Sort By (Name, Size, Type, Date), Refresh, New (Folder, Text Document), Properties.
+
+### 3.3 Windows Explorer (Проводник)
+- **Top Menu:** `File`, `Edit`, `View`, `Favorites`, `Tools`, `Help`.
+- **XP Toolbar:**
+  - Navigation: Back (with history stack), Forward, Up one directory level.
+  - Actions: Search, Folders toggle, Views mode dropdown (Large Icons, Tiles, List, Details).
+  - XP animated flag watermark in the upper right.
+- **Address Bar:** "Address" label + editable directory path + green "Go" arrow button.
+- **Left Sidebar (Classic Task Panes):**
+  - Collapsible blue-headed panels with arrow toggle:
+    - *File and Folder Tasks*: Create Folder, Rename, Delete, Share.
+    - *Other Places*: My Computer, My Documents, Desktop, Network.
+    - *Details*: Selected file icon, name, file size, modification date.
+- **Main Viewport:**
+  - Real macOS filesystem navigation starting at root, user home, or desktop.
+  - Support for creating directories, renaming items inline, deleting (to macOS Trash with confirmation sound).
+  - Double click folder: Enters folder with navigation click sound.
+  - Double click file: Launches in XP Notepad if text-based, or launches via `NSWorkspace.shared.open()` for macOS apps/files.
+
+### 3.4 Start Menu & Taskbar
+- **Start Menu:**
+  - Top header: User icon (avatar) and current macOS username.
+  - Left column (White): Pinned Internet (browser) and E-mail, separator, recent programs list, "All Programs" flyout submenu.
+  - Right column (Luna Blue tint): My Documents, My Pictures, My Music, My Computer, Control Panel, Search, Run...
+  - Bottom bar: Log Off (yellow key icon) and Turn Off Computer (red power button).
+- **Taskbar:**
+  - "Start" Button: Green pill button (`#388238` → `#5c9f3b`) with Windows flag logo, curved right edge, and pressed/hover states.
+  - Quick Launch toolbar: Show Desktop icon, Internet Explorer shortcut.
+  - Window Buttons: Interactive tabs for open windows with active/depressed visual states and click-to-focus/minimize.
+  - System Tray:
+    - Interactive volume speaker (opens XP vertical volume slider).
+    - Real macOS battery percentage and status icon.
+    - Digital clock (`HH:mm a`) showing full date tooltip and opening XP Date & Time calendar window on click.
+
+### 3.5 Built-in XP Applications
+1. **Notepad:**
+   - Full text editing area with Tahoma/Courier font, line wrap toggle, New/Open/Save/Save As/Exit file operations.
+   - Status bar with Line & Column tracking.
+2. **Command Prompt (`cmd.exe`):**
+   - Authentic black CRT-style window with classic banner.
+   - Connected to interactive macOS `zsh` sub-process.
+   - Built-in DOS compatibility aliases: `dir`, `cls`, `cd`, `ver`, `echo`, `type`, `help`, `exit`.
+3. **Calculator:**
+   - Standard XP layout with memory keys (`MC`, `MR`, `MS`, `M+`), arithmetic, `sqrt`, `%`, `1/x`, keyboard input support.
+4. **Minesweeper (`winmine.exe`):**
+   - Classic smiley button with reaction faces (Smile, Surprised, Dead, Cool), 7-segment LED counters, Beginner/Intermediate/Expert grids, right-click flagging, victory/defeat detection.
+5. **MS Paint:**
+   - Classic drawing canvas with Pencil, Brush, Eraser, Line, Rectangle, Ellipse, 28-color palette, stroke size, and image export.
+6. **Control Panel & System Properties:**
+   - System Properties displaying authentic Windows XP specs overlaying real Mac CPU/RAM/OS information.
+   - Date & Time properties with ticking analog clock and interactive calendar.
+7. **Run Dialog:**
+   - Classic prompt supporting `cmd`, `notepad`, `calc`, `paint`, `winmine`, `control`, `explorer`, URLs, and file paths.
+
+### 3.6 Sound Engine & Hotkeys
+- **Sound Effects:**
+  - Startup: Windows XP Startup chime on launch.
+  - Navigation: `start.wav` on Explorer folder traversal.
+  - Errors: `chord.wav` / `ding.wav` on invalid actions or alerts.
+  - Shutdown: Windows XP Shutdown chime on exit.
+- **Keyboard Shortcuts:**
+  - `Win` / `Cmd` or `Ctrl+Esc`: Toggle Start Menu.
+  - `Win+E`: Open Explorer.
+  - `Win+D`: Show Desktop (minimize/restore all).
+  - `Win+R`: Open Run dialog.
+  - `Alt+F4`: Close active window.
+  - `Alt+Tab`: XP Task Switcher HUD.
+  - `F11` / `Cmd+Ctrl+F`: Toggle Fullscreen mode.
+
+---
+
+## 4. Error Handling & Edge Cases
+- File permissions: Graceful alert dialog in XP format if accessing restricted directories.
+- Screen resize / Display changes: Window positions automatically clamped within visible desktop boundaries.
+- Exit handling: Clean process termination for `cmd.exe` background sessions and audio players on exit.
+
+---
+
+## 5. Verification & Testing Strategy
+- Unit tests for `WindowManager` (opening, closing, z-index sorting, minimize/maximize state transitions).
+- Filesystem helper tests (directory listing, path formatting, XP path alias resolution).
+- Integration test for `cmd.exe` process execution and output capturing.
+- Visual inspection of Luna Blue theme components, gradients, and font scaling in fullscreen.
+\n\n---\n\n# DOCUMENT: Component Implementation Plan (docs/superpowers/plans/2026-08-29-macxp-os-plan.md)\n\n# MacXP OS Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build a native macOS Swift application that faithfully recreates the Windows XP desktop environment (Luna Blue theme) with real macOS filesystem integration, start menu, taskbar, sound effects, and built-in apps (Explorer, Notepad, cmd.exe, Calculator, Minesweeper, Paint, Control Panel, Run).
+
+**Architecture:** Pure SwiftUI for UI rendering with an injected `WindowManager` (`ObservableObject`) managing `XPWindowInstance` states. AppKit is used for the borderless fullscreen `NSWindow` container, keyboard events, and system APIs.
+
+**Tech Stack:** Swift 5.9, SwiftUI, AppKit, AVFoundation, Process/Pipe (for cmd.exe), FileManager, NSWorkspace.
+
+## Global Constraints
+
+- Platform: macOS 13+
+- Swift version: 5.9+
+- Build system: Swift Package Manager (`swift build` / `swift run` / `swift test`)
+- No heavy third-party UI libraries (pure native Swift/SwiftUI/AppKit).
+- All terminal commands MUST be prefixed with `rtk`.
+- Visual authenticity: Faithful Windows XP Luna Blue colors, 3D bevels, Tahoma typography, Bliss background, and pixel-precise UI layouts.
+
+---
+
+### Task 1: Project Scaffolding & Core Architecture
+(Status: COMPLETED in commit 6612b47)
+
+---
+
+### Task 2: Window Manager & State Models
+(Status: COMPLETED in commit 0401928)
+
+---
+
+### Task 3: Luna Blue Window Chrome Component
+(Status: COMPLETED in commit 620c260)
+
+---
+
+### Task 4: Desktop Canvas, Start Menu, Taskbar & Context Menus
+
+**Files:**
+- Create: `Sources/MacXP/Views/Taskbar/TaskbarView.swift`
+- Create: `Sources/MacXP/Views/Taskbar/StartButton.swift`
+- Create: `Sources/MacXP/Views/Taskbar/StartMenu.swift`
+- Create: `Sources/MacXP/Views/Taskbar/SystemTrayView.swift`
+- Create: `Sources/MacXP/Views/Desktop/DesktopView.swift`
+- Create: `Sources/MacXP/Views/Desktop/DesktopIconView.swift`
+- Create: `Sources/MacXP/Views/Desktop/DesktopContextMenu.swift`
+- Create: `Sources/MacXP/Views/Desktop/MarqueeSelection.swift`
+- Modify: `Sources/MacXP/MacXPApp.swift`
+- Create: `Tests/MacXPTests/DesktopAndTaskbarTests.swift`
+
+**Interfaces:**
+- Consumes: `WindowManager`, `XPWindowInstance`, `LunaWindowView`
+- Produces: Complete interactive Windows XP desktop with:
+  - Bliss wallpaper background (procedural / high-res vector/image).
+  - Desktop icons: My Computer, My Documents, Recycle Bin, Internet Explorer, plus user's `~/Desktop` files.
+  - Marquee drag selection box (`#316ac5` translucent fill with dotted/solid border).
+  - Desktop right-click context menu (Arrange Icons By, Refresh, New -> Folder / Text Document, Properties).
+  - Authentic Start Button with Windows flag logo, curved edge, green gradient.
+  - Authentic Start Menu (User banner, 2-column layout: Pinned & Recent apps on left, System folders & Control Panel/Run on right, Log Off & Turn Off buttons at bottom).
+  - Taskbar window tabs with active/depressed styles and click-to-minimize/restore.
+  - System tray with real live macOS clock, volume popup slider, battery indicator.
+
+- [ ] **Step 1: Write tests for Taskbar and Desktop models/views**
+- [ ] **Step 2: Implement StartButton and StartMenu with XP Luna theme**
+- [ ] **Step 3: Implement TaskbarView and SystemTrayView with live clock and volume control**
+- [ ] **Step 4: Implement DesktopView, DesktopIconView, Marquee selection, and DesktopContextMenu**
+- [ ] **Step 5: Run tests and verify all pass (`rtk swift test`)**
+- [ ] **Step 6: Commit**
+
+---
+
+### Task 5: Windows Explorer (Проводник) & File Management
+
+**Files:**
+- Create: `Sources/MacXP/Services/FileSystemService.swift`
+- Create: `Sources/MacXP/Views/Explorer/ExplorerWindowView.swift`
+- Create: `Sources/MacXP/Views/Explorer/ExplorerToolbar.swift`
+- Create: `Sources/MacXP/Views/Explorer/ExplorerAddressBar.swift`
+- Create: `Sources/MacXP/Views/Explorer/ExplorerSidebar.swift`
+- Create: `Sources/MacXP/Views/Explorer/ExplorerItemGrid.swift`
+- Create: `Sources/MacXP/Views/Explorer/FileContextMenu.swift`
+- Create: `Tests/MacXPTests/FileSystemServiceTests.swift`
+- Create: `Tests/MacXPTests/ExplorerViewTests.swift`
+
+**Interfaces:**
+- Consumes: `WindowManager`, `LunaWindowView`
+- Produces: Complete Windows Explorer with:
+  - Top menu (`File`, `Edit`, `View`, `Favorites`, `Tools`, `Help`).
+  - Toolbar: Back, Forward, Up, Search, Folders, Views dropdown (Tiles, Icons, List, Details) + XP flag logo.
+  - Address Bar with editable path and green "Go" button.
+  - Left Sidebar: "File and Folder Tasks", "Other Places", "Details" with preview.
+  - Real macOS filesystem integration: navigate directories, open files via `NSWorkspace` or internal apps, create folders, rename files inline, delete to macOS Trash.
+  - Right-click file context menu: Open, Explore, Open With (Notepad), Delete, Rename, Properties.
+
+- [x] **Step 1: Write tests for FileSystemService**
+- [x] **Step 2: Implement FileSystemService for macOS file operations**
+- [x] **Step 3: Implement Explorer toolbar, address bar, sidebar, and grid views**
+- [x] **Step 4: Implement FileContextMenu and file operations (create folder, rename, trash)**
+- [x] **Step 5: Run tests and verify all pass (`rtk swift test`)**
+- [x] **Step 6: Commit**
+
+---
+
+### Task 6: Built-in XP Applications
+
+**Files:**
+- Create: `Sources/MacXP/Views/Apps/NotepadView.swift`
+- Create: `Sources/MacXP/Views/Apps/CmdView.swift`
+- Create: `Sources/MacXP/Views/Apps/CalculatorView.swift`
+- Create: `Sources/MacXP/Views/Apps/MinesweeperView.swift`
+- Create: `Sources/MacXP/Views/Apps/PaintView.swift`
+- Create: `Sources/MacXP/Views/Apps/ControlPanelView.swift`
+- Create: `Sources/MacXP/Views/Apps/SystemPropertiesView.swift`
+- Create: `Sources/MacXP/Views/Apps/RunDialogView.swift`
+- Create: `Sources/MacXP/Services/ShellService.swift`
+- Create: `Tests/MacXPTests/BuiltinAppsTests.swift`
+
+**Interfaces:**
+- Consumes: `WindowManager`, `XPAppType`, `LunaWindowView`
+- Produces:
+  - **Notepad:** Real text editor with File/Edit menus, status bar, open/save files.
+  - **cmd.exe:** Connected to macOS `zsh` via `Process`/`Pipe` with DOS command aliases (`dir`, `cls`, `ver`, `cd`, `echo`).
+  - **Calculator:** Standard XP calculator with memory functions and keyboard support.
+  - **Minesweeper:** Complete game with smiley face reactions, 7-segment LED counters, beginner/intermediate/expert modes.
+  - **Paint:** Canvas drawing tool with pencil, brush, eraser, shapes, and 28-color palette.
+  - **Control Panel & System Properties:** Real Mac specs displayed in classic XP dialog.
+  - **Run Dialog:** Launch apps, URLs, or file paths.
+
+- [ ] **Step 1: Write tests for ShellService and Builtin Apps**
+- [ ] **Step 2: Implement ShellService for cmd.exe zsh integration**
+- [ ] **Step 3: Implement Notepad, cmd.exe, Calculator, Minesweeper, Paint, Control Panel, Run Dialog**
+- [ ] **Step 4: Integrate apps into WindowManager and Start Menu dispatch**
+- [ ] **Step 5: Run tests and verify all pass (`rtk swift test`)**
+- [ ] **Step 6: Commit**
+
+---
+
+### Task 7: Sound Engine, Hotkeys & System Integration
+
+**Files:**
+- Create: `Sources/MacXP/Services/SoundManager.swift`
+- Create: `Sources/MacXP/Services/HotkeyManager.swift`
+- Create: `Sources/MacXP/Resources/SoundEffects.swift`
+- Create: `Tests/MacXPTests/SoundAndHotkeyTests.swift`
+
+**Interfaces:**
+- Consumes: `WindowManager`
+- Produces:
+  - Sound effects: Startup chime, folder navigation click, error chord, exclamation ding, shutdown chime.
+  - Hotkeys: `Cmd`/`Win` (Start menu), `Win+E` (Explorer), `Win+D` (Show desktop), `Win+R` (Run dialog), `Alt+F4` (Close window), `Alt+Tab` (Task switcher HUD).
+  - Fullscreen toggle (`F11` / `Cmd+Ctrl+F`) and Turn Off Computer dialog.
+
+- [ ] **Step 1: Write tests for SoundManager and HotkeyManager**
+- [ ] **Step 2: Implement SoundManager with synthesized/bundled authentic XP sound waveforms**
+- [ ] **Step 3: Implement HotkeyManager with NSEvent monitor for global shortcuts**
+- [ ] **Step 4: Implement Alt+Tab task switcher HUD and Turn Off Computer dialog**
+- [ ] **Step 5: Run tests and verify all pass (`rtk swift test`)**
+- [ ] **Step 6: Commit**
+
+---
+
+### Task 8: App Packaging, Assets & DMG Build Script
+
+**Files:**
+- Create: `scripts/build_app.sh`
+- Create: `scripts/build_dmg.sh`
+- Create: `Makefile`
+- Create: `Resources/Info.plist`
+- Create: `Resources/AppIcon.icns`
+- Create: `README.md`
+- Create: `Tests/MacXPTests/PackagingTests.swift`
+
+**Interfaces:**
+- Produces:
+  - Standalone macOS `.app` bundle (`MacXP.app`).
+  - Distributable `.dmg` disk image with Applications shortcut.
+  - Simple `make app` and `make dmg` commands.
+
+- [ ] **Step 1: Create Info.plist and Makefile**
+- [ ] **Step 2: Create build_app.sh and build_dmg.sh scripts**
+- [ ] **Step 3: Test build process and verify DMG generation**
+- [ ] **Step 4: Write comprehensive README.md with usage and shortcuts**
+- [ ] **Step 5: Commit and verify full build**
+\n\n---\n\n# DOCUMENT: Audio Engine & Screensavers Plan (docs/superpowers/plans/2026-08-29-macxp-sounds-and-screensavers-plan.md)\n\n# MacXP Authentic Sounds & 3D Screensavers Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Implement the complete authentic Windows XP WAV sound scheme with genuine audio files and the full suite of 5 classic Windows XP screensavers (3D Pipes, Starfield, Windows XP 3D Logo, Mystify, Blank) with real-time CRT mini-preview in Display Properties, settings dialogs, and idle-time activation.
+
+**Architecture:**
+- **Sound Subsystem:** Bundle authentic 16-bit 44.1kHz WAV assets in `Resources/Sounds/` and update `SoundManager` to load and cache them via `AVAudioPlayer`, connecting them to all OS events (startup, shutdown, navigation, errors, trash, balloons).
+- **Screensaver Engine:** A modular `ScreenSaverType` enum and `ScreenSaverRenderer` protocols with SwiftUI / Canvas rendering for 3D Pipes, Starfield, Windows XP 3D Logo, Mystify, and Blank.
+- **Display Properties & Settings:** Integrate the Screen Saver tab into `DisplayPropertiesView` with a CRT monitor live mini-viewport, "Settings..." dialog per screensaver, "Preview" full-screen mode, and an idle-timer `ScreenSaverManager` with mouse/keyboard wake-up detection.
+
+**Tech Stack:** Swift 5.9, SwiftUI, AppKit, AVFoundation, Canvas / Geometry2D / SceneKit, XCTest.
+
+## Global Constraints
+- Platform: macOS 13+
+- Swift version: 5.9+
+- Build system: Swift Package Manager (`swift build`, `swift test`)
+- All shell commands MUST be prefixed with `rtk` (e.g. `rtk swift test`, `rtk make app`, `rtk make dmg`)
+- Zero external third-party heavy dependencies; use native Apple frameworks (AVFoundation, SwiftUI, AppKit, Canvas).
+- Strict visual and auditory authenticity to Windows XP Luna Blue (Tahoma typography, 3D bevels, classic palettes, pixel precision).
+
+---
+
+### Task 1: Authentic Windows XP WAV Sound Pack & SoundManager Integration
+
+**Files:**
+- Create: `Resources/Sounds/` (directory with 12 authentic Windows XP WAV files)
+- Modify: `Sources/MacXP/Services/SoundManager.swift`
+- Modify: `Sources/MacXP/Resources/SoundEffects.swift`
+- Modify: `Sources/MacXP/Resources/XPAssetProvider.swift`
+- Modify: `scripts/build_app.sh`
+- Test: `Tests/MacXPTests/AuthenticSoundTests.swift`
+
+---
+
+### Task 2: Core Screensaver Engine & Starfield Simulation
+
+**Files:**
+- Create: `Sources/MacXP/Screensavers/ScreenSaverModel.swift`
+- Create: `Sources/MacXP/Screensavers/StarfieldScreenSaverView.swift`
+- Test: `Tests/MacXPTests/ScreenSaverTests.swift`
+
+---
+
+### Task 3: 3D Pipes Screensaver (Трубопровод 3D)
+
+**Files:**
+- Create: `Sources/MacXP/Screensavers/Pipes3DScreenSaverView.swift`
+- Modify: `Sources/MacXP/Screensavers/ScreenSaverModel.swift`
+- Test: `Tests/MacXPTests/Pipes3DTests.swift`
+
+---
+
+### Task 4: Windows XP 3D Logo, Mystify & Blank Screensavers
+
+**Files:**
+- Create: `Sources/MacXP/Screensavers/XP3DLogoScreenSaverView.swift`
+- Create: `Sources/MacXP/Screensavers/MystifyScreenSaverView.swift`
+- Create: `Sources/MacXP/Screensavers/BlankScreenSaverView.swift`
+- Modify: `Sources/MacXP/Screensavers/ScreenSaverModel.swift`
+- Test: `Tests/MacXPTests/OtherScreensaversTests.swift`
+
+---
+
+### Task 5: Display Properties Screen Saver Tab, Settings Modals & Idle Manager
+
+**Files:**
+- Create: `Sources/MacXP/Services/ScreenSaverManager.swift`
+- Create: `Sources/MacXP/Views/Screensaver/ScreenSaverSettingsDialog.swift`
+- Create: `Sources/MacXP/Views/Screensaver/FullScreenSaverOverlay.swift`
+- Modify: `Sources/MacXP/Views/Apps/DisplayPropertiesView.swift`
+- Modify: `Sources/MacXP/Views/Desktop/DesktopView.swift`
+- Test: `Tests/MacXPTests/DisplayPropertiesScreenSaverTests.swift`
+
+---
+
+### Task 6: System-wide Sound Events Wiring, Final Packaging & Verification
+
+**Files:**
+- Modify: `Sources/MacXP/Views/Desktop/DesktopView.swift`
+- Modify: `Sources/MacXP/Views/Taskbar/TaskbarView.swift`
+- Modify: `Sources/MacXP/Views/Taskbar/StartMenu.swift`
+- Modify: `Sources/MacXP/Views/Apps/ExplorerWindowView.swift`
+- Modify: `Sources/MacXP/Views/Apps/RunDialogView.swift`
+- Modify: `Sources/MacXP/Views/TurnOffDialogView.swift`
+- Modify: `README.md`
+- Test: `Tests/MacXPTests/PackagingTests.swift`
+\n\n---\n\n# DOCUMENT: License (LICENSE)\n\nMIT License
+
+Copyright (c) 2026 MacXP Authors & Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Disclaimer: Windows XP, Luna Blue, Bliss, and related visual trademarks are property of Microsoft Corporation. Macromedia and Flash are trademarks of Adobe Systems Inc. This project is an open-source educational, recreational, and artistic tribute recreation.
