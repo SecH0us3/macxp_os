@@ -133,6 +133,7 @@ public struct DesktopView: View {
     @State private var isBooting: Bool = true
     @State private var marqueeStart: CGPoint? = nil
     @State private var marqueeCurrent: CGPoint? = nil
+    @State private var clickMonitor: Any? = nil
 
     public init(windowManager: WindowManager) {
         self.windowManager = windowManager
@@ -149,8 +150,8 @@ public struct DesktopView: View {
                         isStartMenuOpen = false
                         isVolumePopupOpen = false
                     }
-                    .gesture(
-                        DragGesture(minimumDistance: 4)
+                    .simultaneousGesture(
+                        DragGesture(minimumDistance: 6)
                             .onChanged { value in
                                 isStartMenuOpen = false
                                 isVolumePopupOpen = false
@@ -264,18 +265,7 @@ public struct DesktopView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: desktopGeo.size.height - 30, alignment: .topLeading)
 
-                // 5. Dismiss backdrops for Start Menu & Volume Popup
-                if isStartMenuOpen || isVolumePopupOpen {
-                    Color.black.opacity(0.001)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .onTapGesture {
-                            isStartMenuOpen = false
-                            isVolumePopupOpen = false
-                        }
-                        .zIndex(99990)
-                }
-
-                // 6. Start Menu Overlay
+                // 5. Start Menu Overlay
                 if isStartMenuOpen {
                     StartMenuView(
                         windowManager: windowManager,
@@ -397,6 +387,29 @@ public struct DesktopView: View {
                         }
                     }
                 }
+                if clickMonitor == nil {
+                    clickMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { event in
+                        if isStartMenuOpen || isVolumePopupOpen {
+                            let loc = event.locationInWindow
+                            let isInsideStartMenu = (loc.x <= 620 && loc.y <= 450)
+                            let isInsideStartButton = (loc.x <= 110 && loc.y <= 32)
+                            let isInsideVolumePopup = (loc.x >= 700 && loc.y <= 240)
+                            let isInsideVolumeTray = (loc.x >= 700 && loc.y <= 32)
+
+                            if isStartMenuOpen && !isInsideStartMenu && !isInsideStartButton {
+                                DispatchQueue.main.async {
+                                    isStartMenuOpen = false
+                                }
+                            }
+                            if isVolumePopupOpen && !isInsideVolumePopup && !isInsideVolumeTray {
+                                DispatchQueue.main.async {
+                                    isVolumePopupOpen = false
+                                }
+                            }
+                        }
+                        return event
+                    }
+                }
                 #endif
                 hotkeyManager.startMonitoring(
                     windowManager: windowManager,
@@ -418,6 +431,14 @@ public struct DesktopView: View {
                         #endif
                     }
                 )
+            }
+            .onDisappear {
+                #if os(macOS)
+                if let monitor = clickMonitor {
+                    NSEvent.removeMonitor(monitor)
+                    clickMonitor = nil
+                }
+                #endif
             }
         }
     }

@@ -438,8 +438,8 @@ public struct DesktopIconView: View {
         .onTapGesture(count: 1) {
             onSelect(false)
         }
-        .gesture(
-            DragGesture()
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 4)
                 .onChanged { value in
                     dragOffset = value.translation
                 }
@@ -452,6 +452,21 @@ public struct DesktopIconView: View {
                     onDragPosition?(finalPos)
                 }
         )
+        .contextMenu {
+            Button("Open") {
+                onOpen()
+            }
+            if let path = item.fileURL?.path {
+                Button("Move to Trash") {
+                    try? FileSystemService.shared.deleteItem(at: path)
+                    DesktopManager.shared.refresh()
+                }
+            }
+            Divider()
+            Button("Properties") {
+                onOpen()
+            }
+        }
     }
 
     private var iconColor: Color {

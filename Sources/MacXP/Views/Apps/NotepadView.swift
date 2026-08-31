@@ -130,12 +130,6 @@ public struct NotepadView: View {
             
             // Dropdown Menus Overlay
             if let activeMenu = openMenu {
-                Color.black.opacity(0.001)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onTapGesture {
-                        openMenu = nil
-                    }
-                
                 dropdownMenuView(for: activeMenu)
             }
             

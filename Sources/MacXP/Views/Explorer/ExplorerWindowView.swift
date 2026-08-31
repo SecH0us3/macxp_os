@@ -439,13 +439,6 @@ public struct ExplorerWindowView: View {
 
             // Authentic Windows XP Menu Dropdown Overlay
             if let activeMenu = openMenu {
-                Color.black.opacity(0.001)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        openMenu = nil
-                        openSubmenu = nil
-                    }
-
                 VStack {
                     HStack {
                         dropdownMenuView(for: activeMenu)
