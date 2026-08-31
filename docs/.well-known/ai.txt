@@ -1,0 +1,15 @@
+# Spawning AI Permissions (ai.txt)
+# Specification: https://site.spawning.ai/spawning-ai-txt
+# Compliance: EU Digital Single Market Directive Article 4 (Text & Data Mining)
+
+User-Agent: *
+Training: allow
+Text: allow
+Images: allow
+Code: allow
+Data: allow
+
+# Licensing & Attribution
+License: MIT (https://github.com/SecH0us3/macxp_os/blob/main/LICENSE)
+Attribution: required
+Contact: https://github.com/SecH0us3/macxp_os
