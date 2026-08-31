@@ -4,7 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MacXP — The Nostalgic Windows XP Experience for macOS</title>
-  <meta name="description" content="A standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built in Swift & SwiftUI for macOS 13.0+." />
+  
+  <!-- Comprehensive Search and AI Crawler Descriptions -->
+  <meta name="description" content="MacXP is a standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built natively in Swift & SwiftUI for macOS 13.0+. Features authentic boot screen with animated blue cubes, window manager, start menu, taskbar, sound synthesis engine, Macromedia Flash Player with retro games, and built-in classic apps." />
+  <meta property="og:title" content="MacXP — The Nostalgic Windows XP Experience for macOS" />
+  <meta property="og:description" content="MacXP is a standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built natively in Swift & SwiftUI for macOS 13.0+. Features authentic boot screen with animated blue cubes, window manager, start menu, taskbar, sound synthesis engine, Macromedia Flash Player with retro games, and built-in classic apps." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sech0us3.github.io/macxp_os/" />
+  <meta property="og:image" content="https://sech0us3.github.io/macxp_os/assets/poster.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MacXP — The Nostalgic Windows XP Experience for macOS" />
+  <meta name="twitter:description" content="A standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built natively in Swift & SwiftUI for macOS 13.0+. Features authentic boot screen, Flash Player, sound engine, and classic apps." />
+  <meta name="twitter:image" content="https://sech0us3.github.io/macxp_os/assets/poster.jpg" />
   <meta name="author" content="SecH0us3" />
   <meta name="creator" content="SecH0us3" />
   <meta name="publisher" content="SecH0us3" />
@@ -72,6 +83,18 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     body {
@@ -270,6 +293,7 @@
       width: 100%;
       aspect-ratio: 16 / 10;
       max-height: 580px;
+      margin: 0;
     }
 
     video {
@@ -366,7 +390,11 @@
       font-weight: 500;
     }
 
-    /* Features Grid */
+    /* Features Section */
+    .features-section {
+      margin-bottom: 40px;
+    }
+
     .features-heading {
       color: white;
       font-size: 26px;
@@ -380,7 +408,6 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
-      margin-bottom: 40px;
     }
 
     .feature-card {
@@ -428,7 +455,7 @@
       box-shadow: 0 12px 32px rgba(0,0,0,0.4);
     }
 
-    .apps-section h3 {
+    .apps-heading {
       font-size: 20px;
       color: #003399;
       margin-bottom: 16px;
@@ -529,7 +556,7 @@
       <span class="brand-tag">v1.0.0</span>
     </a>
 
-    <nav class="top-nav">
+    <nav class="top-nav" aria-label="Main Navigation">
       <a href="https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0" class="nav-btn">
         <span>📦 Releases</span>
       </a>
@@ -551,28 +578,28 @@
     </header>
 
     <!-- 2. Video Showcase (Middle / Under Title) -->
-    <section class="xp-window">
-      <div class="window-titlebar">
-        <div class="window-title">
+    <section class="xp-window" aria-labelledby="video-window-title">
+      <header class="window-titlebar">
+        <h2 id="video-window-title" class="window-title">
           <img src="assets/icons/windows_flag_64.png" alt="Icon" />
           <span>MacXP Desktop & Applications Showcase — Windows Media Player</span>
+        </h2>
+        <div class="window-controls" aria-hidden="true">
+          <span class="win-btn min">_</span>
+          <span class="win-btn max">□</span>
+          <span class="win-btn close">×</span>
         </div>
-        <div class="window-controls">
-          <div class="win-btn min">_</div>
-          <div class="win-btn max">□</div>
-          <div class="win-btn close">×</div>
-        </div>
-      </div>
+      </header>
 
-      <div class="window-menubar">
+      <nav class="window-menubar" aria-label="Media Player Window Controls">
         <span><u>F</u>ile</span>
         <span><u>V</u>iew</span>
         <span><u>P</u>lay</span>
         <span><u>T</u>ools</span>
         <span><u>H</u>elp</span>
-      </div>
+      </nav>
 
-      <div class="video-wrapper">
+      <figure class="video-wrapper">
         <video 
           controls 
           preload="metadata"
@@ -582,12 +609,13 @@
           <source src="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
-      </div>
+        <figcaption class="sr-only">MacXP Desktop, Start Menu, Window Manager, and Built-in Applications Video Showcase</figcaption>
+      </figure>
     </section>
 
     <!-- 3. Action Buttons & Download (Below Video) -->
-    <section class="actions-panel">
-      <div class="cta-buttons">
+    <section class="actions-panel" aria-label="Application Downloads and Links">
+      <nav class="cta-buttons" aria-label="Action buttons">
         <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/MacXP.dmg" class="btn-download">
           <img src="assets/icons/my_computer.png" alt="Download" />
           <span>Download MacXP.dmg (v1.0.0)</span>
@@ -598,95 +626,97 @@
         <a href="https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0" class="btn-secondary" style="background: linear-gradient(180deg, #4d668c 0%, #2f4566 100%); border-color: #1e3048;">
           <span>📦 Release Notes</span>
         </a>
-      </div>
+      </nav>
 
-      <div class="badges-row">
+      <aside class="badges-row" aria-label="System compatibility and build highlights">
         <span class="badge-item">🍏 macOS 13.0+ (Ventura, Sonoma, Sequoia)</span>
         <span class="badge-item">⚡ 100% Swift & SwiftUI Native</span>
         <span class="badge-item">🧪 144/144 Tests Passing</span>
         <span class="badge-item">📄 Open Source MIT License</span>
-      </div>
+      </aside>
     </section>
 
     <!-- 4. Features Highlights -->
-    <h2 class="features-heading">✨ Authentic Nostalgic Features</h2>
-    
-    <div class="features-grid">
-      <!-- Boot Screen -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/windows_flag_64.png" alt="Boot Screen" />
-          <div class="feature-title">Windows XP Boot Screen</div>
-        </div>
-        <p class="feature-desc">
-          Authentic pitch-black startup screen with the iconic glowing 3 blue running cubes progress bar, smooth fade transition, and startup chime.
-        </p>
-      </div>
+    <section class="features-section" aria-labelledby="features-heading">
+      <h2 id="features-heading" class="features-heading">✨ Authentic Nostalgic Features</h2>
+      
+      <div class="features-grid">
+        <!-- Boot Screen -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/windows_flag_64.png" alt="Boot Screen" />
+            <h3 class="feature-title">Windows XP Boot Screen</h3>
+          </header>
+          <p class="feature-desc">
+            Authentic pitch-black startup screen with the iconic glowing 3 blue running cubes progress bar, smooth fade transition, and startup chime.
+          </p>
+        </article>
 
-      <!-- Flash Player -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/flash.png" alt="Flash Player" />
-          <div class="feature-title">Macromedia Flash Player 8</div>
-        </div>
-        <p class="feature-desc">
-          Includes the legendary Flash Player with authentic context menu and built-in classics: <strong>Copter 2004</strong> (Helicopter game) and <strong>Space Alien Blast</strong>!
-        </p>
-      </div>
+        <!-- Flash Player -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/flash.png" alt="Flash Player" />
+            <h3 class="feature-title">Macromedia Flash Player 8</h3>
+          </header>
+          <p class="feature-desc">
+            Includes the legendary Flash Player with authentic context menu and built-in classics: <strong>Copter 2004</strong> (Helicopter game) and <strong>Space Alien Blast</strong>!
+          </p>
+        </article>
 
-      <!-- Explorer & My Computer -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/my_computer.png" alt="My Computer" />
-          <div class="feature-title">My Computer & Explorer</div>
-        </div>
-        <p class="feature-desc">
-          Original XP system icons (CRT monitor, Local Disk C:, User Documents, Recycle Bin) with 5 view modes (Tiles, Icons, Details), address bar, and sidebars.
-        </p>
-      </div>
+        <!-- Explorer & My Computer -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/my_computer.png" alt="My Computer" />
+            <h3 class="feature-title">My Computer & Explorer</h3>
+          </header>
+          <p class="feature-desc">
+            Original XP system icons (CRT monitor, Local Disk C:, User Documents, Recycle Bin) with 5 view modes (Tiles, Icons, Details), address bar, and sidebars.
+          </p>
+        </article>
 
-      <!-- Internet Explorer 6 -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/ie.png" alt="Internet Explorer 6" />
-          <div class="feature-title">Internet Explorer 6</div>
-        </div>
-        <p class="feature-desc">
-          Classic blue e with gold halo, back/forward buttons, URL address bar with green Go button, and live WebKit browser rendering.
-        </p>
-      </div>
+        <!-- Internet Explorer 6 -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/ie.png" alt="Internet Explorer 6" />
+            <h3 class="feature-title">Internet Explorer 6</h3>
+          </header>
+          <p class="feature-desc">
+            Classic blue e with gold halo, back/forward buttons, URL address bar with green Go button, and live WebKit browser rendering.
+          </p>
+        </article>
 
-      <!-- Windows Media Player -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/paint.png" alt="Media Player" />
-          <div class="feature-title">Windows Media Player & Sounds</div>
-        </div>
-        <p class="feature-desc">
-          Authentic sound engine with sample tracks (<em>Like Humans Do</em>, <em>Windows XP Tour</em>), animated spectrum visualizers, and classic XP audio effects.
-        </p>
-      </div>
+        <!-- Windows Media Player -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/paint.png" alt="Media Player" />
+            <h3 class="feature-title">Windows Media Player & Sounds</h3>
+          </header>
+          <p class="feature-desc">
+            Authentic sound engine with sample tracks (<em>Like Humans Do</em>, <em>Windows XP Tour</em>), animated spectrum visualizers, and classic XP audio effects.
+          </p>
+        </article>
 
-      <!-- Screensavers -->
-      <div class="feature-card">
-        <div class="feature-header">
-          <img src="assets/icons/system_properties.png" alt="Screensavers" />
-          <div class="feature-title">3D Pipes & Starfield Screensavers</div>
-        </div>
-        <p class="feature-desc">
-          Classic 3D OpenGL-style Pipes and retro Starfield warp speed simulation with preview monitor in Display Properties.
-        </p>
+        <!-- Screensavers -->
+        <article class="feature-card">
+          <header class="feature-header">
+            <img src="assets/icons/system_properties.png" alt="Screensavers" />
+            <h3 class="feature-title">3D Pipes & Starfield Screensavers</h3>
+          </header>
+          <p class="feature-desc">
+            Classic 3D OpenGL-style Pipes and retro Starfield warp speed simulation with preview monitor in Display Properties.
+          </p>
+        </article>
       </div>
-    </div>
+    </section>
 
     <!-- 5. Built-in Applications Table -->
-    <section class="apps-section">
-      <h3>💻 Complete Classic Applications Suite</h3>
+    <section class="apps-section" aria-labelledby="apps-heading">
+      <h2 id="apps-heading" class="apps-heading">💻 Complete Classic Applications Suite</h2>
       <table class="apps-table">
         <thead>
           <tr>
-            <th>Application</th>
-            <th>Description</th>
+            <th scope="col">Application</th>
+            <th scope="col">Description</th>
           </tr>
         </thead>
         <tbody>
