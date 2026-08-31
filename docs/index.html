@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacXP — The Nostalgic Windows XP Experience for macOS</title>
+  <meta name="description" content="A standalone, pixel-accurate recreation of Microsoft Windows XP (Luna Blue theme) built in Swift & SwiftUI for macOS 13.0+." />
+  <link rel="icon" type="image/png" href="assets/icons/my_computer.png" />
+  <style>
+    :root {
+      --luna-blue-top: #0055ea;
+      --luna-blue-mid: #0a64dc;
+      --luna-blue-bot: #1c7fed;
+      --luna-selection: #316ac5;
+      --taskbar-bg: linear-gradient(180deg, #1f2f86 0%, #315ce6 3%, #245ede 8%, #1f53cb 15%, #1941a5 100%);
+      --start-green: linear-gradient(180deg, #388438 0%, #44a544 5%, #3c993c 15%, #2a7c2a 85%, #1a561a 100%);
+      --xp-window-bg: #ece9d8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Tahoma", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #003366 url("assets/bliss.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Luna Navigation Bar */
+    .top-bar {
+      background: var(--taskbar-bg);
+      border-bottom: 2px solid #08216b;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .brand img {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .btn-github {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1060px;
+      margin: 36px auto;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    /* XP Window Container for Video Demo */
+    .xp-window {
+      background: var(--xp-window-bg);
+      border-radius: 8px 8px 4px 4px;
+      border: 3px solid #0055ea;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .window-titlebar {
+      background: linear-gradient(180deg, #0055ea 0%, #0a64dc 50%, #1c7fed 100%);
+      color: white;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    .window-title {
+      font-size: 13px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    .window-title img {
+      width: 16px;
+      height: 16px;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .win-btn {
+      width: 21px;
+      height: 21px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+
+    .win-btn.min, .win-btn.max {
+      background: linear-gradient(180deg, #3d87f5 0%, #0c57d8 100%);
+    }
+
+    .win-btn.close {
+      background: linear-gradient(180deg, #e85338 0%, #c4260d 100%);
+    }
+
+    .window-menubar {
+      background: #ece9d8;
+      border-bottom: 1px solid #d0ccb9;
+      padding: 3px 8px;
+      display: flex;
+      gap: 16px;
+      font-size: 11px;
+      color: #222;
+    }
+
+    .video-wrapper {
+      background: #000;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      max-height: 580px;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: none;
+    }
+
+    /* Hero CTA Section */
+    .hero-cta {
+      background: rgba(236, 233, 216, 0.95);
+      backdrop-filter: blur(8px);
+      border: 2px solid #0055ea;
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #003399;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: #444;
+      max-width: 720px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn-download {
+      background: var(--start-green);
+      color: white;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(26, 86, 26, 0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+      border: 1px solid #144414;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(26, 86, 26, 0.6);
+    }
+
+    .btn-download img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, #3d87f5 0%, #0c57d8 100%);
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #083c9c;
+      box-shadow: 0 4px 12px rgba(12, 87, 216, 0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+      transition: transform 0.1s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Features Grid */
+    .features-heading {
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      background: rgba(236, 233, 216, 0.94);
+      backdrop-filter: blur(6px);
+      border: 2px solid #7ba5e8;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feature-header img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .feature-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #002266;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #444;
+    }
+
+    /* App Showcase List */
+    .apps-section {
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #0055ea;
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+
+    .apps-section h3 {
+      font-size: 20px;
+      color: #003399;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .apps-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .apps-table th {
+      background: #0a64dc;
+      color: white;
+      text-align: left;
+      padding: 10px 14px;
+    }
+
+    .apps-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #333;
+    }
+
+    .apps-table tr:nth-child(even) {
+      background: #f7f9fd;
+    }
+
+    .app-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      color: #002266;
+    }
+
+    .app-cell img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--taskbar-bg);
+      border-top: 2px solid #08216b;
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    footer a {
+      color: #8cc4ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 24px; }
+      .container { margin: 16px auto; }
+      .hero-cta { padding: 20px; }
+      .btn-download, .btn-secondary { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Luna Navigation Bar -->
+  <header class="top-bar">
+    <a href="#" class="brand">
+      <img src="assets/icons/windows_flag_64.png" alt="MacXP Flag" />
+      <span class="brand-title">MacXP</span>
+      <span class="brand-tag">v1.0.0</span>
+    </a>
+
+    <nav class="top-nav">
+      <a href="https://github.com/SecH0us3/macxp_os/releases/tag/v1.0.0" class="nav-btn">
+        <span>📦 Releases</span>
+      </a>
+      <a href="https://github.com/SecH0us3/macxp_os" class="nav-btn btn-github" target="_blank" rel="noopener">
+        <span>GitHub Repo ↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Hero Title & CTA -->
+    <section class="hero-cta">
+      <h1 class="hero-title">The Windows XP Experience for macOS</h1>
+      <p class="hero-subtitle">
+        A standalone, pixel-accurate, and high-performance recreation of Microsoft Windows XP (Luna Blue) built natively in Swift & SwiftUI for macOS 13.0+ (Ventura, Sonoma, Sequoia).
+      </p>
+
+      <div class="cta-buttons">
+        <a href="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/MacXP.dmg" class="btn-download">
+          <img src="assets/icons/my_computer.png" alt="Download" />
+          <span>Download MacXP.dmg (v1.0.0)</span>
+        </a>
+        <a href="https://github.com/SecH0us3/macxp_os" class="btn-secondary" target="_blank" rel="noopener">
+          <span>★ Star on GitHub</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Embedded Video in Authentic Luna XP Window Chrome -->
+    <section class="xp-window">
+      <div class="window-titlebar">
+        <div class="window-title">
+          <img src="assets/icons/windows_flag_64.png" alt="Icon" />
+          <span>MacXP Desktop & Applications Showcase — Windows Media Player</span>
+        </div>
+        <div class="window-controls">
+          <div class="win-btn min">_</div>
+          <div class="win-btn max">□</div>
+          <div class="win-btn close">×</div>
+        </div>
+      </div>
+
+      <div class="window-menubar">
+        <span><u>F</u>ile</span>
+        <span><u>V</u>iew</span>
+        <span><u>P</u>lay</span>
+        <span><u>T</u>ools</span>
+        <span><u>H</u>elp</span>
+      </div>
+
+      <div class="video-wrapper">
+        <video 
+          controls 
+          preload="metadata"
+          poster="assets/poster.jpg"
+          playsinline
+        >
+          <source src="https://github.com/SecH0us3/macxp_os/releases/download/v1.0.0/demo.mp4" type="video/mp4" />
+          <source src="assets/demo.mp4" type="video/mp4" />
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </section>
+
+    <!-- Features Highlights -->
+    <h2 class="features-heading">✨ Authentic Nostalgic Features</h2>
+    
+    <div class="features-grid">
+      <!-- Boot Screen -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/windows_flag_64.png" alt="Boot Screen" />
+          <div class="feature-title">Windows XP Boot Screen</div>
+        </div>
+        <p class="feature-desc">
+          Authentic pitch-black startup screen with the iconic glowing 3 blue running cubes progress bar, smooth fade transition, and startup chime.
+        </p>
+      </div>
+
+      <!-- Flash Player -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/flash.png" alt="Flash Player" />
+          <div class="feature-title">Macromedia Flash Player 8</div>
+        </div>
+        <p class="feature-desc">
+          Includes the legendary Flash Player with authentic context menu and built-in classics: <strong>Copter 2004</strong> (Helicopter game) and <strong>Space Alien Blast</strong>!
+        </p>
+      </div>
+
+      <!-- Explorer & My Computer -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/my_computer.png" alt="My Computer" />
+          <div class="feature-title">My Computer & Explorer</div>
+        </div>
+        <p class="feature-desc">
+          Original XP system icons (CRT monitor, Local Disk C:, User Documents, Recycle Bin) with 5 view modes (Tiles, Icons, Details), address bar, and sidebars.
+        </p>
+      </div>
+
+      <!-- Internet Explorer 6 -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/ie.png" alt="Internet Explorer 6" />
+          <div class="feature-title">Internet Explorer 6</div>
+        </div>
+        <p class="feature-desc">
+          Classic blue e with gold halo, back/forward buttons, URL address bar with green Go button, and live WebKit browser rendering.
+        </p>
+      </div>
+
+      <!-- Windows Media Player -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/paint.png" alt="Media Player" />
+          <div class="feature-title">Windows Media Player & Sounds</div>
+        </div>
+        <p class="feature-desc">
+          Authentic sound engine with sample tracks (<em>Like Humans Do</em>, <em>Windows XP Tour</em>), animated spectrum visualizers, and classic XP audio effects.
+        </p>
+      </div>
+
+      <!-- Screensavers -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <img src="assets/icons/system_properties.png" alt="Screensavers" />
+          <div class="feature-title">3D Pipes & Starfield Screensavers</div>
+        </div>
+        <p class="feature-desc">
+          Classic 3D OpenGL-style Pipes and retro Starfield warp speed simulation with preview monitor in Display Properties.
+        </p>
+      </div>
+    </div>
+
+    <!-- Built-in Applications Table -->
+    <section class="apps-section">
+      <h3>💻 Complete Classic Applications Suite</h3>
+      <table class="apps-table">
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/folder.png" alt="Explorer" />
+                <span>Windows Explorer</span>
+              </div>
+            </td>
+            <td>Virtual C:\ drive, breadcrumbs, parent directory traversal, and full macOS filesystem management.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/flash.png" alt="Flash" />
+                <span>Macromedia Flash Player</span>
+              </div>
+            </td>
+            <td>Flash 8 interface with Copter 2004 and Space Alien Blast retro arcade games.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/notepad.png" alt="Notepad" />
+                <span>Notepad</span>
+              </div>
+            </td>
+            <td>Lightweight text editor with File/Edit menus, Word Wrap, and Line/Column status bar.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/calculator.png" alt="Calculator" />
+                <span>Calculator</span>
+              </div>
+            </td>
+            <td>Standard calculator with memory keys, square root, percent, and keyboard input.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/minesweeper.png" alt="Minesweeper" />
+                <span>Minesweeper</span>
+              </div>
+            </td>
+            <td>3 difficulties, animated smiley face reaction button, and 7-segment digital LED timer.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/paint.png" alt="Paint" />
+                <span>MS Paint</span>
+              </div>
+            </td>
+            <td>Pencil, Brush, Line, Rectangle, Ellipse, Eraser tools, 28-color palette, and undo history.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="app-cell">
+                <img src="assets/icons/cmd.png" alt="cmd" />
+                <span>Command Prompt</span>
+              </div>
+            </td>
+            <td>Real terminal session running macOS zsh subprocess with DOS aliases (DIR, CLS, CD, VER, ECHO).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>MacXP</strong> is an open-source project released under the <a href="https://github.com/SecH0us3/macxp_os/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+    </p>
+    <p style="color: rgba(255,255,255,0.7); font-size: 11px; margin-top: 4px;">
+      Disclaimer: Windows XP, Luna, and related visual trademarks are property of Microsoft Corporation. Macromedia and Flash are trademarks of Adobe Systems Inc. Created for nostalgic, design, and educational purposes.
+    </p>
+  </footer>
+
+</body>
+</html>
